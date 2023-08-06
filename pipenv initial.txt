@@ -1,0 +1,57 @@
+https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
+
+1. Make a directory for the django project
+2. Install 'pip install pipenv' in the system environment if not already
+3. Create a virtual environment by running 'pipenv shell' (the location of the venv defaults to '~/user/.virtualenv/',
+	 to make it live inside the current directory, make an empty folder named '.venv', pipenv automatically detects that folder and creates the virtual environment inside that folder)
+4. Now install django by running 'pipenv install django' (installs the latest version)
+5. Start the project by running 'django-admin startproject $NAME_OF_THE_PROJECT'
+6. To start the live server cd into the project and run 'python manage.py runserver port(optional)'
+7. To make a new app inside that project run 'python manage.py startapp $NAME_OF_THE_APP'
+
+
+show all packages installed globally
+> pip freeze    
+
+
+create env with requirement.txt file:
+> pipenv install -r ./requirements.txt
+
+check any security issue in installed packages:
+> pipenv check
+update in pipfile and run "pipenv install"
+
+
+show dependencies
+pipenv graph
+
+
+update lock file with the installed version in case you install latest version of some package and it shows "*" in pipfile and then insatll using lock file when you deploy:
+pipenv lock
+
+pipenv install --ignore-pipfile
+
+
+
+run command in virtual environment without activating it:
+pipenv run python
+
+
+**********************
+
+
+Go into dir where you want your virtual environment:
+
+1) create ".venv" director,
+2) pipenv install             --  will create Pipfile and lock file and create virtual environment
+3) pipenv install django      -- install package
+4) pipenv shell		      -- activate virtual environment
+
+5) Create a new Django project called P1_DjangoModels with the following command. 
+
+django-admin startproject P1_DjangoModels .              -- create project in the same dir
+
+django-admin startproject P1_DjangoModels		-- create project in its sub directory
+
+
+

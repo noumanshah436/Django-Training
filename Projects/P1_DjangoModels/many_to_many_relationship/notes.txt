@@ -1,0 +1,431 @@
+https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_many/
+
+
+
+# CREATE TABLE "many_to_many_relationship_article"(
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "headline" varchar(100) NOT NULL
+# )
+
+
+# CREATE TABLE "many_to_many_relationship_publication" (
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "title" varchar(30) NOT NULL
+# )
+
+# CREATE TABLE "many_to_many_relationship_article_publications" (
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "article_id" bigint NOT NULL REFERENCES "many_to_many_relationship_article" ("id") DEFERRABLE INITIALLY DEFERRED,
+#   "publication_id" bigint NOT NULL REFERENCES "many_to_many_relationship_publication" ("id") DEFERRABLE INITIALLY DEFERRED
+# )
+
+
+# The "DEFERRABLE INITIALLY DEFERRED" part is specifying that the foreign key constraints on the "article_id" and "publication_id" columns are deferrable and initially deferred. This means that when data is inserted or updated, the foreign key constraint checks for these columns will be deferred until the transaction is about to be committed.
+
+******************************
+
+Create a few Publications:
+
+>>> from many_to_many_relationship.models import *
+
+>>> p1 = Publication(title="The Python Journal")
+>>> p1.save()
+>>> p2 = Publication(title="Science News")
+>>> p2.save()
+>>> p3 = Publication(title="Science Weekly")
+>>> p3.save()
+
+
+Create Articles:
+>>> a1 = Article(headline="Django lets you build web apps easily")
+>>> a1.save()
+>>> a2 = Article(headline="NASA uses Python")
+>>> a2.save()
+
+
+Associate the Article with a Publication:
+>>> a1.publications.add(p1)
+
+>>> a2.publications.add(p1, p2)
+>>> a2.publications.add(p3)
+
+Adding a second time is OK, it will not duplicate the relation:
+>>> a2.publications.add(p3)
+
+>>> p1 = Publication.objects.get(pk=1)
+>>> p2 = Publication.objects.get(pk=1)
+>>> p3 = Publication.objects.get(pk=3)
+>>> a1 = Article.objects.get(pk=1)
+
+*****************************
+
+Create and add a Publication to an Article in one step using create():
+>>> new_publication = a2.publications.create(title="Highlights for Children")
+
+*****************************
+
+Get related Objects:
+
+>>> a1.publications.all()
+>>> a2.publications.all()
+
+>>> p1.article_set.all()
+>>> p2.article_set.all()
+>>> p3.article_set.all()
+
+*****************************
+
+Many-to-many relationships can be queried using lookups across relationships:
+
+>>> Article.objects.filter(publications__id=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications__pk=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications=p1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+
+>>> Article.objects.filter(publications__title__startswith="Science")
+<QuerySet [<Article: NASA uses Python>, <Article: NASA uses Python>]>
+
+>>> Article.objects.filter(publications__title__startswith="Science").distinct()
+<QuerySet [<Article: NASA uses Python>]>
+
+*****************************
+
+The count() function respects distinct() as well:
+
+>>> Article.objects.filter(publications__title__startswith="Science").count()
+2
+
+>>> Article.objects.filter(publications__title__startswith="Science").distinct().count()
+1
+
+>>> Article.objects.filter(publications__in=[1, 2]).distinct()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications__in=[p1, p2]).distinct()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+
+*****************************
+
+Reverse m2m queries are supported (i.e., starting at the table that doesn’t have a ManyToManyField):
+
+>>> Publication.objects.filter(id=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(pk=1)
+<QuerySet [<Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__headline__startswith="NASA")
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__id=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article__pk=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article=a1)
+<QuerySet [<Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__in=[1, 2]).distinct()
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+>>> Publication.objects.filter(article__in=[a1, a2]).distinct()
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+
+*****************************
+
+Excluding a related item works as you would expect, too (although the SQL involved is a little complex):
+
+>>> Article.objects.exclude(publications=p2)
+<QuerySet [<Article: Django lets you build web apps easily>]>
+
+*****************************
+
+If we delete an Article, its Publications won’t be able to access it:
+
+>>> a2.delete()
+>>> Article.objects.all()
+<QuerySet [<Article: Django lets you build web apps easily>]>
+
+>>> p2.article_set.all()
+<QuerySet []>
+
+*****************************
+
+Adding via the ‘other’ end of an m2m: (-- add existing article)
+
+>>> a4 = Article(headline="NASA finds intelligent life on Earth")
+>>> a4.save()
+
+>>> p2.article_set.add(a4)
+
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>]>
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+*****************************
+
+Adding via the other end using keywords: (-- both create and add article)
+
+>>> new_article = p2.article_set.create(headline="Oxygen-free diet works wonders")
+
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>, <Article: Oxygen-free diet works wonders>]>
+
+>>> a5 = p2.article_set.all()[1]
+
+>>> a5.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+*********************************
+
+Removing Publication from an Article:
+
+>>> a4.publications.remove(p2)
+
+>>> p2.article_set.all()
+<QuerySet [<Article: Oxygen-free diet works wonders>]>
+>>> a4.publications.all()
+<QuerySet []>
+
+
+And from the other end:
+
+>>> p2.article_set.remove(a5)
+
+>>> p2.article_set.all()
+<QuerySet []>
+>>> a5.publications.all()
+<QuerySet []>
+
+*********************************
+
+Relation sets can be set: ( pass array of objects to Associate)
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+>>> a4.publications.set([p3])         -- this will remove previous related objects and add new related objects
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science Weekly>]>
+
+*********************************
+
+Relation sets can be cleared:
+
+>>> p2.article_set.clear()
+>>> p2.article_set.all()
+<QuerySet []>
+
+
+And you can clear from the other end:
+
+>>> p2.article_set.add(a4, a5)
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>, <Article: Oxygen-free diet works wonders>]>
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>, <Publication: Science Weekly>]>
+>>> a4.publications.clear()
+>>> a4.publications.all()
+<QuerySet []>
+>>> p2.article_set.all()
+<QuerySet [<Article: Oxygen-free diet works wonders>]>
+
+*********************************
+
+Recreate the Article and Publication we have deleted:
+
+>>> p1 = Publication(title="The Python Journal")
+>>> p1.save()
+>>> a2 = Article(headline="NASA uses Python")
+>>> a2.save()
+
+>>> a2.publications.add(p1, p2, p3)
+
+*********************************
+
+Bulk delete some Publications - references to deleted publications should go:
+
+>>> Publication.objects.filter(title__startswith="Science").delete()
+>>> Publication.objects.all()
+<QuerySet [<Publication: Highlights for Children>, <Publication: The Python Journal>]>
+>>> Article.objects.all()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA finds intelligent life on Earth>, <Article: NASA uses Python>, <Article: Oxygen-free diet works wonders>]>
+>>> a2.publications.all()
+<QuerySet [<Publication: The Python Journal>]>
+
+*********
+
+Bulk delete some articles - references to deleted objects should go:
+
+>>> q = Article.objects.filter(headline__startswith="Django")
+>>> print(q)
+<QuerySet [<Article: Django lets you build web apps easily>]>
+>>> q.delete()
+
+*********
+
+After the delete(), the QuerySet cache needs to be cleared, and the referenced objects should be gone:
+
+>>> print(q)
+<QuerySet []>
+>>> p1.article_set.all()
+<QuerySet [<Article: NASA uses Python>]>
+
+*********************************
+
+Publication.objects.all().delete()
+Article.objects.all().delete()
+
+
+***************************************
+Extra fields on many-to-many relationships¶
+***************************************
+
+CREATE TABLE "many_to_many_relationship_person" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "name" varchar(128) NOT NULL
+)
+
+CREATE TABLE "many_to_many_relationship_group" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "name" varchar(128) NOT NULL
+)
+
+CREATE TABLE "many_to_many_relationship_membership" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "date_joined" date NOT NULL,
+  "invite_reason" varchar(64) NOT NULL,
+  "group_id" bigint NOT NULL REFERENCES "many_to_many_relationship_group" ("id") DEFERRABLE INITIALLY DEFERRED,
+  "person_id" bigint NOT NULL REFERENCES "many_to_many_relationship_person" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+Add Data:
+
+>>> from datetime import date
+>>> nouman = Person.objects.create(name="Nouman")
+>>> farhan = Person.objects.create(name="Farhan")
+>>> beatles = Group.objects.create(name="The Beatles")
+>>> cricketers = Group.objects.create(name="The Cricketers")
+
+>>> m1 = Membership(
+  person=nouman,
+  group=beatles,
+  date_joined=date(1998, 11, 19),
+  invite_reason="Needed a new drummer.",
+)
+>>> m1.save()
+
+>>> beatles.members.all()
+<QuerySet [<Person: Nouman Starr>]>
+
+>>> nouman.group_set.all()
+<QuerySet [<Group: The Beatles>]>
+
+>>> m2 = Membership.objects.create(
+     person=farhan,
+     group=beatles,
+     date_joined=date(1960, 8, 1),
+     invite_reason="Wanted to form a band.",
+ )
+>>> beatles.members.all()
+<QuerySet [<Person: nouman Starr>, <Person: farhan McCartney>]>
+
+***************************
+
+You can also use add(), create(), or set() to create relationships, as long as you specify through_defaults for any required fields:
+
+>>> john = Person.objects.create(name="john")
+>>> beatles.members.add( john, through_defaults={ "date_joined": date(1960, 8, 1) } )
+
+>>> beatles.members.create(
+...     name="George Harrison", through_defaults={"date_joined": date(1960, 8, 1)}
+... )
+
+>>> beatles.members.set(
+...     [john, paul, ringo, george], through_defaults={"date_joined": date(1960, 8, 1)}
+... )
+
+***************************
+Duplicate in through table case:
+
+You may prefer to create instances of the intermediate model directly.
+
+If the custom through table defined by the intermediate model does not enforce uniqueness on the (model1, model2) pair,
+allowing multiple values, the remove() call will remove all intermediate model instances:
+
+>>> Membership.objects.create(
+     person=nouman,
+     group=beatles,
+     date_joined=date(1968, 9, 4),
+     invite_reason="You've been gone for a month and we miss you.",
+ )
+
+>>> beatles.members.all()
+<QuerySet [<Person: Ringo Starr>, <Person: Paul McCartney>, <Person: Ringo Starr>]>
+
+>>> # This deletes both of the intermediate model instances for Ringo Starr
+>>> beatles.members.remove(nouman)
+
+>>> beatles.members.all()
+<QuerySet [<Person: Paul McCartney>]>
+
+***************************
+The clear() method can be used to remove all many-to-many relationships for an instance:
+
+# Beatles have broken up
+# Note that this deletes the intermediate model instances
+>>> beatles.members.clear()
+
+>>> Membership.objects.all()
+<QuerySet []>
+
+***************************
+
+Once you have established the many-to-many relationships, you can issue queries. Just as with normal many-to-many relationships, you can query using the attributes of the many-to-many-related model:
+
+# Find all the groups with a member whose name starts with 'Paul'
+
+>>> Group.objects.filter(members__name__startswith="Nouman")
+<QuerySet [<Group: The Beatles>]>
+
+***************************
+
+As you are using an intermediate model, you can also query on its attributes:
+
+# Find all the members of the Beatles that joined after 1 Jan 1961
+>>> Person.objects.filter(
+  group__name="The Beatles", membership__date_joined__gt=date(1961, 1, 1)
+)
+<QuerySet [<Person: Ringo Starr]>
+
+***************************
+
+If you need to access a membership’s information you may do so by directly querying the Membership model:
+
+>>> nouman_membership = Membership.objects.get(group_id=1, person_id=1)
+>>> nouman_membership = Membership.objects.get(group=1, person=1)
+>>> nouman_membership = Membership.objects.get(group=beatles, person=nouman)
+
+>>> nouman_membership.date_joined
+datetime.date(1962, 8, 16)
+>>> nouman_membership.invite_reason
+'Needed a new drummer.'
+
+***************************
+
+Another way to access the same information is by querying the many-to-many reverse relationship from a Person object:
+
+>>> nouman_membership = nouman.membership_set.get(group=beatles)
+
+>>> nouman_membership.date_joined
+datetime.date(1962, 8, 16)
+
+>>> nouman_membership.invite_reason
+'Needed a new drummer.'
+
+***************************

@@ -1,0 +1,57 @@
+https://docs.djangoproject.com/en/4.2/topics/db/examples/one_to_one/
+
+from one_to_one_relationship.models import Place, Restaurant
+
+
+Create a couple of Places:
+p1 = Place(name="Place 1", address="944 W. Fullerton")
+p1.save()
+p2 = Place(name="Place 2", address="1013 N. Ashland")
+p2.save()
+
+
+Create a Restaurant. Pass the “parent” object as this object’s primary key:
+r = Restaurant(place=p1, serves_hot_dogs=True, serves_pizza=False)
+r.save()
+
+A Restaurant can access its place:
+r.place
+
+A Place can access its restaurant, if available:
+p1.restaurant
+
+
+Set the place using assignment notation. Because place is the primary key on Restaurant, the save will create a new restaurant:
+
+>>> r.place = p2
+>>> r.save()
+
+>>> p2.restaurant
+<Restaurant: Ace Hardware the restaurant>
+
+>>> r.place
+<Place: Ace Hardware the place>
+
+
+Set the place back again, using assignment in the reverse direction:
+
+>>> p1.restaurant = r
+>>> p1.restaurant
+<Restaurant: Demon Dogs the restaurant>
+
+**************************
+
+The primary key field is read-only. If you change the value of the primary key on an existing object and then save it, a new object will be created alongside the old one. For example:
+
+from django.db import models
+
+
+class Fruit(models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
+>>> fruit = Fruit.objects.create(name="Apple")
+>>> fruit.name = "Pear"
+>>> fruit.save()
+>>> Fruit.objects.values_list("name", flat=True)
+<QuerySet ['Apple', 'Pear']>
+
+**************************

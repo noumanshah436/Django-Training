@@ -1,0 +1,16 @@
+
+database model:
+
+https://medium.com/django-rest/lets-build-a-basic-product-review-backend-with-drf-part-1-652dd9b95485
+
+
+all relations
+https://docs.djangoproject.com/en/4.2/topics/db/examples/
+
+
+many to many django official:
+https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_many/
+
+
+extra-fields-on-many-to-many-relationships
+https://docs.djangoproject.com/en/4.2/topics/db/models/#extra-fields-on-many-to-many-relationships

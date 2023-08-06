@@ -1,0 +1,54 @@
+https://www.youtube.com/watch?v=UmljXZIypDc&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=1&t=405s
+corey schafer
+https://github.com/CoreyMSchafer/code_snippets/tree/master/Django_Blog
+*********************************************
+
+pip install django
+
+python -m django --version
+or
+python -c "import django; print(django.get_version())"
+
+django-admin     --------  list all sub-commands
+
+*********************************************
+
+create project:
+
+django-admin startproject project_name
+
+wsgi  how our web_application and browser_server will commmunicate
+
+*********************************************
+
+
+python manage.py runserver
+
+http://localhost:8000/
+http://127.0.0.1:8000/
+
+
+ctrl+c to stop server
+
+*********************************************
+
+
+Django documentation
+
+https://docs.djangoproject.com/en/3.2/
+
+*********************************************
+
+a single project can contain multiple apps 
+
+python manage.py startapp name_of_app
+
+python manage.py startapp blog
+
+python manage.py startapp users
+
+
+*********************************************
+
+
+

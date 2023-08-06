@@ -1,0 +1,329 @@
+
+Create app inside project:
+
+1) python manage.py startapp name_of_app
+
+python manage.py startapp my_models
+
+2) Register app in installed_app in settings.py file:
+INSTALLED_APPS = [
+    # ...
+    'my_models.apps.MyModelsConfig',
+    # ...
+]
+
+3) Add urls of the app in main urls.py:
+
+a) create urls.py file in app.
+b) register this url file in main urls.py:
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('blog.urls')),
+    ]
+
+4) add model in current app's admin.py file:
+from django.contrib import admin
+from .models import Person
+
+admin.site.register(Person)
+
+
+**********************************
+naming convention for apps:
+
+Here are a few examples of app names following the convention:
+
+blog (for a blogging app)
+ecommerce (for an e-commerce app)
+user_profile (for a user profile app)
+inventory_management (for an inventory management app)
+event_calendar (for an event calendar app)
+
+**********************************
+
+Add model:
+
+1) Add model in model.p
+
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+
+Run the Migrations commands in order to get changes to our database.
+
+2) python manage.py makemigrations
+
+3) python manage.py sqlmigrate my_models 0001   #  it prints out the code that is going to run
+
+4) python manage.py migrate
+
+**********************************
+
+Manipulate database
+
+Start the django shell:
+
+python manage.py shell
+
+(In the shell at the prompt)
+
+from my_models.models import User
+
+u = User(name='Kristen', email='kf@umich.edu')
+u.save()
+u = User(name='Chuck', email='csev@umich.edu')
+u.save()
+u = User(name='Colleen', email='cvl@umich.edu')
+u.save()
+u = User(name='Ted', email='ted@umich.edu')
+u.save()
+u = User(name='Sally', email='a2@umich.edu')
+u.save()
+
+User.objects.values()
+User.objects.filter(email='csev@umich.edu').values()
+
+User.objects.filter(email='ted@umich.edu').delete()
+User.objects.values()
+
+User.objects.filter(email='csev@umich.edu').update(name='Charles')
+User.objects.values()
+
+User.objects.values().order_by('email')
+User.objects.values().order_by('-name')
+
+quit()
+
+
+**********************************
+one to many relationship:
+**********************************
+
+class Artist(models.Model):
+    name = models.CharField(max_length=200, db_index=True, help_text='Artist name')
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+class Album(models.Model):
+    title = models.CharField(max_length=200, db_index=True, help_text='Album title')
+    artist = models.ForeignKey('Artist', on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.title
+
+class Genre(models.Model):
+    name = models.CharField(max_length=200, db_index=True, help_text='Genre of music (i.e. Blues)')
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.name
+
+class Track(models.Model):
+    title = models.CharField(max_length=200, db_index=True, help_text='Track title')
+    rating = models.IntegerField(null=True)
+    length = models.IntegerField(null=True)
+    count = models.IntegerField(null=True)
+    album = models.ForeignKey('Album', on_delete=models.CASCADE)
+    genre = models.ForeignKey('Genre', on_delete=models.SET_NULL, null=True)
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return self.title
+
+
+Adding data:
+from my_models.models import Artist, Genre, Album, Track;
+
+zep = Artist(name='Led Zepplin')
+zep.save()
+zep.id
+
+abc = Artist(name='ACDC')
+abc.save()
+
+Artist.objects.values()
+
+made = Album(title='Who Made Who', artist=abc)
+made.save()
+zep_iv = Album(title='IV', artist=zep)
+zep_iv.save()
+zep_v = Album(title='V', artist=zep)
+zep_v.save()
+
+ROCK = Genre(name='Rock')
+ROCK.save()
+met = Genre(name='Metal')
+met.save()
+
+x = Track(title='Black Dog', rating=5, length=297, count=9, album=zep_iv, genre=ROCK)
+x.save()
+x.id
+
+x = Track(title='Stairway', rating=5, length=482, count=0, album=zep_iv, genre=ROCK)
+x.save()
+x.id
+
+x = Track(title='About to Rock', rating=5, length=313, count=0, album=made, genre=met)
+x.save()
+x = Track(title='Who Made Who', rating=5, length=207, count=0, album=made, genre=met)
+x.save()
+
+Track.objects.values()
+
+first = Track.objects.get(pk=1)
+first
+
+print(first)
+
+print(first.genre)
+
+print(first.genre.name)
+
+print(first.album)
+
+print(first.album.artist)
+
+x = Artist.objects.get(pk=1)
+x.album_set.values()
+
+******************
+
+each person has many accounts:
+
+p1 = Person(name="Joan louji", email="sjlouji10@gmail.com", mobile="123412")
+p1.save()
+
+a1 = Account(person=p1, balance="1002335", account_number="432198176354")
+a1.save()
+a2 = Account(person=p1, balance="1002", account_number="4321981763541234")
+a2.save()
+a3 = Account(person=p1, balance="103412", account_number="43219813254")
+a3.save()
+
+p1.account_set.values()
+
+**********************************
+# One to One Relationship
+**********************************
+
+One to One Relationship
+In this type of relationship, both tables can only have one record on either side of the relationship.
+For example,
+let’s consider two entities person(person_id, person_name)
+and adhar(adhar_id, adhar_details). Here, a person can have only one Adhar ID and an Ahdar can be related to only one person.
+
+
+# https://sjlouji10.medium.com/django-models-with-relationships-one-to-one-relationship-f3ef8d77aec1
+
+class Person(models.Model):
+    name = models.TextField(max_length=100)
+    email = models.EmailField()
+    mobile = models.TextField(max_length=100)
+
+
+class Adhar(models.Model):
+    person = models.OneToOneField("Person", on_delete=models.CASCADE)
+    signature = models.TextField()
+    adhar_no = models.TextField(max_length=100)
+
+
+Add data:
+from my_models.models import Person, Adhar
+
+p1 = Person(name="Joan louji", email="sjlouji10@gmail.com", mobile="123412")
+p1.save()
+p2 = Person(name="Rion", email="rion@gmail.com", mobile="0987632")
+p2.save()
+
+a1 = Adhar(person=p1, signature="asdf234dsafuiq3&^$^GUJHVR", adhar_no="432198176354")
+a1.save()
+a2 = Adhar(person=p2, signature="adfpoiwruywqtrgmnb13241)*&^%$", adhar_no="2314928376")
+a2.save()
+
+p = Person.objects.all()
+print(p)
+<QuerySet [<Person: Person object (1)>, <Person: Person object (2)>]>
+
+a = Adhar.objects.all()
+print(a)
+<QuerySet [<Adhar: Adhar object (1)>, <Adhar: Adhar object (2)>]>
+a.values()
+<QuerySet [{'id': 1, 'person_id': 1, 'signature': 'asdf234dsafuiq3&^$^GUJHVR', 'adhar_no': '432198176354'}, {'id': 2, 'person_id': 2, 'signature': 'adfpoiwruywqtrgmnb13241)*&^%$', 'adhar_no': '2314928376'}]>
+
+Test one to one:
+a3 = Adhar(person=p1, signature="asdf234dsafuiq3&^$^GUjkJHVR", adhar_no="4321982176354")
+a3.save()
+
+this will give error ->
+    django.db.utils.IntegrityError: UNIQUE constraint failed: my_models_adhar.person_id
+
+because
+    person = models.OneToOneField("Person", on_delete=models.CASCADE)
+makes
+    "person_id" bigint NOT NULL UNIQUE
+
+
+**********************************
+Many to Many Relationship
+**********************************
+
+In this type of relationship, each record of the first table is related to many records of the second table and
+also each record of the second table is related to many records of the first table.
+
+
+class Customer(models.Model):
+    cus_name = models.TextField(max_length=100)
+    cus_email = models.EmailField()
+    cus_mobile = models.TextField(max_length=100)
+
+class Products(models.Model):
+    cus_id = models.ManyToManyField("Customer")
+    cus_name = models.TextField()
+    cus_qty = models.TextField(max_length=100)
+
+Add Data:
+
+from my_models.models import Customer, Products
+
+c1 = Customer(cus_name="Joan Louji", cus_email="sjlouji10@gmail.com", cus_mobile="927347234")
+c1.save()
+c2 = Customer(cus_name="Rion Louji", cus_email="sjlouji@gmail.com", cus_mobile="4327347234")
+c2.save()
+c3 = Customer(cus_name="Louji", cus_email="joanlouji@gmail.com", cus_mobile="4323417234")
+c3.save()
+
+p1 = Products(cus_name="Iphone", cus_qty="3")
+p1.save()
+
+p1.cus_id.add(c1)
+p1.cus_id.add(c2)
+p1.cus_id.add(c3)
+p1.save()
+
+cus = Customer.objects.all()
+pro = Products.objects.all()
+
+cus.values()
+<QuerySet [{'id': 1, 'cus_name': 'Joan Louji', 'cus_email': 'sjlouji10@gmail.com', 'cus_mobile': '927347234'}, {'id': 2, 'cus_name': 'Rion Louji', 'cus_email': 'sjlouji@gmail.com', 'cus_mobile': '4327347234'}, {'id': 3, 'cus_name': 'Louji', 'cus_email': 'joanlouji@gmail.com', 'cus_mobile': '4323417234'}]>
+
+p1.cus_id.all().values()
+<QuerySet [{'id': 1, 'cus_name': 'Joan Louji', 'cus_email': 'sjlouji10@gmail.com', 'cus_mobile': '927347234'}, {'id': 2, 'cus_name': 'Rion Louji', 'cus_email': 'sjlouji@gmail.com', 'cus_mobile': '4327347234'}, {'id': 3, 'cus_name': 'Louji', 'cus_email': 'joanlouji@gmail.com', 'cus_mobile': '4323417234'}]>
+
+************************
+
+
+
+python manage.py startapp many_to_one_relationship
+python manage.py startapp one_to_one_relationship
+python manage.py startapp many_to_many_relationship
+
+
+ 

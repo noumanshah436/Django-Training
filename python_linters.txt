@@ -1,0 +1,3 @@
+Difference Between Linter and Formatter?
+Linter analyzes code for errors, potential issues, and adherence to coding standards, providing suggestions and warnings.
+Formatter automatically adjusts code formatting to conform to a specific style guide, ensuring consistent and uniform code appearance.
