@@ -1,0 +1,192 @@
+
+
+**************************************************************************
+https://docs.djangoproject.com/en/4.2/ref/models/fields/#field-options
+
+Field options
+
+NULL vs BLANK
+
+
+null:
+The null option is used at the database level and determines whether a field can store a NULL value in the database.
+It's relevant for database columns.
+
+If you set null=True on a field, it means that the field's database column can hold a NULL value, indicating the absence of data.
+If you set null=False (which is the default), it means that the field cannot hold NULL values.
+
+Example:
+
+class MyModel(models.Model):
+    some_field = models.CharField(max_length=50, null=True)
+
+In this example, some_field can store NULL values in the database.
+
+More detail:
+
+-> Using null=True on String-based Fields:
+When you use null=True on a string-based field like CharField or TextField,
+you're allowing that field to store NULL values in the database, in addition to empty strings.
+This means the field can have two possible values to represent "no data" (i.e. NULL and an empty string '').
+
+Django's convention is to use the empty string ('') to represent "no data" for string-based fields.
+
+Here's an example:
+
+class Product(models.Model):
+    name = models.CharField(max_length=100, null=True)
+
+In this example, if you set null=True on the name field, it will allow the field to store both NULL and empty strings.
+
+summary:
+It's often better to leave null=False (the default) for string-based fields, so an empty string can be used to represent "no data".
+For other types of fields like numbers or dates, using null=True can be appropriate when you want to differentiate between "no data" and an actual numeric or date value.
+
+-> exception for above scenerio:
+
+If you do not give null=True and have a field with unique=True and blank=True,
+then having multiple NULL values will indeed violate the uniqueness constraint.
+
+class Product(models.Model):
+    code = models.CharField(max_length=10, unique=True, blank=True)
+
+# Creating two products with NULL code values
+product1 = Product.objects.create(code=None)
+product2 = Product.objects.create(code=None)
+
+In this example, if you attempt to create both product1 and product2 with NULL values for the code field, you will encounter a uniqueness constraint violation.
+This is because, by default, without null=True, NULL values are treated as equal and will violate the uniqueness constraint set by unique=True.
+
+To avoid this issue and allow multiple NULL values for the field while maintaining uniqueness for non-NULL values, you would need to set null=True.
+
+class Product(models.Model):
+    code = models.CharField(max_length=10, unique=True, blank=True, null=True)
+
+# Creating two products with NULL code values
+product1 = Product.objects.create(code=None)
+product2 = Product.objects.create(code=None)
+
+In this case, with null=True, the uniqueness constraint will not be violated because each NULL value is considered distinct, and you can have multiple rows with NULL code values.
+
+In summary, using null=True along with unique=True and blank=True can help handle scenarios where you want to allow multiple blank or NULL values while still enforcing uniqueness on the non-empty values.
+
+***************
+blank:
+
+The blank option is used at the validation and form level.
+It specifies whether a field is required when creating a form to input data.
+
+If blank=True is set on a field, it means that the field is not required when creating a form.
+If blank=False (the default) is set, the field is required.
+
+Example:
+
+class MyModel(models.Model):
+    some_field = models.CharField(max_length=50, blank=True)
+
+In this example, some_field is not required when creating a form.
+
+***************
+
+In summary:
+
+'null' is related to the database and determines whether a field can hold NULL values.
+'blank' is related to form validation and determines whether a field is required when creating a form.
+
+It's also worth noting that some field types have default behaviors for null and blank.
+
+For example,
+
+CharField and TextField have blank set to False by default (field is required), while
+DateField and DateTimeField have null set to True by default.
+
+1) If you have a CharField with blank=True (null=False by default) and you create a record without giving a value for that field, Django will store an empty string ('') in the database for that field.
+
+2) If you have a CharField with both blank=True and null=True, and you create a record without giving a value for that field, Django will store a NULL value in the database for that field.
+
+**************************************************************************
+https://docs.djangoproject.com/en/4.2/topics/db/models/#verbose-field-names
+
+Verbose field names
+
+Each field type, except for ForeignKey, ManyToManyField and OneToOneField, takes an optional first positional argument – a verbose name.
+If the verbose name isn’t given, Django will automatically create it using the field’s attribute name, converting underscores to spaces.
+
+In this example, the verbose name is "person's first name":
+first_name = models.CharField("person's first name", max_length=30)
+
+In this example, the verbose name is "first name":
+first_name = models.CharField(max_length=30)
+
+
+ForeignKey, ManyToManyField and OneToOneField require the first argument to be a model class, so use the verbose_name keyword argument:
+poll = models.ForeignKey(
+    Poll,
+    on_delete=models.CASCADE,
+    verbose_name="the related poll",
+)
+sites = models.ManyToManyField(Site, verbose_name="list of sites")
+place = models.OneToOneField(
+    Place,
+    on_delete=models.CASCADE,
+    verbose_name="related place",
+)
+
+The convention is not to capitalize the first letter of the verbose_name.
+Django will automatically capitalize the first letter where it needs to.
+
+****************
+
+In Django, the verbose_name and verbose_name_plural attributes are used to provide human-readable names for model fields and their related models.
+These attributes are not strictly necessary for the functionality of your application, but they greatly improve the readability and user-friendliness of your code and the admin interface.
+
+class Book(models.Model):
+    title = models.CharField(max_length=200, verbose_name="book Title")
+    author = models.CharField(max_length=100, verbose_name="author's Name")
+    publication_year = models.PositiveIntegerField(verbose_name="publication Year")
+    is_available = models.BooleanField(default=True, verbose_name="is Available")
+
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+
+Readability and Clarity: We use verbose_name to provide more descriptive names for our fields. Instead of using generic names like title, author, etc., we provide meaningful labels like "Book Title," "Author's Name," etc.
+
+Admin Interface: In the Django admin interface, the labels provided by verbose_name will be displayed for each field. Users of the admin interface will see these labels, which make it clear what each field represents.
+
+Documentation and Collaboration: Other developers working on the project will immediately understand the purpose of each field when reading the code. For instance, verbose_name="Publication Year" communicates that the field represents the publication year of the book.
+
+Internationalization and Localization: Imagine you want to make your application multilingual. With verbose_name, you can provide translations for different languages. For instance, you can have translations for "Book Title" in different languages, allowing your application to display the appropriate label based on the user's language preferences.
+
+
+**************************************************************************
+https://docs.djangoproject.com/en/4.2/topics/db/models/#field-name-restrictions
+
+Field name restrictions
+
+Django places some restrictions on model field names:
+
+1) A field name cannot be a Python reserved word, because that would result in a Python syntax error. For example:
+
+class Example(models.Model):
+    pass = models.IntegerField() # 'pass' is a reserved word!
+
+2) A field name cannot contain more than one underscore in a row, due to the way Django’s query lookup syntax works. For example:
+
+class Example(models.Model):
+    foo__bar = models.IntegerField()  # 'foo__bar' has two underscores!
+
+3) A field name cannot end with an underscore, for similar reasons.
+
+These limitations can be worked around, though, because your field name doesn’t necessarily have to match your database column name. See the db_column option.
+
+SQL reserved words, such as join, where or select, are allowed as model field names, because Django escapes all database table names and column names in every underlying SQL query. It uses the quoting syntax of your particular database engine.
+
+
+
+
+**************************************************************************
+
+
+
+**************************************************************************

@@ -1,108 +1,7 @@
-
-Create app inside project:
-
-1) python manage.py startapp name_of_app
-
-python manage.py startapp my_models
-
-2) Register app in installed_app in settings.py file:
-INSTALLED_APPS = [
-    # ...
-    'my_models.apps.MyModelsConfig',
-    # ...
-]
-
-3) Add urls of the app in main urls.py:
-
-a) create urls.py file in app.
-b) register this url file in main urls.py:
-    from django.contrib import admin
-    from django.urls import path, include
-
-    urlpatterns = [
-        path('admin/', admin.site.urls),
-        path('', include('blog.urls')),
-    ]
-
-4) add model in current app's admin.py file:
-from django.contrib import admin
-from .models import Person
-
-admin.site.register(Person)
-
-
-**********************************
-naming convention for apps:
-
-Here are a few examples of app names following the convention:
-
-blog (for a blogging app)
-ecommerce (for an e-commerce app)
-user_profile (for a user profile app)
-inventory_management (for an inventory management app)
-event_calendar (for an event calendar app)
-
-**********************************
-
-Add model:
-
-1) Add model in model.p
-
-from django.db import models
-
-class User(models.Model):
-    name = models.CharField(max_length=128)
-    email = models.CharField(max_length=128)
-
-Run the Migrations commands in order to get changes to our database.
-
-2) python manage.py makemigrations
-
-3) python manage.py sqlmigrate my_models 0001   #  it prints out the code that is going to run
-
-4) python manage.py migrate
-
-**********************************
-
-Manipulate database
-
-Start the django shell:
-
-python manage.py shell
-
-(In the shell at the prompt)
-
-from my_models.models import User
-
-u = User(name='Kristen', email='kf@umich.edu')
-u.save()
-u = User(name='Chuck', email='csev@umich.edu')
-u.save()
-u = User(name='Colleen', email='cvl@umich.edu')
-u.save()
-u = User(name='Ted', email='ted@umich.edu')
-u.save()
-u = User(name='Sally', email='a2@umich.edu')
-u.save()
-
-User.objects.values()
-User.objects.filter(email='csev@umich.edu').values()
-
-User.objects.filter(email='ted@umich.edu').delete()
-User.objects.values()
-
-User.objects.filter(email='csev@umich.edu').update(name='Charles')
-User.objects.values()
-
-User.objects.values().order_by('email')
-User.objects.values().order_by('-name')
-
-quit()
-
-
-**********************************
+================================================================
 one to many relationship:
-**********************************
+================================================================
+
 
 class Artist(models.Model):
     name = models.CharField(max_length=200, db_index=True, help_text='Artist name')
@@ -138,6 +37,35 @@ class Track(models.Model):
         """String for representing the Model object."""
         return self.title
 
+******************************
+
+CREATE TABLE "my_models_artist" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" varchar(200) NOT NULL
+)
+
+CREATE TABLE "my_models_album" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" varchar(200) NOT NULL,
+    "artist_id" bigint NULL REFERENCES "my_models_artist" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+CREATE TABLE "my_models_genre" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" varchar(200) NOT NULL
+)
+
+CREATE TABLE "my_models_track" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "title" varchar(200) NOT NULL,
+    "rating" integer NULL,
+    "length" integer NULL,
+    "count" integer NULL,
+    "album_id" bigint NOT NULL REFERENCES "my_models_album" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "genre_id" bigint NULL REFERENCES "my_models_genre" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+******************************
 
 Adding data:
 from my_models.models import Artist, Genre, Album, Track;
@@ -194,9 +122,43 @@ print(first.album.artist)
 x = Artist.objects.get(pk=1)
 x.album_set.values()
 
-******************
+************************************
+Another example for One to Many relationship
+************************************
 
-each person has many accounts:
+Each person has many accounts:
+
+
+class Person(models.Model):
+    name = models.TextField(max_length=100)
+    email = models.EmailField()
+    mobile = models.TextField(max_length=100)
+
+class Account(models.Model):
+    person = models.ForeignKey("Person", on_delete=models.CASCADE)
+    account_number = models.TextField()
+    balance = models.TextField(max_length=100)
+
+***************
+
+CREATE TABLE "my_models_person" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" text NOT NULL,
+    "email" varchar(254) NULL,
+    "mobile" text NOT NULL
+)
+
+
+CREATE TABLE "my_models_account" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "account_number" text NOT NULL,
+    "balance" text NOT NULL,
+    "person_id" bigint NOT NULL REFERENCES "my_models_person" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+***************
+
+from my_models.models import Person, Account
 
 p1 = Person(name="Joan louji", email="sjlouji10@gmail.com", mobile="123412")
 p1.save()
@@ -210,12 +172,13 @@ a3.save()
 
 p1.account_set.values()
 
-**********************************
+================================================================
 # One to One Relationship
-**********************************
+================================================================
 
 One to One Relationship
 In this type of relationship, both tables can only have one record on either side of the relationship.
+
 For example,
 let’s consider two entities person(person_id, person_name)
 and adhar(adhar_id, adhar_details). Here, a person can have only one Adhar ID and an Ahdar can be related to only one person.
@@ -223,16 +186,21 @@ and adhar(adhar_id, adhar_details). Here, a person can have only one Adhar ID an
 
 # https://sjlouji10.medium.com/django-models-with-relationships-one-to-one-relationship-f3ef8d77aec1
 
-class Person(models.Model):
-    name = models.TextField(max_length=100)
-    email = models.EmailField()
-    mobile = models.TextField(max_length=100)
-
-
 class Adhar(models.Model):
     person = models.OneToOneField("Person", on_delete=models.CASCADE)
     signature = models.TextField()
     adhar_no = models.TextField(max_length=100)
+
+***************************************
+
+CREATE TABLE "my_models_adhar" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "signature" text NULL,
+    "adhar_no" text NOT NULL,
+    "person_id" bigint NOT NULL UNIQUE REFERENCES "my_models_person" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+***************************************
 
 
 Add data:
@@ -271,9 +239,9 @@ makes
     "person_id" bigint NOT NULL UNIQUE
 
 
-**********************************
+================================================================
 Many to Many Relationship
-**********************************
+================================================================
 
 In this type of relationship, each record of the first table is related to many records of the second table and
 also each record of the second table is related to many records of the first table.
@@ -284,11 +252,33 @@ class Customer(models.Model):
     cus_email = models.EmailField()
     cus_mobile = models.TextField(max_length=100)
 
-class Products(models.Model):
-    cus_id = models.ManyToManyField("Customer")
+class Product(models.Model):
+    customers = models.ManyToManyField("Customer")
     cus_name = models.TextField()
     cus_qty = models.TextField(max_length=100)
 
+
+***********************************
+
+CREATE TABLE "my_models_customer" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "cus_name" text NOT NULL,
+    "cus_email" varchar(254) NOT NULL,
+    "cus_mobile" text NOT NULL
+)
+
+
+CREATE TABLE "my_models_product" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "cus_name" text NOT NULL, "cus_qty" text NOT NULL
+)
+
+CREATE TABLE "my_models_product_customers" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "product_id" bigint NOT NULL REFERENCES "my_models_product" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "customer_id" bigint NOT NULL REFERENCES "my_models_customer" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+***********************************
 Add Data:
 
 from my_models.models import Customer, Products
@@ -303,9 +293,9 @@ c3.save()
 p1 = Products(cus_name="Iphone", cus_qty="3")
 p1.save()
 
-p1.cus_id.add(c1)
-p1.cus_id.add(c2)
-p1.cus_id.add(c3)
+p1.customers.add(c1)
+p1.customers.add(c2)
+p1.customers.add(c3)
 p1.save()
 
 cus = Customer.objects.all()
@@ -314,7 +304,7 @@ pro = Products.objects.all()
 cus.values()
 <QuerySet [{'id': 1, 'cus_name': 'Joan Louji', 'cus_email': 'sjlouji10@gmail.com', 'cus_mobile': '927347234'}, {'id': 2, 'cus_name': 'Rion Louji', 'cus_email': 'sjlouji@gmail.com', 'cus_mobile': '4327347234'}, {'id': 3, 'cus_name': 'Louji', 'cus_email': 'joanlouji@gmail.com', 'cus_mobile': '4323417234'}]>
 
-p1.cus_id.all().values()
+p1.customers.all().values()
 <QuerySet [{'id': 1, 'cus_name': 'Joan Louji', 'cus_email': 'sjlouji10@gmail.com', 'cus_mobile': '927347234'}, {'id': 2, 'cus_name': 'Rion Louji', 'cus_email': 'sjlouji@gmail.com', 'cus_mobile': '4327347234'}, {'id': 3, 'cus_name': 'Louji', 'cus_email': 'joanlouji@gmail.com', 'cus_mobile': '4323417234'}]>
 
 ************************
@@ -326,4 +316,3 @@ python manage.py startapp one_to_one_relationship
 python manage.py startapp many_to_many_relationship
 
 
- 

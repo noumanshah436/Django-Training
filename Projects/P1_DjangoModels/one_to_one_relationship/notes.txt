@@ -1,5 +1,18 @@
 https://docs.djangoproject.com/en/4.2/topics/db/examples/one_to_one/
 
+
+
+CREATE TABLE "one_to_one_relationship_place" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" varchar(50) NOT NULL, "address" varchar(80) NOT NULL
+)
+
+CREATE TABLE "one_to_one_relationship_restaurant" (
+    "place_id" bigint NOT NULL PRIMARY KEY REFERENCES "one_to_one_relationship_place" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "serves_hot_dogs" bool NOT NULL,
+    "serves_pizza" bool NOT NULL
+)
+
 from one_to_one_relationship.models import Place, Restaurant
 
 

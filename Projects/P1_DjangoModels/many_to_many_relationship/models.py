@@ -25,7 +25,9 @@ class Article(models.Model):
         return f"id: {self.id}, headline: {self.headline}"
 
 
-# Extra fields on many-to-many relationships¶
+# ****************************************
+# Extra fields on many-to-many relationships
+# ****************************************
 class Person(models.Model):
     name = models.CharField(max_length=128)
 

@@ -1,0 +1,324 @@
+
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#select-related
+
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#prefetch-related
+
+**********************
+
+
+Prefetch_Related And Select_Related Django
+
+from my_models.models import Person, Account
+
+
+person = Person.objects.all()
+
+p1 = person[0]
+accounts = Account.objects.all()
+
+
+
+****************************************************************************************
+Account.objects.all()
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 21;
+
+****************
+
+ Account.objects.all()[0]
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 1;
+
+****************
+This will run 2 queries to get related object data:
+
+Account.objects.all()[0].person
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 1;
+
+
+SELECT "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_person"
+WHERE "my_models_person"."id" = 3
+LIMIT 21;
+
+
+<Person: Joan louji>
+
+
+****************************************************************************************
+select_related:
+
+* select_related is used to fetch related objects from the database in a single query by performing a SQL join.
+* It works for ForeignKey and OneToOneField relationships models.
+* When you use select_related, Django fetches the related objects and caches them in memory. This can be particularly useful when you need to access fields of related objects in your code.
+* Use select_related when you have a ForeignKey or OneToOneField relationship and you know you will be accessing related object fields. It's efficient for cases where you're fetching a single object and its related object(s).
+
+select_related will fetch all the foreign key related objects in single query:
+
+Account.objects.select_related('person')
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance",
+       "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_account"
+INNER JOIN "my_models_person" ON ("my_models_account"."person_id" = "my_models_person"."id")
+LIMIT 21;
+
+*****************
+this single query to fetch related models data:
+
+Account.objects.select_related('person')[0].person
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance",
+       "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_account"
+INNER JOIN "my_models_person" ON ("my_models_account"."person_id" = "my_models_person"."id")
+LIMIT 1;
+
+
+<Person: Joan louji>
+
+******************************
+
+looping through the loaded objetcs and access their related objects:
+specify which foreign key related objects to fetch:
+
+This is run only single query for looping:
+
+accounts = Account.objects.select_related('person')
+
+for account in accounts:
+  print(account.person.name)
+
+****************************************************************************************
+prefetch_related:
+****************************************************************************************
+
+Account.objects.prefetch_related('person')
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 21;
+
+
+**********************
+
+Account.objects.prefetch_related()[0].person
+
+**********************
+
+
+from my_models.models import *
+
+customers = Customer.objects.prefetch_related('product_set')
+
+for customer in customers:
+  print(customer.product_set.all())
+
+It runs only two queries:
+
+1) to fetch all customers
+
+  SELECT "my_models_customer"."id",
+        "my_models_customer"."cus_name",
+        "my_models_customer"."cus_email",
+        "my_models_customer"."cus_mobile"
+  FROM "my_models_customer";
+
+2) To fetch all the products related to these customers:
+
+  SELECT ("my_models_product_customers"."customer_id") AS "_prefetch_related_val_customer_id",
+        "my_models_product"."id",
+        "my_models_product"."cus_name",
+        "my_models_product"."cus_qty"
+  FROM "my_models_product"
+  INNER JOIN "my_models_product_customers" ON ("my_models_product"."id" = "my_models_product_customers"."product_id")
+  WHERE "my_models_product_customers"."customer_id" IN (1,2,3);
+
+
+
+**************************************
+differences between select_related and prefetch_related:
+**************************************
+
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#prefetch-related
+
+-> select_related works by creating an SQL join and including the fields of the related object in the SELECT statement.
+For this reason, select_related gets the related objects in the same database query ( does ‘joining’ in sql)
+However, to avoid the much larger result set that would result from joining across a ‘many’ relationship, select_related is limited to single-valued relationships - foreign key and one-to-one.
+-> select_related only works with foreign key and one-to-one
+-> select_related will not work with many-to-many relationship:
+  Customer.objects.select_related('product_set')  -- give error
+
+
+-> prefetch_related, on the other hand, does a separate lookup for each relationship, and does the ‘joining’ in Python.
+This allows it to prefetch many-to-many and many-to-one objects ( which cannot be done using select_related ), and it also works for foreign key and one-to-one relationships that are supported by select_related.
+It also supports prefetching of GenericRelation and GenericForeignKey, however, it must be restricted to a homogeneous set of results.
+
+For example, prefetching objects referenced by a GenericForeignKey is only supported if the query is restricted to one ContentType.
+
+
+*****************************
+Complex lookups with Q objects
+*****************************
+
+In Django, the Q object is a powerful tool that allows you to create complex queries using logical operators like AND(&), OR(|), and NOT(~).
+It's often used in conjunction with the filter() method to create more advanced database queries.
+
+“A Q object (django.db.models.Q) is an object used to encapsulate a collection of keyword arguments.
+These keyword arguments are specified as in ‘Field lookups’”.
+
+
+from my_models.models import Person
+from django.db.models import Q
+
+With Field lookups
+>>> Person.objects.filter(name__startswith='a') | Category.objects.filter(name__startswith='s')
+
+With Q object:
+>>> Person.objects.filter(Q(name__startswith='a') | Q(name__startswith='s'))
+
+boht will generate same sql:
+  SELECT "my_models_person"."id",
+        "my_models_person"."name",
+        "my_models_person"."email",
+        "my_models_person"."mobile"
+  FROM "my_models_person"
+  WHERE ("my_models_person"."name" LIKE 'a%' ESCAPE '\' OR "my_models_person"."name" LIKE 's%' ESCAPE '\') LIMIT 21; args=('a%', 's%');
+
+
+******************
+
+Q objects can be combined using the &, |, and ^ operators.
+When an operator is used on two Q objects, it yields a new Q object.
+
+For example, this statement yields a single Q object that represents the “OR” of two "question__startswith" queries:
+
+>>> Q(question__startswith="Who") | Q(question__startswith="What")
+
+This is equivalent to the following SQL WHERE clause:
+  WHERE question LIKE 'Who%' OR question LIKE 'What%'
+
+*************************
+
+You can compose statements of arbitrary complexity by combining Q objects with the &, |, and ^ operators and use parenthetical grouping.
+Also, Q objects can be negated using the ~ operator, allowing for combined lookups that combine both a normal query and a negated (NOT) query:
+
+Q(question__startswith="Who") | ~Q(pub_date__year=2005)
+
+*****************************
+Multiple Q objects:
+
+Each lookup function that takes keyword-arguments (e.g. filter(), exclude(), get()) can also be passed one or more Q objects as positional (not-named) arguments.
+If you provide multiple Q object arguments to a lookup function, the arguments will be “AND”ed together.
+
+For example:
+
+Poll.objects.get(
+    Q(question__startswith="Who"),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+)
+
+Roughly translates into the SQL:
+
+  SELECT * from polls WHERE question LIKE 'Who%'
+      AND (pub_date = '2005-05-02' OR pub_date = '2005-05-06')
+
+*****
+
+Person.objects.get(
+  Q(name__startswith="joan"),
+  Q(email='sjlouji10@gmail.com') | Q(mobile=123412),
+)
+
+SELECT "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_person"
+WHERE ("my_models_person"."name" LIKE 'joan%' ESCAPE '\' AND ("my_models_person"."email" = 'sjlouji10@gmail.com' OR "my_models_person"."mobile" = '123412')) LIMIT 21; args=('joan%', 'sjlouji10@gmail.com', '123412');
+
+
+<Person: Joan louji>
+
+*****************************
+
+Lookup functions can mix the use of Q objects and keyword arguments.
+All arguments provided to a lookup function (be they keyword arguments or Q objects) are “AND”ed together.
+However, if a Q object is provided, it must precede the definition of any keyword arguments. For example:
+
+Poll.objects.get(
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+    question__startswith="Who",
+)
+
+would be a valid query, equivalent to the previous example.
+
+****
+
+# INVALID QUERY
+Poll.objects.get(
+    question__startswith="Who",
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+)
+
+
+Person.objects.get(
+  name__startswith="joan",
+  Q(email='sjlouji10@gmail.com') | Q(mobile=123412),
+)
+
+SyntaxError: positional argument follows keyword argument
+*****************************
+
+The Q object is particularly useful when you need to build queries dynamically based on user input or other runtime conditions.
+You can combine multiple Q objects using the logical operators to create even more complex queries:
+
+
+from django.db.models import Q
+from myapp.models import MyModel
+
+q1 = Q(field1__icontains='term1')
+q2 = Q(field2__icontains='term2')
+q3 = Q(field3__icontains='term3')
+
+# Retrieve objects where either q1 AND q2 OR q3 is true
+results = MyModel.objects.filter((q1 & q2) | q3)
+
+*****************************

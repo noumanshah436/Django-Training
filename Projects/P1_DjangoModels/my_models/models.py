@@ -46,7 +46,9 @@ class Track(models.Model):
         return self.title
 
 
+# ****************************************
 # relationships
+# ****************************************
 class Person(models.Model):
     name = models.TextField(max_length=100)
     email = models.EmailField(null=True)
@@ -57,20 +59,20 @@ class Person(models.Model):
         # return f"name: {self.name}, email: {self.email}"
 
 
-# One to One Relationship
-# A person can have only one Adhar ID
-class Adhar(models.Model):
-    person = models.OneToOneField("Person", on_delete=models.CASCADE)
-    signature = models.TextField(null=True)
-    adhar_no = models.TextField(max_length=100)
-
-
 # one to many relationship
 # Each person can hold more than one account
 class Account(models.Model):
     person = models.ForeignKey("Person", on_delete=models.CASCADE)
     account_number = models.TextField()
     balance = models.TextField(max_length=100)
+
+
+# One to One Relationship
+# A person can have only one Adhar ID
+class Adhar(models.Model):
+    person = models.OneToOneField("Person", on_delete=models.CASCADE)
+    signature = models.TextField(null=True)
+    adhar_no = models.TextField(max_length=100)
 
 
 # many to many relationship
@@ -82,7 +84,7 @@ class Customer(models.Model):
     cus_mobile = models.TextField(max_length=100)
 
 
-class Products(models.Model):
-    cus_id = models.ManyToManyField("Customer")
+class Product(models.Model):
+    customers = models.ManyToManyField("Customer")
     cus_name = models.TextField()
     cus_qty = models.TextField(max_length=100)

@@ -1,0 +1,212 @@
+Lookup functions in Django are methods provided by the Django ORM (Object-Relational Mapping)
+that allow you to perform various types of queries on your database.
+These functions help you filter, order, and manipulate data in your database tables.
+They are often used in combination with the filter() or exclude() methods of querysets to narrow down the set of objects returned.
+
+They enable you to write expressive and precise queries while abstracting away the underlying SQL.
+
+You can use these functions to tailor your queries to your specific requirements and retrieve the data you need from the database.
+
+
+Here are some commonly used lookup functions in Django:
+
+**********************
+exact:
+Performs an exact match lookup. It's used to retrieve objects with a field value exactly equal to the provided value.
+
+User.objects.filter(name__exact='john')
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."name" = 'john'
+
+
+**********************
+iexact:
+Performs a case-insensitive exact match lookup.
+
+User(name="John", email='john@gmail.com').save()
+User(name="john", email='john@gmail.com').save()
+User(name="JOHN", email='john@gmail.com').save()
+
+User.objects.filter(name__iexact='JOHN')
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."name" LIKE 'JOHN' ESCAPE '\'  args=('JOHN',);
+
+-> this will get all the above create objects
+
+
+**********************
+
+contains:
+Checks if the field value contains the specified substring.
+
+from many_to_many_relationship.models import Article
+
+Article.objects.filter(headline__contains='Django')
+
+SELECT * FROM "many_to_many_relationship_article"
+WHERE "many_to_many_relationship_article"."headline" LIKE '%Django%' ESCAPE '\' ORDER BY "many_to_many_relationship_article"."headline" ASC  args=('%Django%',);
+
+
+**********************
+
+icontains:
+Case-insensitive version of contains.
+
+**********************
+
+gt and lt: Greater than and less than comparisons.
+
+Product.objects.filter(price__gt=50)
+
+**********************
+
+gte and lte: Greater than or equal to and less than or equal to comparisons.
+
+**********************
+
+in:
+Checks if the field value is in a given list.
+
+User.objects.filter(id__in=[1, 2, 3])
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."id" IN (1, 2, 3)
+
+**********************
+
+startswith and endswith:
+
+Checks if the field value starts or ends with a specified substring.
+
+Album.objects.filter(title__startswith='The')
+
+SELECT * FROM "my_models_album"
+WHERE "my_models_album"."title" LIKE 'The%' ESCAPE '\'  args=('The%',);
+
+**********************
+
+range: Finds values within a specified range.
+
+Order.objects.filter(quantity__range=(10, 50))
+
+Track.objects.filter(length__range=(10, 50))
+
+SELECT  * FROM "my_models_track"
+WHERE "my_models_track"."length" BETWEEN 10 AND 50
+
+**********************
+
+isnull:
+Checks for null values.
+
+Post.objects.filter(comments__isnull=True)
+
+Person.objects.filter(mobile__isnull=True)
+
+SELECT * FROM "my_models_person"
+WHERE "my_models_person"."mobile" IS NULL
+
+
+**********************
+
+date:
+Extracts date parts from a DateTimeField.
+
+Event.objects.filter(date__date=datetime.date(2023, 8, 11))
+
+
+**********************
+
+exact and iexact with foreign keys:
+
+You can use these lookups to filter objects based on their related foreign key fields.
+
+
+# Example: Retrieve articles written by an author with exact id 1
+Article.objects.filter(author__exact=1)
+
+# Example: Retrieve articles written by an author with case-insensitive name 'John'
+Article.objects.filter(author__name__iexact='John')
+icontains with related fields: You can apply case-insensitive substring matching on related fields.
+
+
+**********************
+
+# Example: Retrieve users whose email contains 'example.com'
+User.objects.filter(profile__email__icontains='example.com')
+
+
+**********************
+
+year, month, and day: Extract year, month, or day components from a DateField or DateTimeField.
+
+
+# Example: Retrieve events that occurred in the year 2023
+Event.objects.filter(date__year=2023)
+
+# Example: Retrieve articles published in the month of August
+Article.objects.filter(pub_date__month=8)
+
+**********************
+
+week_day: Filters objects based on the day of the week (1 for Monday, 7 for Sunday).
+
+# Example: Retrieve tasks scheduled for Fridays
+Task.objects.filter(due_date__week_day=5)
+
+
+**********************
+
+regex: Performs a regular expression match.
+
+
+# Example: Retrieve products with SKUs that match a specific pattern
+Product.objects.filter(sku__regex=r'^[A-Z]{3}-\d{3}$')
+
+**********************
+
+iregex: Case-insensitive version of regex.
+
+
+# Example: Retrieve products with SKUs that match a specific pattern (case-insensitive)
+Product.objects.filter(sku__iregex=r'^[a-z]{3}-\d{3}$')
+
+**********************
+
+exists: Checks if there are any related records.
+
+
+# Example: Retrieve users who have posted at least one comment
+User.objects.filter(comments__exists=True)
+
+**********************
+
+annotate: Adds aggregated values to each object.
+
+
+from django.db.models import Count
+
+# Example: Retrieve authors with the count of articles they've written
+Author.objects.annotate(article_count=Count('articles'))
+
+**********************
+
+F object:
+
+Allows you to reference other fields in the query.
+
+
+from django.db.models import F
+
+# Example: Retrieve products with price higher than cost price
+Product.objects.filter(price__gt=F('cost_price'))
+
+**********************
+
+
+
+
+
+

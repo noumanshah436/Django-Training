@@ -1,0 +1,57 @@
+**********************************
+
+Add model:
+
+1) Add model in model.p
+
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+
+Run the Migrations commands in order to get changes to our database.
+
+2) python manage.py makemigrations
+
+3) python manage.py sqlmigrate my_models 0001   #  it prints out the code that is going to run
+
+4) python manage.py migrate
+
+**********************************
+
+Manipulate database
+
+Start the django shell:
+
+python manage.py shell
+
+(In the shell at the prompt)
+
+from my_models.models import User
+
+u = User(name='Kristen', email='kf@umich.edu')
+u.save()
+u = User(name='Chuck', email='csev@umich.edu')
+u.save()
+u = User(name='Colleen', email='cvl@umich.edu')
+u.save()
+u = User(name='Ted', email='ted@umich.edu')
+u.save()
+u = User(name='Sally', email='a2@umich.edu')
+u.save()
+
+User.objects.values()
+User.objects.filter(email='csev@umich.edu').values()
+
+User.objects.filter(email='ted@umich.edu').delete()
+User.objects.values()
+
+User.objects.filter(email='csev@umich.edu').update(name='Charles')
+User.objects.values()
+
+User.objects.values().order_by('email')
+User.objects.values().order_by('-name')
+
+quit()
+
