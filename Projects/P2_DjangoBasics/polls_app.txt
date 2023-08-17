@@ -1,0 +1,394 @@
+https://docs.djangoproject.com/en/4.2/intro/tutorial01/
+
+python manage.py startapp polls
+
+
+
+**************************
+https://docs.djangoproject.com/en/4.2/intro/tutorial02/
+
+1) add models
+
+2)
+$ python manage.py makemigrations polls
+By running makemigrations, you’re telling Django that you’ve made some changes to your models (in this case, you’ve made new ones)
+and that you’d like the changes to be stored as a migration.
+
+let’s see what SQL that migration would run.
+$ python manage.py sqlmigrate polls 0001
+
+then migrate:
+$ python manage.py migrate
+
+The migrate command takes all the migrations that haven’t been applied (Django tracks which ones are applied using a special table in your database called django_migrations)
+and runs them against your database - essentially, synchronizing the changes you made to your models with the schema in the database.
+
+
+3) add data in models using shell:
+
+python manage.py shell
+
+>>> from polls.models import Choice, Question  .
+# Create a new Question.
+# Support for time zones is enabled in the default settings file, so
+# Django expects a datetime with tzinfo for pub_date. Use timezone.now()
+# instead of datetime.datetime.now() and it will do the right thing.
+
+>>> from django.utils import timezone
+>>> q = Question(question_text="What's new?", pub_date=timezone.now())
+
+# Save the object into the database. You have to call save() explicitly.
+>>> q.save()
+
+# Now it has an ID.
+>>> q.id
+1
+
+# Access model field values via Python attributes.
+>>> q.question_text
+"What's new?"
+>>> q.pub_date
+datetime.datetime(2012, 2, 26, 13, 0, 0, 775217, tzinfo=datetime.timezone.utc)
+
+# Change values by changing the attributes, then calling save().
+>>> q.question_text = "What's up?"
+>>> q.save()
+
+# objects.all() displays all the questions in the database.
+>>> Question.objects.all()
+<QuerySet [<Question: Question object (1)>]>
+
+# create choices for question
+>>> q.choice_set.create(choice_text="Not much", votes=0)
+<Choice: Choice object (1)>
+>>> q.choice_set.create(choice_text="The sky", votes=0)
+<Choice: Choice object (2)>
+>>> q.choice_set.create(choice_text="Just hacking again", votes=0)
+
+# Get the question that was published this year.
+>>> from django.utils import timezone
+>>> current_year = timezone.now().year
+>>> Question.objects.get(pub_date__year=current_year)
+
+# Find all Choices for any question whose pub_date is in this year
+>>> Choice.objects.filter(question__pub_date__year=current_year)
+<QuerySet [<Choice: Not much>, <Choice: The sky>, <Choice: Just hacking again>]>
+
+# Let's delete one of the choices. Use delete() for that.
+>>> c = q.choice_set.filter(choice_text__startswith="Just hacking")
+>>> c.delete()
+
+
+********************************
+
+Creating an admin use
+
+python manage.py createsuperuser
+
+Username (leave blank to use 'dev'): nouman
+Error: That username is already taken.
+Username (leave blank to use 'dev'): farhan
+Email address: farhan@gmail.com
+Password:
+Password (again):
+The password is too similar to the username.
+This password is too short. It must contain at least 8 characters.
+This password is too common.
+Bypass password validation and create user anyway? [y/N]: y
+
+
+username: farhan
+password: farhan
+
+********************************
+
+
+Make the poll app modifiable in the admin
+
+
+Only one more thing to do: we need to tell the admin that Question objects have an admin interface.
+To do this, open the polls/admin.py file, and edit it to look like this:
+
+polls/admin.py
+from django.contrib import admin
+from .models import Question
+
+admin.site.register(Question)
+
+***************************************
+
+
+If the value of “Date published” doesn’t match the time when you created the question in Tutorial 1,
+ it probably means you forgot to set the correct value for the TIME_ZONE setting.
+ Change it, reload the page and check that the correct value appears.
+
+
+Default TIME_ZONE: 'America/Chicago'
+
+When USE_TZ is False, this is the time zone in which Django will store all datetimes.
+When USE_TZ is True, this is the default time zone that Django will use to display datetimes in templates and to interpret datetimes entered in forms.
+
+When I set it to, it shows time in this timezone:
+TIME_ZONE = 'Asia/Karachi'
+
+https://docs.djangoproject.com/en/4.2/ref/settings/#std-setting-TIME_ZONE
+
+https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
+***************************************
+
+
+Tutorial 3
+https://docs.djangoproject.com/en/4.2/intro/tutorial03/
+
+
+To get from a URL to a view, Django uses what are known as ‘URLconfs’. A URLconf maps URL patterns to views.
+
+
+*********************
+
+add views:
+
+
+def index(request):
+    return HttpResponse("Hello, world. You're at the polls index.")
+
+
+def detail(request, question_id):
+    return HttpResponse("You're looking at question %s." % question_id)
+
+
+def results(request, question_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % question_id)
+
+
+def vote(request, question_id):
+    return HttpResponse("You're voting on question %s." % question_id)
+
+************************
+
+urls:
+
+urlpatterns = [
+    # ex: /polls/
+    path("", views.index, name="index"),
+    # ex: /polls/5/
+    path("<int:question_id>/", views.detail, name="detail"),
+    # ex: /polls/5/results/
+    path("<int:question_id>/results/", views.results, name="results"),
+    # ex: /polls/5/vote/
+    path("<int:question_id>/vote/", views.vote, name="vote"),
+]
+
+************************
+
+When somebody requests a page from your website – say, “/polls/34/”,
+Django will load the mysite.urls Python module because it’s pointed to by the ROOT_URLCONF setting.
+
+It finds the variable named urlpatterns and traverses the patterns in order.
+After finding the match at 'polls/', it strips off the matching text ("polls/") and sends the remaining text – "34/" – to the ‘polls.urls’ URLconf for further processing.
+ There it matches '<int:question_id>/', resulting in a call to the detail() view.
+
+**************************
+
+Add templates:
+
+-> Your project’s TEMPLATES setting describes how Django will load and render templates.
+The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. By convention DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
+
+
+-> Here’s a setup that tells the Django template engine to load templates from the templates subdirectory inside each installed application:
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+    },
+]
+
+
+-> Within the templates directory you have just created, create another directory called polls, and within that create a file called index.html.
+In other words, your template should be at "polls/templates/polls/index.html".
+Because of how the app_directories template loader works as described above,
+you can refer to this template within Django as polls/index.html.
+
+
+******************************
+views.py:
+
+from django.http import HttpResponse
+from django.shortcuts import render
+from django.http import Http404
+
+from .models import Question
+
+
+def index(request):
+    latest_question_list = Question.objects.order_by("-pub_date")[:5]
+    context = {"latest_question_list": latest_question_list}
+    return render(request, "polls/index.html", context)
+
+
+def detail(request, question_id):
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist :(")
+    return render(request, "polls/detail.html", {"question": question})
+
+
+def results(request, question_id):
+    response = "You're looking at the results of question %s."
+    return HttpResponse(response % question_id)
+
+
+def vote(request, question_id):
+    return HttpResponse(f"You're voting on question {question_id}.")
+
+****************************
+
+A shortcut: get_object_or_404()¶
+
+from django.shortcuts import get_object_or_404, render
+
+from .models import Question
+
+
+# ...
+def detail(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, "polls/detail.html", {"question": question})
+
+
+The get_object_or_404() function takes a Django model as its first argument and an arbitrary number of keyword arguments,
+which it passes to the get() function of the model’s manager. It raises Http404 if the object doesn’t exist.
+
+****************************
+
+Removing hardcoded URLs in templates:
+
+Remember, when we wrote the link to a question in the polls/index.html template, the link was partially hardcoded like this:
+
+<li><a href="/polls/{{ question.id }}/">{{ question.question_text }}</a></li>
+The problem with this hardcoded, tightly-coupled approach is that it becomes challenging to change URLs on projects with a lot of templates. However, since you defined the name argument in the path() functions in the polls.urls module, you can remove a reliance on specific URL paths defined in your url configurations by using the {% url %} template tag:
+
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+The way this works is by looking up the URL definition as specified in the polls.urls module. You can see exactly where the URL name of ‘detail’ is defined below:
+
+...
+# the 'name' value as called by the {% url %} template tag
+path("<int:question_id>/", views.detail, name="detail"),
+...
+
+
+****************************
+
+Namespacing URL names:
+
+The tutorial project has just one app, polls. In real Django projects, there might be five, ten, twenty apps or more.
+ How does Django differentiate the URL names between them?
+For example, the polls app has a detail view, and so might an app on the same project that is for a blog.
+How does one make it so that Django knows which app view to create for a url when using the {% url %} template tag?
+
+The answer is to add namespaces to your URLconf. In the polls/urls.py file, go ahead and add an app_name to set the application namespace:
+
+polls/urls.py¶
+from django.urls import path
+
+from . import views
+
+app_name = "polls"
+urlpatterns = [
+    path("", views.index, name="index"),
+    path("<int:question_id>/", views.detail, name="detail"),
+    path("<int:question_id>/results/", views.results, name="results"),
+    path("<int:question_id>/vote/", views.vote, name="vote"),
+]
+
+
+Now change your polls/index.html template from:
+
+<li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+
+to point at the namespaced detail view:
+
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
+
+****************************
+Tutorial 4:
+https://docs.djangoproject.com/en/4.2/intro/tutorial04/
+****************************
+
+reverse() function:
+
+In vote function we are using the reverse() function in the HttpResponseRedirect constructor in this example.
+This function helps avoid having to hardcode a URL in the view function.
+It is given the name of the view that we want to pass control to and the variable portion of the URL pattern that points to that view.
+In this case, using the URLconf we set up in Tutorial 3, this reverse() call will return a string like
+
+"/polls/3/results/"
+
+we can also test this in terminal:
+
+>>> from django.urls import reverse
+>>> reverse("polls:results", args=(3,))
+'/polls/3/results/'
+
+****************************
+Generic views
+****************************
+
+Use generic views: Less code is better ¶
+
+The detail() and results() views are very short – and, as mentioned above, redundant.
+The index() view, which displays a list of polls, is similar.
+
+These views represent a common case of basic web development:
+  getting data from the database according to a parameter passed in the URL, loading a template and returning the rendered template.
+
+Because this is so common, Django provides a shortcut, called the “generic views” system.
+Generic views abstract common patterns to the point where you don’t even need to write Python code to write an app.
+
+Let’s convert our poll app to use the generic views system, so we can delete a bunch of our own code.
+We’ll have to take a few steps to make the conversion.
+
+We will:
+  Convert the URLconf.
+  Delete some of the old, unneeded views.
+  Introduce new views based on Django’s generic views.
+
+********************************
+
+We’re using two generic views here: ListView and DetailView.
+
+ListView   = to display a list of objects
+DetailView = to display a detail page for a particular type of object
+
+1) Each generic view needs to know what model it will be acting upon. This is provided using the model attribute.
+
+2) The DetailView expects the primary key value captured from the URL to be called "pk",
+ so we’ve changed question_id to pk for the generic views.
+
+********************
+DetailView generic view:
+
+By default, the DetailView uses a template called <app name>/<model name>_detail.html.
+In our case, it would use the template "polls/question_detail.html".
+The template_name attribute is used to tell Django to use a specific template name instead of the autogenerated default template name.
+
+We also specify the template_name for the results list view – this ensures that the results view and the detail view have a different appearance when rendered, even though they’re both a DetailView behind the scenes.
+
+********************
+ListView generic view:
+
+The ListView uses a default template called <app name>/<model name>_list.html.
+We use template_name to tell ListView to use our existing "polls/index.html" template.
+
+********************
+
+In previous parts of the tutorial, the templates have been provided with a context that contains the question and latest_question_list context variables.
+For DetailView the question variable is provided automatically – since we’re using a Django model (Question), Django is able to determine an appropriate name for the context variable.
+
+However, for ListView, the automatically generated context variable is question_list.
+To override this we provide the context_object_name attribute, specifying that we want to use latest_question_list instead.
+As an alternative approach, you could change your templates to match the new default context variables – but it’s a lot easier to tell Django to use the variable you want.

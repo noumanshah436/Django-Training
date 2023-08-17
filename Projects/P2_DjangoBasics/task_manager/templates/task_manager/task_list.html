@@ -1,0 +1,27 @@
+{% extends 'task_manager_base.html' %}
+{% block content %}
+<center>
+  <h1>Your Tasks</h1>
+  <a href="{% url 'task_manager:task_create' %}" class="btn btn-primary">Add Task</a>
+
+  {% for task in tasks %}
+    <div class="card  m-5">
+      <div class="card-header">
+        {{ task.title }}
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">{{ task.description|truncatechars:50 }}</h5>
+        <p class="card-text">
+          <strong>Completed:</strong>
+          {% if task.completed %}Yes{% else %}No{% endif %}
+        </p>
+
+        <a href="{% url 'task_manager:task_detail' task.pk %}" class="btn btn-primary">Read more</a>
+        <a href="{% url 'task_manager:task_delete' task.pk %}" class="btn btn-danger">Delete task</a>
+      </div>
+    </div>
+  {% empty %}
+    <h3>No tasks yet.</h3>
+  {% endfor %}
+</center>
+{% endblock %}

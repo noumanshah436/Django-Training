@@ -1,0 +1,7 @@
+In this Python Django Tutorial, we will be learning how to use class-based views in order to create, update, and delete posts. These class-based views are very convenient once we get used to using them properly. 
+
+
+For blog home :
+
+create class based view and set some attributes in this class and and make url to that view in urls.py file 
+create template for that view at this default loaction <app>/<model>_<viewtype>.html to render  it.

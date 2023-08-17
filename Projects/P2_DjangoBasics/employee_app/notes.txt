@@ -1,0 +1,29 @@
+https://www.javatpoint.com/django-class-based-generic-views
+
+https://ccbv.co.uk/
+*******************************
+
+
+Function-Based Views
+Function-based views are beginner-friendly; beginners can easily understand them.
+ It is quite easy to understand in comparison to class-based views.
+
+It is easy to understand and easy to use.
+It provides the explicit code flow.
+Straightforward usage of decorators.
+
+But function-based view can't be extended and also leads to code redundancy.
+
+**********************************
+Class-Based Views
+Class-based views can be used in place of function-based views.
+All the operations handle using Python objects instead of functions.
+They provide some excellent example over the function-based views.
+Class-based views can implement CRUD operation in easy manner.
+
+It follows the DRY convention of Django.
+We can extend class-based views and can add more functionality according to a requirement using Mixin.
+It allows to inherit another class, can be modified for various use cases.
+
+But these are complex to understand and hard to read. It has implicit code flow.
+

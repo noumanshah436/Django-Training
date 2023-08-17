@@ -1,0 +1,72 @@
+reverse and reverse_lazy are both functions provided by Django to generate URLs for named views,
+but they have different use cases and behaviors.
+
+reverse:
+
+Eager Evaluation:
+The reverse function generates the URL immediately when called.
+It's useful when you're working with synchronous code and can immediately generate the URL.
+
+Usage:
+You can use reverse in situations where the URL generation won't cause any issues with circular imports.
+
+For example, in views, templates, and other places where the URL is generated directly.
+Example:
+
+from django.urls import reverse
+from django.shortcuts import redirect
+
+def my_view(request):
+    return redirect(reverse('my_app:my_view_name'))
+
+
+we can also test this in terminal:
+
+>>> from django.urls import reverse
+>>> reverse("polls:results", args=(3,))
+'/polls/3/results/'
+
+**********************
+
+reverse_lazy:
+
+Lazy Evaluation:
+The reverse_lazy function returns a lazy object that doesn't immediately generate the URL.
+It's particularly useful in situations where there could be circular import problems,
+ such as when using class-based views or other scenarios where the URL generation is deferred until it's actually needed.
+
+Usage:
+You should use reverse_lazy in situations where the URL generation is delayed,
+such as in class attributes or any situation where the URL might be accessed before the URL configuration is fully loaded.
+
+Example:
+
+from django.urls import reverse_lazy
+from django.views.generic import RedirectView
+
+class MyRedirectView(RedirectView):
+    url = reverse_lazy('my_app:my_view_name')
+
+
+we can also test this in terminal:
+
+>>> from django.urls import reverse_lazy
+>>> reverse_lazy('bookshelf:my_books')
+'/bookshelf/my-books/'
+
+
+***************************
+
+
+In summary:
+
+Use reverse when you're working with synchronous code and there are no concerns about circular imports or other delayed URL resolution issues.
+Use reverse_lazy when you need to generate a URL in a context that could lead to circular imports or if you're using class-based views.
+By using the appropriate function based on your scenario, you can avoid potential issues and ensure that your URL generation behaves as expected.
+
+
+
+
+
+
+Regenerate

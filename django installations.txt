@@ -1,0 +1,7 @@
+django installations
+
+pip install django
+
+pip install django-crispy-forms
+
+pip install Pillow    --   library to work with images with python

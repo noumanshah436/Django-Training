@@ -1,0 +1,7 @@
+
+# For Profile we do
+
+# 1) create model
+# 2) Attach it to admin page
+# 3) Make profile for some user in admin page
+# 4) create signals to make a profile object for a newly created user automatically

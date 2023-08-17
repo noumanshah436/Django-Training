@@ -16,6 +16,7 @@ media
 
 # Virtual environment
 .venv
+envname
 
 # Static files
 node_modules

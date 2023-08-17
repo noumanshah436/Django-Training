@@ -1,0 +1,33 @@
+python manage.py makemigrations
+
+python manage.py migrate
+
+python manage.py createsuperuser
+
+username: CoreyMS
+email: CoreyMSSchafer@gmail.com
+password: testing321
+
+
+username: TestUser
+email: TestUser@company.com
+password: testing321
+
+username: nouman
+email: nouman@gmail.com
+password: testing321
+
+
+
+username: Farhan
+email: farhan@gmail.com
+password: testing321
+
+
+username: Ali_Ramzan
+email: aliramzan@gmail.com
+password: testing321
+
+username: syed
+email: noumanrehman042@gmail.com
+password: testing321

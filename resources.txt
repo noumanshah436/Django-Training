@@ -1,0 +1,17 @@
+Hi, thanks for joining the coding community!
+
+
+Every month, i will send you a summary of all my latest content, which includes my newest videos, blog posts and programming tips.
+
+In the mean time,you can check out my youtube channel where i teach programming: https://www.youtube.com/c/CodeWithTomi
+
+
+Free Resources:
+
+Django Roadmap: https://www.dropbox.com/s/opzvs43bwqpvr8c/Django%20Roadmap%20-%20Google%20Docs.pdf?dl=0
+
+Django Projects Cheat Sheet: https://www.dropbox.com/s/s54nyhbslh8fqxg/Django%20Projects%20cheat%20sheet%20-%20Google%20Docs.pdf?dl=0
+
+Python Data Structures: https://www.dropbox.com/s/bpof9qic77kjlfj/PYTHON%20DATA%20STRUCTURES%20%281%29.pdf?dl=0
+
+Git Cheat Sheet: https://www.dropbox.com/s/ubyvjp84cq42m5r/Git%20Cheat%20Sheet%20-%20Google%20Docs.pdf?dl=0

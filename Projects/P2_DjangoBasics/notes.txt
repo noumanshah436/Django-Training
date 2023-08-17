@@ -1,0 +1,50 @@
+https://docs.djangoproject.com/en/4.2/intro
+
+What are Django class based views & should you use them?
+https://www.youtube.com/watch?v=RE0HlKch_3U
+https://dennisivy.com/django-class-based-views
+
+app in this project:
+
+bookshelf:
+  practice of CRUD operations using both function and class based views
+
+
+employee app:
+  practice crud using class based views
+
+my_class_based_views:
+  to practice class based views using View class (pending )
+
+my_views:
+  initial practice of views in django
+
+polls app:
+  create polls app by following django tutorials
+
+
+By default, the runserver command starts the development server on the internal IP at port 8000.
+
+If you want to change the server’s port, pass it as a command-line argument. For instance, this command starts the server on port 8080:
+$ python manage.py runserver 8080
+
+If you want to change the server’s IP, pass it along with the port. For example, to listen on all available public IPs (which is useful if you are running Vagrant or want to show off your work on other computers on the network), use:
+$ python manage.py runserver 0.0.0.0:8000
+
+*****************************
+
+Automatic reloading of runserver
+
+The development server automatically reloads Python code for each request as needed.
+You don’t need to restart the server for code changes to take effect.
+However, some actions like adding files don’t trigger a restart, so you’ll have to restart the server in these cases.
+
+
+*****************************
+
+
+"%s %s" % (self.first_name, self.last_name)
+
+
+*********************************
+

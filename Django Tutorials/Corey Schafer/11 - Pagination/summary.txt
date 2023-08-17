@@ -1,0 +1,17 @@
+we just see paggination commnads in cmd
+
+add paginate_by = 5 in class based view
+
+add links to other pages in home.html file
+
+***********************************
+
+
+for user views :
+
+we make a new UserPostListView and make our custom query set to get all post of that user.
+
+we make template for this view and copy home.html in it and make some changes in it.
+
+
+At last we add proper links on the user to work correctly

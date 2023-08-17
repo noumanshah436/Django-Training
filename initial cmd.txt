@@ -51,4 +51,49 @@ python manage.py startapp users
 *********************************************
 
 
+Create app inside project:
+
+1) python manage.py startapp name_of_app
+
+python manage.py startapp my_models
+
+2) Register app in installed_app in settings.py file:
+INSTALLED_APPS = [
+    # ...
+    'my_models.apps.MyModelsConfig',
+    # ...
+]
+
+3) Add urls of the app in main urls.py:
+
+a) create urls.py file in app.
+b) register this url file in main urls.py:
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('blog.urls')),
+    ]
+
+4) add model in current app's admin.py file:
+from django.contrib import admin
+from .models import Person
+
+admin.site.register(Person)
+
+
+**********************************
+
+naming convention for apps:
+
+Here are a few examples of app names following the convention:
+
+blog (for a blogging app)
+ecommerce (for an e-commerce app)
+user_profile (for a user profile app)
+inventory_management (for an inventory management app)
+event_calendar (for an event calendar app)
+
+*********************************************
 

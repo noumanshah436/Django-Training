@@ -1,0 +1,17 @@
+from django.utils import timezone
+import pytz
+
+# Get the current datetime in the local time zone
+current_datetime = timezone.now()
+
+# Get the current date and time separately
+current_date = current_datetime.date()
+current_time = current_datetime.time()
+
+# If you want to convert a datetime value from one time zone to another, you can use the pytz library, which is included with Django.
+# Convert the current datetime to a different time zone
+
+source_timezone = pytz.timezone('UTC')
+target_timezone = pytz.timezone('America/New_York')
+
+current_target_time = current_datetime.astimezone(target_timezone)

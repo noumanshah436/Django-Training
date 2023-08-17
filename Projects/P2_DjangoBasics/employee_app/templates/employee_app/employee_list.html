@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<table class="table table-borderless">
+    <thead class="border-bottom font-weight-bold">
+        <tr>
+            <td>First Name</td>
+            <td>Last Name</td>
+            <td>Mobile</td>
+            <td>Email</td>
+                {% comment %}
+                    <a href="{% url 'EmployeeRetrieve' %}" class="btn btn-outline-success">
+                        <i class="fas fa-plus"></i> Add New
+                    </a>
+                {% endcomment %}
+            <td></td>
+        </tr>
+    </thead>
+
+    {% for object in object_list %}
+        <!-- Display Objects -->
+        <tr>
+            <td>{{ object.first_name }}</td>
+            <td> {{object.last_name }}</td>
+            <td> {{object.mobile }}</td>
+            <td>{{object.email }} </td>
+
+            <td>
+                <button>
+                    <a href="{% url 'employee_app:employee_delete' object.pk %}" class = 'class="btn text-secondary px-0'>
+                        Delete
+                    </a>
+                </button>
+
+                <button>
+                    <a href="{% url 'employee_app:employee_update' object.pk %}" class = 'class="btn text-secondary px-0'>
+                        Update
+                    </a>
+                </button>
+            </td>
+    {% endfor %}
+
+</table>
+{% endblock content %} 

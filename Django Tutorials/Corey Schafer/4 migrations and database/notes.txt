@@ -1,0 +1,51 @@
+https://www.youtube.com/watch?v=aHC3uTkT9r8&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=5
+
+In this Python Django Tutorial, we will be creating database tables
+for our application using Django models. 
+
+We will also see how we can use the Django ORM (object relational mapper) to query the database and filter through 
+results. Let's get started...
+
+
+ORM allows us to access our database and  you only need to manipulate the object and it will take care of that record in database
+
+
+
+***********************************
+ 
+ Create Post model in blog models file
+
+***********************************
+
+Re run the Migrations commands in order to get changes to our database.
+
+1) python manage.py makemigrations
+
+2) python manage.py sqlmigrate blog 0001   #  it prints out the code that is going to run
+
+3) python manage.py migrate
+
+
+************************************
+
+Manipulate database 
+
+1) python manage.py shell
+
+2) >>> from blog.Models import Post
+3) >>> from django.contrib.auth.models import User
+
+4) User.objects.all()
+4) User.objects.first()
+4) User.objects.filter(username='nouman')
+4) User.objects.filter(username='nouman').first()
+
+
+5) a) user = User.objects.filter(username='nouman').first()
+   b)  user.post_set
+   b)  user.post_set.all()
+
+
+
+**********************************
+

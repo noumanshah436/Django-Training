@@ -1,0 +1,7 @@
+->  make UserUpdateForm and ProfileUpdateForm forms 
+-> display forms in profile template
+-> update the profile view function to manage forms that will update profile of the user.
+
+-> resize the images when we upload them in model.py file
+
+-> display the pic the each user beside each post 

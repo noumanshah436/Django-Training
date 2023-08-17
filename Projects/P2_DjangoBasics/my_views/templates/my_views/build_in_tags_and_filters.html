@@ -1,0 +1,48 @@
+<ul>
+  {% for i in langs %}
+  <li class="{% cycle 'row1' 'row2' %}">{{ i }}</li>
+  {% endfor %}
+</ul>
+
+{% comment %} {% debug %} {% endcomment %}
+
+<hr />
+
+{{ "django" | capfirst }}
+
+<hr />
+<p>{{ current_datetime | date:"F j, Y, g:i a" }}</p>
+<p>{{ current_datetime | date:"D, M j Y, g:i a" }}</p>
+<p>{{ current_datetime | date:"Y-m-d H:i:s" }}</p>
+<p>{{ current_datetime | date:"l, F j, Y" }}</p>
+<p>{{ current_datetime | date:"jS F Y" }}</p>
+<p>{{ current_datetime | date:"Y-m-d" }}</p>
+<p>{{ current_datetime | date:"H:i" }}</p>
+<p>{{ current_datetime | date:"N/j/Y" }}</p>
+
+<hr />
+
+<h2>Include tag</h2>
+
+{% comment %} pass all context variables {% endcomment %}
+{% include "my_views/_partial.html" %}
+
+<hr />
+{% comment %} pass additional variables +  context variables {% endcomment %}
+{% include "my_views/_partial.html" with greeting="Hi" %}
+
+<hr />
+{% comment %} modify context variable {% endcomment %}
+{% include "my_views/_partial.html" with name="Farhan" %}
+
+<hr />
+{% comment %} only pass given args {% endcomment %}
+{% include "my_views/_partial.html" with greeting="Hi" only %}
+
+<hr />
+{% comment %} do not pass anything {% endcomment %}
+{% include "my_views/_partial.html" with greeting="Hi" only %}
+
+<hr />
+{% comment %} include partial from other app {% endcomment %}
+{% include "polls/_test_partial.html" %}

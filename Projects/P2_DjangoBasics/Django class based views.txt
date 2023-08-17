@@ -1,0 +1,64 @@
+https://www.makeuseof.com/crud-app-with-django-class-based-views/
+
+
+Class-based views(CBVs) offer several benefits over function-based views, including
+inheritance,
+code structuring,
+code reusability, and more.
+
+While implementing class-based views may appear slightly complex,
+ this guide will assist you in comprehending the concept by building a task manager app and providing step-by-step instructions.
+
+*********************
+
+What Are Class-Based Views in Django?
+
+In Django, views are Python functions that take a web request and return a web response.
+
+Class-based views (CBVs) are an alternative way to define views in Django using Python classes instead of functions.
+
+CBVs have several advantages, such as better code organization,
+easier reuse of code, and the ability to use inheritance to create variations of existing views.
+
+CBVs also provide built-in methods such as the get() and post() methods that you can overwrite for custom behaviors.
+
+*********************
+Class-Based Views Available in Django
+
+Django provides some built-in CBVs for popular use cases, such as displaying lists of objects or creating new ones.
+
+Some of these built-in CBVs are:
+
+ListView: This view renders a list of objects retrieved from a model. For instance, a page that lists all the posts available in a blog will use a ListView.
+DetailView: This view renders a detailed view of a single object retrieved from a model. You can use a DetailView to display the details of specific posts in a blog app.
+CreateView: This view renders a form to create a new object and handles the form submission. For instance, in a task manager app, you will use this view for creating new tasks.
+DeleteView: This view renders a confirmation page to delete an object and handles the page deletion.
+UpdateView: This view renders a form to update an existing object and handles the submission of the form.
+
+Django also provides other views, including TemplateView, RedirectView, and FormView.
+You can refer to Django’s documentation for detailed information on class-based views.
+https://docs.djangoproject.com/en/4.2/topics/class-based-views/
+
+*********************
+
+Django class based views:
+
+Django provides a wide range of built-in class-based views that cover common patterns and functionalities,
+helping you write more maintainable and organized code.
+
+Some of the built-in class-based views include:
+
+TemplateView:
+Renders a template and returns an HTTP response.
+
+ListView:
+Renders a list of objects using a template.
+
+DetailView:
+Renders the details of a single object using a template.
+
+CreateView, UpdateView, and DeleteView:
+Handle object creation, updating, and deletion.
+
+FormView:
+Handles form submission and rendering.

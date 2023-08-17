@@ -1,0 +1,204 @@
+we need to run the migrations in order to get any changes to our database.
+
+Migrations are used to change our database structure while saving the current data stored in it.
+
+First we make migrations  and then run migrate to save changes to database
+
+****************************************
+
+python manage.py makemigrations
+
+Migrations for 'blog':
+  blog\migrations\0001_initial.py
+    - Create model Post
+
+****************************************
+
+view the sql that is going to run :
+
+
+python manage.py sqlmigrate blog 0001
+
+CREATE TABLE "blog_post" (
+   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+   "title" varchar(100) NOT NULL, 
+   "content" text NOT NULL,
+   "date_posted" datetime NOT NULL, 
+   "author_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED);
+
+CREATE INDEX "blog_post_author_id_dd7a8485" ON "blog_post" ("author_id");
+COMMIT;
+
+
+****************************************
+
+python manage.py migrate
+ 
+
+****************************************
+Run db_commands in command line :
+
+https://stackoverflow.com/questions/39137339/django-exception-django-core-exceptions-improperlyconfigured/39137721
+
+For new users coming on this question. If you don't want to setup django settings file manually as described wonderfully by @SpiXel You can run python manage.py shell from the project directory which will basically link the settings file that django needs automatically.
+
+python manage.py shell
+
+(venv) C:\Users\Syed Numan Rehman\Desktop\django_project>      python manage.py shell
+
+****************************************
+
+
+>>> from blog.models import Post
+>>> from django.contrib.auth.models import User
+
+# C:\Users\Syed Numan Rehman\Desktop\django_project\venv\Lib\site-packages\django\contrib\auth\models.py
+
+>>> User.objects.all()
+
+>>> User.objects.first()
+<User: nouman>
+
+>>> User.objects.filter(username='nouman')    --  get multiple users if more than one
+<QuerySet [<User: nouman>]>
+
+
+>>> User.objects.filter(username='nouman').first()
+<User: nouman>
+
+>>> user = User.objects.filter(username='nouman').first()    --  save user in variable
+
+>>> user.id
+
+>>> user.pk    -- give primary key
+
+>>> user = User.objects.get(id=1)    -- get user by its id
+<User: nouman>
+
+
+**************
+
+>>> Post.objects.all()
+<QuerySet [<Post: My first Post>]>
+
+>>> post_1 = Post( title ='blog 1' , content='My first post', author= user )
+>>> post_1.save()
+
+>>> Post.objects.all()
+
+>>> post_2 = Post( title ='blog 2' , content='My second post', author_id = user.id )
+>>> post_2.save()
+
+>>> post = Post.objects.first()
+>>> post.content
+>>> post.date_posted
+>>> post.author
+>>> post.author.id
+>>> post.author.email
+
+**************
+
+Get all the posts of the user : --------------------
+
+.modelname_set        ----  django provide this syntax to get info of related table
+
+>>> user =  User.objects.get(id=1)
+>>> user
+<User: nouman>
+
+>>> user.post_set
+<django.db.models.fields.related_descriptors.create_reverse_many_to_one_manager.<locals>.RelatedManager object at 0x0000015566CED580>
+
+
+>>> user.post_set.all()   -- show all posts of that user
+
+>>> user.post_set.all()[0]
+<Post: My first Post>
+
+
+>>> user_posts =  user.post_set.all()
+>>> user_posts
+<QuerySet [<Post: My first Post>, <Post: blog 2>]>
+>>> for i in user_posts:
+...     print(i)
+...
+My first Post
+blog 2
+
+
+copy as it is in python script:
+
+user_posts =  user.post_set.all()
+for i in user_posts:
+    print(i)
+
+>>> user =  User.objects.get(id=1)
+>>> user.post_set.create(title ='blog 3' , content='My third post')     
+                      --  create post for that user directly , no need to specify author and do not need to save it either , it will be automatically saved 
+
+
+
+
+**************
+
+if we make any change to our database model class , we need to run the python interpreter again to get those changes
+
+Any time we make change to our model this is also going make change to the database, 
+and need to run these migrations for those changes to take effect
+
+python manage.py makemigrations 
+python manage.py migrate 
+
+
+****************************************
+
+Profile Model:
+
+we make relationship  between User and Profile Model annd regiater it with admi page
+
+>>> from django.contrib.auth.models import User
+
+>>> user = User.objects.filter(username='nouman').first()
+
+>>> user
+<User: nouman>
+
+>>> user.profile
+<Profile: nouman Profile>
+
+>>> user.profile.user
+<User: nouman>
+
+>>> user.profile.image
+<ImageFieldFile: profile_pics/dp_1.jpg
+
+>>> user.profile.image.size
+110627
+
+>>> user.profile.image.width
+562
+
+>>> user.profile.image.height
+527
+
+>>> user.profile.image.url
+'/media/profile_pics/dp_1.jpg'
+
+
+>>> user = User.objects.filter(username='Ahmed').first()        --  user with no image upload will get default image
+>>> user.profile.image
+<ImageFieldFile: default.jpg>
+>>>
+
+
+
+***********************************
+
+create user in cmd ---------- https://www.codegrepper.com/code-examples/python/django+add+user+command+line
+
+>>> import django.contrib.auth
+>>> User = django.contrib.auth.get_user_model()
+>>> user = User.objects.create_user('username', password='userpassword')
+>>> user.is_superuser = False
+>>> user.is_staff = False
+>>> user.save()

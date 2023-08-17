@@ -1,0 +1,58 @@
+https://www.youtube.com/watch?v=q4jPR-M0TAQ&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=6
+
+In this Python Django Tutorial, we will be learning how to use forms
+and validate user input by creating a user registration page. 
+We will also learn how to install and use Crispy Form so that our
+forms match the modern style of our application. Let's get started...
+
+
+****************************
+
+create user app 
+
+1) python manage.py startapp user
+2) Register The app in settings.py
+
+****************************
+
+user registration form is already created by django for us ( usercreation form )
+
+
+1) create view to render form 
+2) create form in register.html file 
+
+3) add url directly in main url file by importing user_views and add url for views
+
+*********************************
+
+create forms.py file add email field
+
+*********************************
+
+To beauty our form
+
+1) pip install django-crispy-forms
+
+2) add it to installed apps
+
+3) add this in settings.py file
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'  
+
+to specify which bootstrap version to use
+
+****************************
+ Messages
+
+ We also see flash messages after successful user creation.
+
+ We also need to add code to display these messages
+ ( see base.html file in blog/templates)
+
+ {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}

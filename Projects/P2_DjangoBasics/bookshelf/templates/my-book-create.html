@@ -1,0 +1,12 @@
+<h1>This is a book create form</h1>
+
+<div>
+  <form id="create-form" action="" method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+    <br />
+    <br />
+    <input type="submit" name="upload" value="Create" />
+  </form>
+</div>

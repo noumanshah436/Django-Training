@@ -1,0 +1,42 @@
+In this Python Django Tutorial, we will be learning how to
+ use templates to return more complex HTML to the browser.
+ 
+  We'll also see how we can pass variables to our templates as
+   context. Let's get started...
+
+
+*****************************
+
+For an app(blog) it looks for html files in templates folder as base in app.
+
+and for static files it looks for static folder in app.
+
+********************************
+
+Create this structure 
+
+blog -> templates -> blog -> templates.html files
+
+
+and accesss these files in blog views as 
+blog/home.html
+
+****************************
+
+pass data to templates by including data to context  dictionary
+and access in html file by key
+
+*****************************
+
+creating base template file which is extended by each template
+
+********************************
+
+add statuc files in main.css main template
+
+*******************************
+
+
+
+adding link to views in navigation bar
+

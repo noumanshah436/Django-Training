@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+  </head>
+  <body>
+    <h1>Jinja Templates</h1>
+    <hr />
+
+    <h4>Variables</h4>
+    <p>Name: {{ var1 }}</p>
+    <hr />
+
+    <h4>Looping through List</h4>
+    <ul>
+      {% for lang in langs %}
+      <li>{{lang}}</li>
+      {% endfor %}
+    </ul>
+    <hr />
+
+    <h4>Looping with index</h4>
+    <ul>
+      {% for lang in langs %}
+      <li>
+        <span>{{ forloop.counter }} </span> ,
+        <span>{{ forloop.counter0 }} </span> : {{lang}}
+      </li>
+      <!--use forloop.counter0 for index start with 0 and  forloop.counter for start from 1 -->
+      {% endfor %}
+    </ul>
+    <hr />
+
+    <h4>Looping through Nested List</h4>
+    <table style="border: 1px solid black; margin-top: 15px; width: 100%">
+      {% for n in res %}
+      <tr>
+        {% for k in n %}
+        <td style="width: 33%; border: 1px solid black">{{ k }}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+    </table>
+
+    <hr />
+
+    <h4>Looping through dictionary</h4>
+    <ul>
+      {% for key , value in friends.items %}
+      <li>{{ key }} : {{value}}</li>
+      {% endfor %}
+    </ul>
+    <hr />
+
+    <h4>Looping through keys dictionary</h4>
+    <ul>
+      {% for key in friends.keys %}
+      <li>{{ key }}</li>
+      {% endfor %}
+    </ul>
+    <hr />
+
+    <h4>Access List members</h4>
+    <p>{{ langs.0 }}</p>
+    <hr />
+
+    <h4>Access Class Attributes</h4>
+    <p>{{ my_remote.name }}</p>
+    <hr />
+
+    <h4>Conditionals</h4>
+    {% if not bool_var %}
+    <p>Boolean is {{ bool_var}}</p>
+    {% endif %}
+    <hr />
+
+    <h4>Conditional if/elif</h4>
+    {% if my_age < 18 %}
+    <p>No entry</p>
+    {% elif my_age <= 25 %}
+    <p>You may enter</p>
+    {% else %}
+    <p>Entry denied. You're not cool enough</p>
+    {% endif %}
+    <hr />
+
+    <h4>Basic math filters</h4>
+    <ul>
+      <li>8 + 3 = {{ 8|add:3 }}</li>
+
+      <li>13 - 17 = {{ 13|add:-17 }}</li>
+    </ul>
+    <hr />
+
+    <h4>Template Filters</h4>
+    <p>length of list: {{ langs | length }}</p>
+    <p>length of tuple: {{ colors | length }}</p>
+    <p>Upper: {{ var1 | upper }}</p>
+    <hr />
+
+    <h4>Escaping</h4>
+    <!-- by default it replace it as simple text string , prevent any hacking stuff -->
+    <p>Without safe filter</p>
+    <p>{{ my_html }}</p>
+    <!--  embed HTML string into our html code (we use safe filter) -->
+    <p>With safe filter</p>
+    <p>{{ my_html | safe }}</p>
+    <hr />
+
+    <!-- use safe filter carefully while using it with user input -->
+    <h4>Suspicious script</h4>
+    {{ suspicious | safe }}
+    <hr />
+
+    {{ data | default:"3 < 2" }}
+
+    <p>Hello world</p>
+  </body>
+</html>

@@ -1,0 +1,356 @@
+
+
+********************************
+Template inheritance:
+********************************
+
+https://docs.djangoproject.com/en/4.2/ref/templates/language/#template-inheritance
+
+Template inheritance allows you to build a base “skeleton” template that contains all the common elements of your site and
+ defines blocks that child templates can override.
+
+Let’s look at template inheritance by starting with an example:
+******************
+# base.html
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>{% block title %}My amazing site{% endblock %}</title>
+</head>
+
+<body>
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog/">Blog</a></li>
+        </ul>
+        {% endblock %}
+    </div>
+
+    <div id="content">
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
+
+******************
+
+This template, which we’ll call base.html, defines an HTML skeleton document that you might use for a two-column page.
+It’s the job of “child” templates to fill the empty blocks with content.
+
+In this example, the block tag defines three blocks that child templates can fill in.
+All the block tag does is to tell the template engine that a child template may override those portions of the template.
+A child template might look like this:
+
+******************
+
+{% extends "base.html" %}
+
+{% block title %}My amazing blog{% endblock %}
+
+{% block content %}
+{% for entry in blog_entries %}
+    <h2>{{ entry.title }}</h2>
+    <p>{{ entry.body }}</p>
+{% endfor %}
+{% endblock %}
+
+******************
+Note that since the child template didn’t define the sidebar block,
+the value from the parent template is used instead.
+Content within a {% block %} tag in a parent template is always used as a fallback.
+
+******************
+Here are some tips for working with inheritance:
+
+1) If you use {% extends %} in a template, it must be the first template tag in that template.
+Template inheritance won’t work, otherwise.
+
+2) More {% block %} tags in your base templates are better.
+Remember, child templates don’t have to define all parent blocks
+
+3) For extra readability, you can optionally give a name to your {% endblock %} tag. For example:
+
+{% block content %}
+...
+{% endblock content %}
+
+4) {% block %} tags are evaluated first. That’s why the content of a block is always overridden, regardless of the truthiness of surrounding tags.
+For example, this template will always override the content of the title block:
+
+{% if change_title %}
+    {% block title %}Hello!{% endblock title %}
+{% endif %}
+
+5) Finally, note that you can’t define multiple block tags with the same name in the same template.
+
+
+******************************************************************************************
+******************************************************************************************
+Automatic HTML escaping
+
+When generating HTML from templates, there’s always a risk that a variable will include characters that affect the resulting HTML.
+
+Clearly, user-submitted data shouldn’t be trusted blindly and inserted directly into your web pages,
+because a malicious user could use this kind of hole to do potentially bad things.
+This type of security exploit is called a Cross Site Scripting (XSS) attack.
+
+For example, consider this template fragment:
+
+Hello, {{ name }}
+At first, this seems like a harmless way to display a user’s name, but consider what would happen if the user entered their name as this:
+<script>alert('hello')</script>
+
+With this name value, the template would be rendered as:
+Hello, <script>alert('hello')</script>
+
+…which means the browser would pop-up a JavaScript alert box!
+
+****************************
+
+By default in Django, every template automatically escapes() the output of every variable tag.
+Specifically, these five characters are escaped:
+
+< is converted to &lt;
+> is converted to &gt;
+' (single quote) is converted to &#x27;
+" (double quote) is converted to &quot;
+& is converted to &amp;
+
+Again, we stress that this behavior is on by default.
+If you’re using Django’s template system, you’re protected.
+
+-> escape means "to get clear from danger "
+****************************
+Disable auto-escaping
+****************************
+
+For individual variables
+
+To disable auto-escaping for an individual variable, use the safe filter:
+
+This will be escaped: {{ data }}
+This will not be escaped: {{ data|safe }}
+
+Think of safe as shorthand for safe from further escaping or can be safely interpreted as HTML.
+In this example, if data contains '<b>', the output will be:
+
+This will be escaped: &lt;b&gt;
+This will not be escaped: <b>
+
+safe: will paste the text or HTML as it is ( means do not escape it or do not change it)
+
+****************************
+
+For template blocks
+
+To control auto-escaping for a template, wrap the template (or a particular section of the template) in the autoescape tag, like so:
+
+{% autoescape off %}
+    Hello {{ name }}
+{% endautoescape %}
+
+********
+The autoescape tag takes either on or off as its argument.
+At times, you might want to force auto-escaping when it would otherwise be disabled.
+Here is an example template:
+
+Auto-escaping is on by default. Hello {{ name }}
+
+{% autoescape off %}
+    This will not be auto-escaped: {{ data }}.
+
+    Nor this: {{ other_data }}
+    {% autoescape on %}
+        Auto-escaping applies again: {{ name }}
+    {% endautoescape %}
+{% endautoescape %}
+
+************************************
+
+String literals and automatic escaping:
+
+As we mentioned earlier, filter arguments can be strings:
+
+{{ data|default:"This is a string literal." }}
+
+All string literals are inserted without any automatic escaping into the template – they act as if they were all passed through the safe filter.
+The reasoning behind this is that the template author is in control of what goes into the string literal, so they can make sure the text is correctly escaped when the template is written.
+
+This means you would write :
+
+{{ data|default:"3 &lt; 2" }}
+
+…rather than:
+
+{{ data|default:"3 < 2" }}  {# Bad! Don't do this. #}
+
+***************************************
+Built-in template tags and filters
+***************************************
+
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#std-templatefilter-escape
+
+
+cycle:
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#cycle
+
+Produces one of its arguments each time this tag is encountered.
+The first argument is produced on the first encounter, the second argument on the second encounter, and so forth.
+Once all arguments are exhausted, the tag cycles to the first argument and produces it again.
+
+This tag is particularly useful in a loop:
+
+{% for o in some_list %}
+    <tr class="{% cycle 'row1' 'row2' %}">
+        ...
+    </tr>
+{% endfor %}
+
+You can use variables, too.
+
+***************************************
+Built-in template filters
+***************************************
+
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#built-in-filter-reference
+
+
+add:
+
+Adds the argument to the value.
+
+For example:
+
+{{ value|add:"2" }}
+If value is 4, then the output will be 6.
+
+This filter will first try to coerce both values to integers.
+If this fails, it’ll attempt to add the values together anyway.
+This will work on some data types (strings, list, etc.) and fail on others.
+ If it fails, the result will be an empty string.
+
+For example, if we have:
+
+{{ first|add:second }}
+
+**********************
+
+capfirst:
+
+Capitalizes the first character of the value. If the first character is not a letter, this filter has no effect.
+
+For example:
+
+{{ value|capfirst }}
+If value is "django", the output will be "Django".
+
+********************************************
+
+date:
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#date
+
+Formats a date according to the given format.
+
+Uses a similar format to PHP’s date() function with some differences.
+
+Here are some commonly used format placeholders you can use with the date filter:
+
+published_date =  datetime.datetime(2023, 8, 18, 15, 30, 0),
+
+{{ published_date | date:"F j, Y" }}
+
+**********
+
+Here are some commonly used format placeholders you can use with the date filter:
+
+Y: Year with century (e.g., 2023)
+m: Month as a zero-padded decimal number (e.g., 08)
+d: Day of the month as a zero-padded decimal number (e.g., 18)
+F: Full month name (e.g., August)
+j: Day of the month without leading zeros (e.g., 18)
+l: Day of the week, full name (e.g., Wednesday)
+N: Month abbreviation in Associated Press style. (e.g., 'Jan.', 'Feb.', 'March', 'May')
+A: Uppercase AM or PM
+g: Hour in 12-hour format without leading zeros (e.g., 3)
+i: Minutes (e.g., 30)
+s: Seconds (e.g., 0)
+
+**********
+
+Here are some commonly used datetime formats in Django applications along with their explanations:
+
+"F j, Y, g:i a":
+This format displays the full month name, day of the month without leading zeros, year, hour in 12-hour format, minutes, and lowercase "am" or "pm".
+Example: "August 18, 2023, 3:30 pm"
+
+"D, M j Y, g:i a":
+This format displays the abbreviated day name, abbreviated month name, day of the month without leading zeros, year, hour in 12-hour format, minutes, and lowercase "am" or "pm".
+Example: "Wed, Aug 18 2023, 3:30 pm"
+
+"Y-m-d H:i:s":
+This format displays the year, month, day, hour (24-hour format), minutes, and seconds.
+Example: "2023-08-18 15:30:00"
+
+"l, F j, Y":
+This format displays the full day name, full month name, day of the month without leading zeros, and year.
+Example: "Wednesday, August 18, 2023"
+
+"jS F Y":
+This format displays the day of the month without leading zeros, followed by "st", "nd", "rd", or "th", the full month name, and the year.
+Example: "18th August 2023"
+
+"Y-m-d":
+This format displays only the year, month, and day.
+Example: "2023-08-18"
+
+"H:i":
+This format displays only the hour (24-hour format) and minutes.
+Example: "15:30"
+
+"N/j/Y":
+This format displays the month, day, and year, without leading zeros.
+Example: "Aug./18/2023"
+
+
+**********************
+include vs extends
+**********************
+
+include:
+
+Loads a template and renders it with the current context. This is a way of “including” other templates within a template.
+The template name can either be a variable or a hard-coded (quoted) string, in either single or double quotes.
+
+{% include "my_views/_partial.html" %}
+
+Normally the template name is relative to the template loader’s root directory.
+A string argument may also be a relative path starting with ./ or ../.
+
+1) An included template is rendered within the context of the template that includes it.
+
+2) You can pass additional context to the template using keyword arguments:
+{% include "name_snippet.html" with person="Jane" greeting="Hello" %}
+
+3) If you want to render the context only with the variables provided (or even no variables at all),
+use the only option. No other variables are available to the included template:
+{% include "name_snippet.html" with greeting="Hi" only %}
+
+******************
+https://docs.djangoproject.com/en/4.2/ref/templates/builtins/#std-templatetag-extends
+
+extends:
+
+Signals that this template extends a parent template.
+
+This tag can be used in two ways:
+
+{% extends "base.html" %} (with quotes) uses the literal value "base.html" as the name of the parent template to extend.
+{% extends variable %} uses the value of variable. If the variable evaluates to a string, Django will use that string as the name of the parent template. If the variable evaluates to a Template object, Django will use that object as the parent template.
+
+Normally the template name is relative to the template loader’s root directory.
+A string argument may also be a relative path starting with ./ or ../.
+

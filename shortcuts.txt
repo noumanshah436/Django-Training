@@ -1,0 +1,1 @@
+ctrl+l (L)   to clear terminal in pycharm
