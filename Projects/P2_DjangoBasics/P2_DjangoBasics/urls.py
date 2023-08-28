@@ -16,6 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+
+
+# http://localhost:8000/contact/
+def contact(request):
+    return HttpResponse("<h1>My Number: 03424556029</h1>")
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +31,6 @@ urlpatterns = [
     path('employees/', include("employee_app.urls")),
     path('bookshelf/', include("bookshelf.urls")),
     path('task_manager/', include("task_manager.urls")),
+    path('contact/', contact, name="contact"),
+    path('my_forms/', include('my_forms.urls')),
 ]

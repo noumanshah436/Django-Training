@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    {% load crispy_forms_tags %}
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+</head>
+<body>
+<main role="main" class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <form method="POST" novalidate>
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4">Send Email</legend>
+                    <!-- {{ form.non_field_errors }}-->
+                    <hr />
+
+                    <div class="fieldWrapper">
+                        {{ form.subject.errors }}
+                        <label for="{{ form.subject.id_for_label }}">Email subject:</label>
+                        {{ form.subject }}
+                        {% if form.subject.errors %}
+                            <ol>
+                                {% for error in form.subject.errors %}
+                                <li><strong>{{ error|escape }}</strong></li>
+                                {% endfor %}
+                            </ol>
+                        {% endif %}
+                    </div>
+                    <hr />
+
+                    <div class="fieldWrapper">
+                        {{ form.message.errors }}
+                        <label for="{{ form.message.id_for_label }}">Your message:</label>
+                        {{ form.message }}
+                    </div>
+                    <hr />
+
+                    <div class="fieldWrapper">
+                        {{ form.sender.errors }}
+                        <label for="{{ form.sender.id_for_label }}">Your email address:</label>
+                        {{ form.sender }}
+                    </div>
+                    <hr />
+
+                    <div class="fieldWrapper">
+                        {{ form.cc_myself.errors }}
+                        <label for="{{ form.cc_myself.id_for_label }}">CC yourself?</label>
+                        {{ form.cc_myself }}
+                    </div>
+                    <hr />
+                    
+                </fieldset>
+                <div class="form-group">
+                    <button class="btn btn-outline-info" type="submit">Sign Up</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+</html>

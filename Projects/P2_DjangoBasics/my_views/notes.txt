@@ -5,3 +5,5 @@
 #    "color" varchar(20) NOT NULL,
 #    "user_id" integer NOT NULL REFERENCES "auth_user" ("id") DEFERRABLE INITIALLY DEFERRED
 # )
+
+

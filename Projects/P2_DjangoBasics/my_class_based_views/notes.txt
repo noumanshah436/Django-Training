@@ -1,0 +1,7 @@
+why class based views:
+
+The problem with function-based generic views is that while they covered the simple cases well,
+ there was no way to extend or customize them beyond some configuration options,
+  limiting their usefulness in many real-world applications.
+
+

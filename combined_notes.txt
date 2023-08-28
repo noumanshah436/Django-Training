@@ -1,15 +1,38 @@
-Topics:
+***************************************************************************************************
+Resources:
+***************************************************************************************************
 
 https://docs.djangoproject.com/en/4.2/ref/
-
-
 https://docs.djangoproject.com/en/4.2/contents/
-
 https://docs.djangoproject.com/en/4.2/topics/
+https://docs.djangoproject.com/en/3.2/contents/
 
-***************************
+https://www.geeksforgeeks.org/tag/python-django/
+
+https://www.tutorialspoint.com/django/index.htm
+
+**********************
+
+Hi, thanks for joining the coding community!
+Every month, i will send you a summary of all my latest content, which includes my newest videos, blog posts and programming tips.
+In the mean time,you can check out my youtube channel where i teach programming:
+https://www.youtube.com/c/CodeWithTomi
+
+
+Free Resources:
+
+Django Roadmap: https://www.dropbox.com/s/opzvs43bwqpvr8c/Django%20Roadmap%20-%20Google%20Docs.pdf?dl=0
+
+Django Projects Cheat Sheet: https://www.dropbox.com/s/s54nyhbslh8fqxg/Django%20Projects%20cheat%20sheet%20-%20Google%20Docs.pdf?dl=0
+
+Python Data Structures: https://www.dropbox.com/s/bpof9qic77kjlfj/PYTHON%20DATA%20STRUCTURES%20%281%29.pdf?dl=0
+
+Git Cheat Sheet: https://www.dropbox.com/s/ubyvjp84cq42m5r/Git%20Cheat%20Sheet%20-%20Google%20Docs.pdf?dl=0
+
+
+***************************************************************************************************
 frequently used commands
-***************************
+***************************************************************************************************
 
 1) reload shell:
 exit()
@@ -23,12 +46,176 @@ python manage.py makemigrations
 python manage.py migrate
 
 
+***************************************************************************************************
+initial Setup (using pipenv)
+***************************************************************************************************
+
+pipenv:
+
+https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
+
+1. Make a directory for the django project
+2. Install 'pip install pipenv' in the system environment if not already
+3. Create a virtual environment by running 'pipenv shell' (the location of the venv defaults to '~/user/.virtualenv/',
+	 to make it live inside the current directory, make an empty folder named '.venv', pipenv automatically detects that folder and creates the virtual environment inside that folder)
+4. Now install django by running 'pipenv install django' (installs the latest version)
+5. Start the project by running 'django-admin startproject $NAME_OF_THE_PROJECT'
+6. To start the live server cd into the project and run 'python manage.py runserver port(optional)'
+7. To make a new app inside that project run 'python manage.py startapp $NAME_OF_THE_APP'
+
+
+show all packages installed globally
+> pip freeze
+
+
+create env with requirement.txt file:
+> pipenv install -r ./requirements.txt
+
+check any security issue in installed packages:
+> pipenv check
+update in pipfile and run "pipenv install"
+
+
+show dependencies
+pipenv graph
+
+
+update lock file with the installed version in case you install latest version of some package and it shows "*" in pipfile and then insatll using lock file when you deploy:
+pipenv lock
+
+pipenv install --ignore-pipfile
+
+
+
+run command in virtual environment without activating it:
+pipenv run python
+
+
+**********************
+summary:
+
+Go into dir where you want your virtual environment:
+
+First install pipenv using "pip install pipenv"
+
+1) create ".venv" director,
+2) pipenv install             --  will create Pipfile and lock file and create virtual environment
+3) pipenv install django      -- install package
+4) pipenv shell		      -- activate virtual environment
+
+5) Create a new Django project called P1_DjangoModels with the following command.
+
+django-admin startproject P1_DjangoModels .              -- create project in the same dir
+
+django-admin startproject P1_DjangoModels		   -- create project in its sub directory
+
+
+***************************************************************************************************
+Initial Setup (old)
+***************************************************************************************************
+
+https://www.youtube.com/watch?v=UmljXZIypDc&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=1&t=405s
+corey schafer
+https://github.com/CoreyMSchafer/code_snippets/tree/master/Django_Blog
+*********************************************
+
+pip install django
+
+python -m django --version
+or
+python -c "import django; print(django.get_version())"
+
+django-admin     --------  list all sub-commands
+
+*********************************************
+
+create project:
+
+django-admin startproject project_name
+
+wsgi  how our web_application and browser_server will commmunicate
+
+*********************************************
+
+
+python manage.py runserver
+
+http://localhost:8000/
+http://127.0.0.1:8000/
+
+
+ctrl+c to stop server
+
+*********************************************
+
+
+Django documentation
+
+https://docs.djangoproject.com/en/3.2/
+
+*********************************************
+
+a single project can contain multiple apps
+
+python manage.py startapp name_of_app
+
+python manage.py startapp blog
+
+python manage.py startapp users
+
+
+*********************************************
+Create app inside project:
+
+1) python manage.py startapp name_of_app
+
+python manage.py startapp my_models
+
+2) Register app in installed_app in settings.py file:
+
+INSTALLED_APPS = [
+    # ...
+    'my_models.apps.MyModelsConfig',
+    # ...
+]
+
+3) Add urls of the app in main urls.py:
+
+a) create urls.py file in app.
+b) register this url file in main urls.py:
+    from django.contrib import admin
+    from django.urls import path, include
+
+    urlpatterns = [
+        path('admin/', admin.site.urls),
+        path('', include('blog.urls')),
+    ]
+
+4) add model in current app's admin.py file:
+
+from django.contrib import admin
+from .models import Person
+
+admin.site.register(Person)
+
+
 **********************************
+
+naming convention for apps:
+
+Here are a few examples of app names following the convention:
+
+blog (for a blogging app)
+ecommerce (for an e-commerce app)
+user_profile (for a user profile app)
+inventory_management (for an inventory management app)
+event_calendar (for an event calendar app)
+
+
+***************************************************************************************************
 Day 1:
 Models
-**********************************
-
-
+***************************************************************************************************
 
 debugging:
 
@@ -101,7 +288,69 @@ LOGGING = {
     'loggers': {
         'django.db.backends': {
             'handlers': ['console'],
-            'level': 'DEBUG',  # Set this to the desired logging level
+            'l
+***************************************************************************************************
+pipenv initial
+***************************************************************************************************
+
+https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
+
+1. Make a directory for the django project
+2. Install 'pip install pipenv' in the system environment if not already
+3. Create a virtual environment by running 'pipenv shell' (the location of the venv defaults to '~/user/.virtualenv/',
+	 to make it live inside the current directory, make an empty folder named '.venv', pipenv automatically detects that folder and creates the virtual environment inside that folder)
+4. Now install django by running 'pipenv install django' (installs the latest version)
+5. Start the project by running 'django-admin startproject $NAME_OF_THE_PROJECT'
+6. To start the live server cd into the project and run 'python manage.py runserver port(optional)'
+7. To make a new app inside that project run 'python manage.py startapp $NAME_OF_THE_APP'
+
+
+show all packages installed globally
+> pip freeze
+
+
+create env with requirement.txt file:
+> pipenv install -r ./requirements.txt
+
+check any security issue in installed packages:
+> pipenv check
+update in pipfile and run "pipenv install"
+
+
+show dependencies
+pipenv graph
+
+
+update lock file with the installed version in case you install latest version of some package and it shows "*" in pipfile and then insatll using lock file when you deploy:
+pipenv lock
+
+pipenv install --ignore-pipfile
+
+
+
+run command in virtual environment without activating it:
+pipenv run python
+
+
+**********************
+
+
+Go into dir where you want your virtual environment:
+
+First install pipenv using "pip install pipenv"
+
+1) create ".venv" director,
+2) pipenv install             -- will create Pipfile and lock file and create virtual environment
+3) pipenv install django      -- install package
+4) pipenv shell		          -- activate virtual environment
+
+5) Create a new Django project called P1_DjangoModels with the following command.
+
+django-admin startproject P1_DjangoModels .              -- create project in the same dir
+
+django-admin startproject P1_DjangoModels		   -- create project in its sub directory
+
+evel': 'DEBUG',  # Set this to the desired logging level
             'propagate': False,
         },
     },
@@ -115,3 +364,748 @@ to print the SQL command.
 ie:
 
 MyModel.objects.all().query.as_sql()
+
+
+
+
+********************************************
+Django Basics
+****************************************
+
+Create Project heirarchy
+
+1) Create virtual environment:
+
+python -m venv myenv        -- create virtual environment
+myenv\Scripts\activate      -- activate it
+
+pip install django
+pip install django-crispy-forms
+
+2) django-admin startproject djangoPractice
+
+3) To create your app, make sure you’re in the same directory as manage.py and type this command:
+   python manage.py startapp myapp
+
+4) Its useful to register app in settings.py file immediately
+	'myapp.apps.MyappConfig'
+
+
+myenv\Scripts\activate
+cd mysite
+
+
+python manage.py runserver
+
+
+*********************************************************************************
+
+Create views
+
+1) create urls.py in the app
+
+2) include this url file in main url file
+
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [                                  # note write / after route else it cause error
+    path('admin/', admin.site.urls),
+    path('myapp/', include('myapp.urls'))
+]
+
+
+3) craeate urls + views
+
+from django.urls import path
+from . import views
+
+urlpatterns=[
+    path( '', views.index , name="index" )
+
+]
+
+from django.http import HttpResponse
+def index(requuest):
+     return HttpResponse("hello world")
+
+
+
+*********************************************************************************
+
+render html :
+
+1) first register app in settings.py file
+'myapp.apps.MyappConfig'
+
+2) create templates in myapp  ( by default django look in templates folder as base directory )
+
+myapp -> templates  -> myapp -> index.html
+
+3) create view
+
+from django.shortcuts import render
+
+def index2(request):
+    return render(request, "myapp/index.html")
+
+*******
+
+Your project’s TEMPLATES setting describes how Django will load and render templates.
+The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. By convention DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
+
+*********
+
+Here’s a setup that tells the Django template engine to load templates from the templates subdirectory inside each installed application:
+
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "APP_DIRS": True,
+    },
+]
+
+
+************************************************************************************************************
+
+
+creating models:
+
+1)
+
+create model in model class ----
+
+from django.db import models
+from django.utils import timezone
+from django.contrib.auth.models import User
+
+class Post(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    # on_delete : if the user is deleted , then we want to delete their posts as well
+
+    def __str__(self):  # dunder(double underscore) str method
+        return self.title
+
+
+# DateTimeField(auto_now = True)   -> for last modified field
+# DateTimeField(auto_now-add = True)   -> save current date when object is created but we cannot modify that date
+
+2)
+
+create models and register in admin.py file in app
+
+from .models import Post
+admin.site.register(Question)
+
+
+3)
+
+To run migrations we first need to create super user
+
+	python manage.py createsuperuser
+
+3)
+
+Re run the Migrations commands in order to get changes to our database.
+
+a) python manage.py makemigrations
+
+b) python manage.py sqlmigrate blog 0001   #  it prints out the code that is going to run
+
+c) python manage.py migrate
+
+
+***************************
+
+Manipulate database
+
+see official docs   ---  https://docs.djangoproject.com/en/4.0/intro/tutorial02/
+
+Create User in cmd  ---  https://www.codegrepper.com/code-examples/python/django+add+user+command+line
+
+1) python manage.py shell
+
+2) >>> from app.Models import Post
+3) >>> from django.contrib.auth.models import User
+
+4) User.objects.all()
+4) User.objects.first()
+4) User.objects.filter(username='nouman')
+4) User.objects.filter(username='nouman').first()
+
+
+5) a) user = User.objects.filter(username='nouman').first()
+   b)  user.post_set
+   b)  user.post_set.all()
+
+
+6) exit()  to exit from shell
+
+see database.txt also
+
+
+
+***************************************************************************************************
+https://stackoverflow.com/questions/75495403/django-returns-templatedoesnotexist-when-using-crispy-forms
+
+Forms:
+
+1) As of django-crispy-forms 2.0 the template packs are now in separate packages.
+Install both packages:
+
+pip install django-crispy-forms
+pip install crispy-bootstrap4
+
+
+2)register this app in settings.py
+'crispy_forms',
+'crispy_bootstrap4',
+
+3) CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+4) create forms.py file and creaete form:
+
+from django import forms
+class PostForm(forms.Form):
+    title = forms.CharField(max_length=100)
+    content = forms.CharField(widget=forms.Textarea)
+
+
+
+5) create view as :
+
+def new_post(request):
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        form = PostForm(request.POST)
+        # check whether it's valid:
+        if form.is_valid():
+            title = form.cleaned_data['title']
+            content = form.cleaned_data['content']
+            post = Post(title=title, content=content, author_id=1)
+            post.save()
+            return redirect('posts')
+    else:
+        form = PostForm()
+    return render(request, 'myapp/myForm.html', {'form': form})
+
+
+4) create html file myForm.html
+inside your_html.html file add {% load crispy_forms_tags %} and you can use cripy_forms as you like
+
+************************************
+
+
+
+load static data:
+
+
+add this in settings.py file  ---  STATIC_URL = '/static/'
+
+by default django look static file in this heirarchy ( so create this structure)
+app -> static-> app-> staticfile
+
+to add static file in html page:
+
+{% load static %}
+
+ <link rel="stylesheet" type="text/css" href="{% static 'myapp/bootstrap.min.css' %}">
+
+***************************************************************************************************
+Django Basic Lines:
+***************************************************************************************************
+
+
+from django.contrib import admin
+from django.contrib.auth import views as auth_views
+from django.urls import path, include
+from users import views as user_views
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    # path('blog/', include('blog.urls')),    # all the blog views will start from  blog/...
+    path('', include('blog.urls')),
+    path('register/', user_views.register, name='register'),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+]
+
+****************************
+
+
+# names can be used to redirect to this specific route as
+
+return redirect('register')
+
+<a class="ml-2" href="{% url 'register' %}">Sign Up Now</a>
+
+********************************************
+
+href="{% url 'post-detail' post.id %}"   in html file ( blog app)
+
+path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail')
+
+
+********************************************
+
+
+***************************************************************************************************
+Django Ecommerce
+***************************************************************************************************
+
+
+Check Python
+check pip
+create project
+connect database in setting.py
+
+
+
+Part 2
+1. Create App = store
+2. Register The app in settings.py
+3. INclude the app's urls.py file in the main urls file
+4. create the templates structure
+5. Create the home path and views function and render the index.html template
+
+
+part 3:
+1. create category and product models and register in admin.py file
+2. make migrations and migrate
+	(env) D:\Python Django Project\Ecommerce Website>       python manage.py makemigration
+	(env) D:\Python Django Project\Ecommerce Website>	pythom manage.py migrate
+
+
+3. create superuser
+
+	python manage.py createsuperuser
+
+	(env) D:\Python Django Project\Ecommerce Website>python manage.py createsuperuser
+	Username (leave blank to use 'nouman'):
+	Email address: noumanrehman042@gmail.com
+	Password: 1234 (invisible)
+	Password (again):1234
+	This password is too short. It must contain at least 8 characters.
+	This password is too common.
+	This password is entirely numeric.
+	Bypass password validation and create user anyway? [y/N]: y
+	Superuser created successfully.
+
+
+4. pip install django-jazzmin
+  and register it in installed apps as 'jazzmin' in settings.py file
+
+
+8. Django Ecommerce Part 8 | User registration in django | Custom User register form using bootstrap
+	User registration in django:
+
+https://www.youtube.com/watch?v=q6oxoOxvUMk&list=PL_99hMDlL4d2zsGU5nOgADmRc6A8msXyh&index=8
+
+
+
+
+
+***************************************************************************************************
+Django Installations
+***************************************************************************************************
+
+pip install django
+
+pip install django-crispy-forms
+
+pip install Pillow    --   library to work with images with python
+
+
+***************************************************************************************************
+Python linters
+***************************************************************************************************
+
+Difference Between Linter and Formatter?
+Linter analyzes code for errors, potential issues, and adherence to coding standards, providing suggestions and warnings.
+Formatter automatically adjusts code formatting to conform to a specific style guide, ensuring consistent and uniform code appearance.
+
+
+
+***************************************************************************************************
+Django Apps
+***************************************************************************************************
+
+https://docs.djangoproject.com/en/4.2/ref/applications/
+
+Django contains a registry of installed applications that stores configuration and provides introspection.
+It also maintains a list of available models.
+
+This registry is called apps and it’s available in django.apps:
+
+>>> from django.apps import apps
+
+>>> apps.get_app_config("admin").verbose_name
+'Administration'
+
+>>> apps.ready
+Boolean attribute that is set to True after the registry is fully populated and
+all AppConfig.ready() methods are called.
+
+
+>>> apps.get_app_configs()
+It Returns an iterable of AppConfig instances.
+
+dict_values([<AdminConfig: admin>, <AuthConfig: auth>, <ContentTypesConfig: contenttypes>,
+<SessionsConfig: sessions>, <MessagesConfig: messages>, <StaticFilesConfig: staticfiles>,
+<MyViewsConfig: my_views>, <AppConfig: crispy_forms>, <PollsConfig: polls>,
+<MyClassBasedViewsConfig: my_class_based_views>, <EmployeeAppConfig: employee_app>,
+ <BookshelfConfig: bookshelf>, <TaskManagerConfig: task_manager>])
+
+>>> apps.get_app_config(app_label)
+
+apps.get_app_config('polls')
+<PollsConfig: polls>
+
+Returns an AppConfig for the application with the given app_label.
+Raises LookupError if no such application exists.
+
+
+*************
+
+>>> apps.get_model("polls", "Question")
+>>> apps.get_model("polls.Question")
+>>> apps.get_model("polls.question")
+
+syntax:
+apps.get_model(app_label, model_name, require_ready=True)¶
+
+Returns the Model with the given app_label and model_name.
+As a shortcut, this method also accepts a single argument in the form app_label.model_name.
+model_name is case-insensitive.
+
+
+****************************
+All methods of apps registry:
+
+>>> from django.apps import apps
+
+methods we can use with this 'apps':
+
+apps.all_models                    apps.clear_cache(                  apps.get_model(                    apps.lazy_model_operation(         apps.ready_event                   apps.unset_available_apps(
+apps.app_configs                   apps.do_pending_operations(        apps.get_models(                   apps.loading                       apps.register_model(               apps.unset_installed_apps(
+apps.apps_ready                    apps.get_app_config(               apps.get_registered_model(         apps.models_ready                  apps.set_available_apps(
+apps.check_apps_ready(             apps.get_app_configs(              apps.get_swappable_settings_name(  apps.populate(                     apps.set_installed_apps(
+apps.check_models_ready(           apps.get_containing_app_config(    apps.is_installed(                 apps.ready                         apps.stored_app_configs
+
+
+****************************
+Application configuration
+****************************
+
+class AppConfig:
+Application configuration objects store metadata for an application.
+Some attributes can be configured in AppConfig subclasses. Others are set by Django and read-only.
+
+>>> from django.apps import apps
+
+>>> app_config = apps.get_app_config('polls')
+<PollsConfig: polls>
+
+>>> app_config.verbose_name
+'Polls'
+
+>>> app_config.name
+'polls'
+
+>>> app_config.label
+'polls'
+
+>>> app_config.path
+'/home/dev/django_training/Projects/P2_DjangoBasics/polls'
+
+
+>>> app_config.module
+<module 'polls' from '/home/dev/django_training/Projects/P2_DjangoBasics/polls/__init__.py'>
+
+All methods on app_config:
+
+app_config.apps                app_config.get_model(          app_config.label               app_config.module              app_config.ready(
+app_config.create(             app_config.get_models(         app_config.models              app_config.name                app_config.verbose_name
+app_config.default_auto_field  app_config.import_models(      app_config.models_module       app_config.path
+
+********************************
+
+Initialization process:
+
+https://docs.djangoproject.com/en/4.2/ref/applications/#initialization-process
+
+In Django, when the framework starts up, the django.setup() function is responsible for populating the application registry and performing various initialization tasks.
+The setup() function is typically called automatically when Django's management commands or server are run.
+
+The django.setup() function performs several important tasks:
+
+1) Populating the Application Registry: As you mentioned, one of the main tasks of setup() is to populate the application registry.
+It does this by scanning the installed apps and their corresponding AppConfig classes.
+Each application's AppConfig class provides metadata and configuration for the application, such as its name, label, models, middleware, and other settings.
+
+2) Setting Up Settings: The setup() function also ensures that the settings for the project are properly configured and ready to be used. This includes loading settings from the project's settings.py file and applying any necessary modifications.
+
+3) Loading Middleware: Middleware components are classes that process requests and responses globally in Django. The setup() function loads and configures the middleware defined in the project's settings.
+
+4) Initializing Database Connections: If the project uses a database, setup() sets up and configures the database connections based on the database settings defined in the project's settings.
+
+5) Initializing Template Engine: If you're using Django's template system, setup() initializes the template engine and configures template-related settings.
+
+6) Other Initialization Tasks: Apart from the tasks mentioned above, setup() handles other initialization tasks like setting up logging, loading translation catalogs, and more.
+
+In most cases, as a developer, you don't need to explicitly call django.setup() yourself. It's automatically called by Django when you run management commands like runserver, migrate, or shell.
+However, if you're writing custom scripts or tools outside of Django's management commands, you might need to call setup() before interacting with Django's components.
+
+Keep in mind that the details of Django's internal workings might change with different versions of the framework, so it's a good practice to refer to the official documentation for the most accurate and up-to-date information.
+
+
+***************************************************************************************************
+Url configuration/mapping/routing
+***************************************************************************************************
+https://docs.djangoproject.com/en/4.2/topics/http/urls/#
+
+Path converters
+The following path converters are available by default:
+
+str - Matches any non-empty string, excluding the path separator, '/'. This is the default if a converter isn’t included in the expression.
+int - Matches zero or any positive integer. Returns an int.
+slug - Matches any slug string consisting of ASCII letters or numbers, plus the hyphen and underscore characters. For example, building-your-1st-django-site.
+uuid - Matches a formatted UUID. To prevent multiple URLs from mapping to the same page, dashes must be included and letters must be lowercase. For example, 075194d3-6885-417e-a8a8-6c931e272f00. Returns a UUID instance.
+path - Matches any non-empty string, including the path separator, '/'. This allows you to match against a complete URL path rather than a segment of a URL path as with str.
+
+**********************
+
+Getting parameters:
+
+path( 'index3/<int:id>', views.index3 , name="index3" ),
+path( 'index4/<str:name>', views.index4 , name="index4" )
+
+path('user/<int:id>', views.getUserById, name="getUser")
+
+************
+
+from django.http import  HttpResponse
+
+def index3(request, id):
+    return HttpResponse(f"hello world {id}")
+
+def index4(request, name):
+    return HttpResponse(f"hello world {name}")
+
+
+def getUserById(request, id):
+    user = User.objects.get(id=id)
+    profile = {
+        "name": user.username,
+        "email":user.email
+    }
+    return JsonResponse(profile)
+
+
+*****************************************
+Passing extra options to view functions:
+
+URLconfs have a hook that lets you pass extra arguments to your view functions, as a Python dictionary.
+The path() function can take an optional third argument which should be a dictionary of extra keyword arguments to pass to the view function.
+
+For example:
+
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path("blog/<int:year>/", views.year_archive, {"foo": "bar"}),
+]
+
+In this example, for a request to /blog/2005/, Django will call views.year_archive(request, year=2005, foo='bar').
+
+This technique is used in the syndication framework to pass metadata and options to views.
+
+Dealing with conflicts
+It’s possible to have a URL pattern which captures named keyword arguments, and also passes arguments with the same names in its dictionary of extra arguments. When this happens, the arguments in the dictionary will be used instead of the arguments captured in the URL.
+
+*****************************
+
+Passing extra options to include():
+
+Similarly, you can pass extra options to include() and each line in the included URLconf will be passed the extra options.
+
+For example, these two URLconf sets are functionally identical:
+
+Set one: ************
+
+# main.py
+from django.urls import include, path
+
+urlpatterns = [
+    path("blog/", include("inner"), {"blog_id": 3}),
+]
+
+# inner.py
+from django.urls import path
+from mysite import views
+
+urlpatterns = [
+    path("archive/", views.archive),
+    path("about/", views.about),
+]
+
+
+Set two: ************
+
+# main.py
+from django.urls import include, path
+from mysite import views
+
+urlpatterns = [
+    path("blog/", include("inner")),
+]
+
+# inner.py
+from django.urls import path
+
+urlpatterns = [
+    path("archive/", views.archive, {"blog_id": 3}),
+    path("about/", views.about, {"blog_id": 3}),
+]
+
+
+Note that extra options will always be passed to every line in the included URLconf, regardless of whether the line’s view actually accepts those options as valid. For this reason, this technique is only useful if you’re certain that every view in the included URLconf accepts the extra options you’re passing.
+
+*******************************
+other related topics:
+
+1) reverse vs reverse_lazy
+2) Namespacing URL names
+
+see in polls app
+
+
+***************************************************************************************************
+Django Forms
+***************************************************************************************************
+https://docs.djangoproject.com/en/4.2/topics/forms/
+
+The Form class:
+
+forms.py
+from django import forms
+
+class NameForm(forms.Form):
+    your_name = forms.CharField(label="Your name", max_length=100)
+
+
+The whole form, when rendered for the first time, will look like:
+
+<label for="your_name">Your name: </label>
+<input id="your_name" type="text" name="your_name" maxlength="100" required>
+
+Note that it does not include the <form> tags, or a submit button.
+We’ll have to provide those ourselves in the template.
+
+**************************
+Bound and unbound form instances
+The distinction between Bound and unbound forms is important:
+
+An unbound form has no data associated with it. When rendered to the user, it will be empty or will contain default values.
+A bound form has submitted data, and hence can be used to tell if that data is valid. If an invalid bound form is rendered, it can include inline error messages telling the user what data to correct.
+The form’s is_bound attribute will tell you whether a form has data bound to it or not.
+
+***************************
+Widgets:
+
+Each form field has a corresponding Widget class, which in turn corresponds to an HTML form widget such as <input type="text">.
+
+In most cases, the field will have a sensible default widget.
+For example:
+By default, a CharField will have a TextInput widget, that produces an <input type="text"> in the HTML.
+If you needed <textarea> instead, you’d specify the appropriate widget when defining your form field,
+as we have done for the message field.
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+
+
+
+***************************************************************************************************
+***************************************************************************************************
+

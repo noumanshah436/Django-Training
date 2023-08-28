@@ -1,25 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Title</title>
-</head>
-<body>
-
-{% for post in posts%}
-<div>
-    <ul>
+  </head>
+  <body>
+    {% for post in posts%}
+    <div>
+      <ul>
         <li>{{post.author.username}}</li>
         <li>{{post.title}}</li>
         <li>{{post.content}}</li>
         <li>{{post.date_posted}}</li>
-    </ul>
-</div>
+      </ul>
+    </div>
 
-{% endfor %}
+    {% endfor %}
 
-<li><a href="{% url 'index'  %}">Go to index Page</a></li>
-<li><a href="{% url 'get_user'  1 %}">Get user with id=1</a></li>
-
-</body>
+    <li><a href="{% url 'my_views:index' %}">Go to index Page</a></li>
+    <li><a href="{% url 'my_views:get_user' 1 %}">Get user with id=1</a></li>
+  </body>
 </html>

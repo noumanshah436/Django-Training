@@ -1,0 +1,74 @@
+
+https://stackoverflow.com/questions/36950416/when-to-use-get-get-queryset-get-context-data-in-django
+
+diff between django:
+
+1) get_context_data()
+2) get_queryset()
+3) queryset =
+
+
+**********************
+
+get_queryset():
+
+The ListView has a get_queryset() method we can override.
+ By default, it returns the value of the queryset attribute, but we can use it to add more logic.
+
+Used by ListViews - it determines the list of objects that you want to display.
+By default, it will just give you all for the model you specify.
+By overriding this method you can extend or completely replace this logic.
+
+https://docs.djangoproject.com/en/3.0/topics/class-based-views/generic-display/#generic-views-of-objects
+
+class FilteredAuthorView(ListView):
+    template_name = 'authors.html'
+    model = Author
+
+    def get_queryset(self):
+        # original qs
+        qs = super().get_queryset()
+        # filter by a variable captured from url, for example
+        return qs.filter(name__startswith=self.kwargs['name'])
+
+**********************
+
+get_context_data():
+
+
+This method is used to populate a dictionary to use as the template context. For example, ListViews will populate the result from get_queryset() as author_list in the above example. You will probably be overriding this method most often to add things to display in your templates.
+
+def get_context_data(self, **kwargs):
+    data = super().get_context_data(**kwargs)
+    data['page_title'] = 'Authors'
+    return data
+And then in your template, you can reference these variables.
+
+<h1>{{ page_title }}</h1>
+
+<ul>
+{% for author in author_list %}
+    <li>{{ author.name }}</li>
+{% endfor %}
+</ul>
+
+**********************
+
+You can also specify the list of objects using the queryset argument:
+
+from django.views.generic import DetailView
+from books.models import Publisher
+
+class PublisherDetail(DetailView):
+
+    context_object_name = 'publisher'
+    queryset = Publisher.objects.all()
+
+
+Specifying model = Publisher is shorthand for saying queryset = Publisher.objects.all().
+However, by using queryset to define a filtered list of objects you can be more specific
+about the objects that will be visible in the view
+
+If you don't override the get_queryset() method, the view will use the queryset specified by the queryset attribute.
+
+**********************

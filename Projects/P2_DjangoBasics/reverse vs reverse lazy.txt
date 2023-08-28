@@ -26,6 +26,15 @@ we can also test this in terminal:
 >>> reverse("polls:results", args=(3,))
 '/polls/3/results/'
 
+Another Example:
+
+In Urlconfig
+path('products/<int:id>/', my_view_function, name='product-detail')
+
+In product model:
+def get_absolute_url(self):
+    return reverse('product-detail', kwargs={'id': self.id})
+
 **********************
 
 reverse_lazy:

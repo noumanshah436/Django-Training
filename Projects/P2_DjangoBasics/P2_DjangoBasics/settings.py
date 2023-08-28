@@ -39,11 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'my_views.apps.MyViewsConfig',
     'crispy_forms',
+    'crispy_bootstrap4',
     'polls.apps.PollsConfig',
     'my_class_based_views.apps.MyClassBasedViewsConfig',
     'employee_app.apps.EmployeeAppConfig',
     'bookshelf.apps.BookshelfConfig',
     'task_manager',
+    'my_forms.apps.MyFormsConfig',
 
 ]
 

@@ -109,12 +109,14 @@ def build_in_tags_and_filters(request):
     return render(request, 'my_views/build_in_tags_and_filters.html', context)
 
 
+# http://localhost:8000/posts/
 def display_posts(request):
     posts = Post.objects.all()
     context = {'posts': posts}
     return render(request, 'my_views/posts.html', context)
 
 
+# http://localhost:8000/newpost/
 def new_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -123,7 +125,7 @@ def new_post(request):
             content = form.cleaned_data['content']
             post = Post(title=title, content=content, author_id=1)
             post.save()
-            return redirect('posts')
+            return redirect('my_views:posts')
     else:
         form = PostForm()
     return render(request, 'my_views/myForm.html', {'form': form})
