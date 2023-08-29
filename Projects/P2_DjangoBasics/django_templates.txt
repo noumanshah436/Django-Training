@@ -124,6 +124,10 @@ Again, we stress that this behavior is on by default.
 If you’re using Django’s template system, you’re protected.
 
 -> escape means "to get clear from danger "
+
+Escaping means converting characters that have special meaning in HTML, like <, >, and &,
+into their HTML entity equivalents (e.g., &lt;, &gt;, &amp;).
+
 ****************************
 Disable auto-escaping
 ****************************

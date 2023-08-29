@@ -1,6 +1,6 @@
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-
+from .forms import GeeksForm
 from .forms import NameForm, ContactForm
 
 
@@ -56,3 +56,23 @@ def get_contact(request):
     # return render(request, 'my_forms/my_form.html', {'form': form})
     return render(request, 'my_forms/rendering_form_manually.html',
                   {'form': form})
+
+
+# http://localhost:8000/my_forms/practice_model_forms/
+def practice_model_forms(request):
+    context = {}
+
+    if request.method == 'POST':
+        # create object of form
+        form = GeeksForm(request.POST, request.FILES)
+
+        # check if form data is valid
+        if form.is_valid():
+            # save the form data to model
+            form.save()
+            return HttpResponse("Record saved")
+    else:
+        form = GeeksForm()
+
+    context['form'] = form
+    return render(request, "my_forms/home.html", context)
