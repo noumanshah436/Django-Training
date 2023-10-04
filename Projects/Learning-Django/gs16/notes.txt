@@ -1,0 +1,2 @@
+By default djang looks for static files inside app's static folder.
+No nneed to do any setting.

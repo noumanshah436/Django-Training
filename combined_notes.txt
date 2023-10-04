@@ -1,6 +1,6 @@
-***************************************************************************************************
+===================================================================================================
 Resources:
-***************************************************************************************************
+===================================================================================================
 
 https://docs.djangoproject.com/en/4.2/ref/
 https://docs.djangoproject.com/en/4.2/contents/
@@ -30,9 +30,9 @@ Python Data Structures: https://www.dropbox.com/s/bpof9qic77kjlfj/PYTHON%20DATA%
 Git Cheat Sheet: https://www.dropbox.com/s/ubyvjp84cq42m5r/Git%20Cheat%20Sheet%20-%20Google%20Docs.pdf?dl=0
 
 
-***************************************************************************************************
+===================================================================================================
 frequently used commands
-***************************************************************************************************
+===================================================================================================
 
 1) reload shell:
 exit()
@@ -46,9 +46,9 @@ python manage.py makemigrations
 python manage.py migrate
 
 
-***************************************************************************************************
+===================================================================================================
 initial Setup (using pipenv)
-***************************************************************************************************
+===================================================================================================
 
 pipenv:
 
@@ -110,9 +110,9 @@ django-admin startproject P1_DjangoModels .              -- create project in th
 django-admin startproject P1_DjangoModels		   -- create project in its sub directory
 
 
-***************************************************************************************************
+===================================================================================================
 Initial Setup (old)
-***************************************************************************************************
+===================================================================================================
 
 https://www.youtube.com/watch?v=UmljXZIypDc&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=1&t=405s
 corey schafer
@@ -212,10 +212,10 @@ inventory_management (for an inventory management app)
 event_calendar (for an event calendar app)
 
 
-***************************************************************************************************
+===================================================================================================
 Day 1:
 Models
-***************************************************************************************************
+===================================================================================================
 
 debugging:
 
@@ -289,9 +289,9 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['console'],
             'l
-***************************************************************************************************
+===================================================================================================
 pipenv initial
-***************************************************************************************************
+===================================================================================================
 
 https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
 
@@ -368,9 +368,9 @@ MyModel.objects.all().query.as_sql()
 
 
 
-********************************************
+===================================================================================================
 Django Basics
-****************************************
+===================================================================================================
 
 Create Project heirarchy
 
@@ -398,7 +398,7 @@ cd mysite
 python manage.py runserver
 
 
-*********************************************************************************
+********************************************
 
 Create views
 
@@ -431,7 +431,7 @@ def index(requuest):
 
 
 
-*********************************************************************************
+**********************************************
 
 render html :
 
@@ -466,8 +466,7 @@ TEMPLATES = [
 ]
 
 
-************************************************************************************************************
-
+****************************************************
 
 creating models:
 
@@ -518,7 +517,7 @@ b) python manage.py sqlmigrate blog 0001   #  it prints out the code that is goi
 c) python manage.py migrate
 
 
-***************************
+***************************************************
 
 Manipulate database
 
@@ -548,7 +547,7 @@ see database.txt also
 
 
 
-***************************************************************************************************
+===================================================================================================
 https://stackoverflow.com/questions/75495403/django-returns-templatedoesnotexist-when-using-crispy-forms
 
 Forms:
@@ -614,9 +613,9 @@ to add static file in html page:
 
  <link rel="stylesheet" type="text/css" href="{% static 'myapp/bootstrap.min.css' %}">
 
-***************************************************************************************************
+===================================================================================================
 Django Basic Lines:
-***************************************************************************************************
+===================================================================================================
 
 
 from django.contrib import admin
@@ -649,12 +648,9 @@ href="{% url 'post-detail' post.id %}"   in html file ( blog app)
 path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail')
 
 
-********************************************
-
-
-***************************************************************************************************
+===================================================================================================
 Django Ecommerce
-***************************************************************************************************
+===================================================================================================
 
 
 Check Python
@@ -708,9 +704,9 @@ https://www.youtube.com/watch?v=q6oxoOxvUMk&list=PL_99hMDlL4d2zsGU5nOgADmRc6A8ms
 
 
 
-***************************************************************************************************
+===================================================================================================
 Django Installations
-***************************************************************************************************
+===================================================================================================
 
 pip install django
 
@@ -719,9 +715,9 @@ pip install django-crispy-forms
 pip install Pillow    --   library to work with images with python
 
 
-***************************************************************************************************
+===================================================================================================
 Python linters
-***************************************************************************************************
+===================================================================================================
 
 Difference Between Linter and Formatter?
 Linter analyzes code for errors, potential issues, and adherence to coding standards, providing suggestions and warnings.
@@ -729,9 +725,9 @@ Formatter automatically adjusts code formatting to conform to a specific style g
 
 
 
-***************************************************************************************************
+===================================================================================================
 Django Apps
-***************************************************************************************************
+===================================================================================================
 
 https://docs.djangoproject.com/en/4.2/ref/applications/
 
@@ -862,9 +858,9 @@ However, if you're writing custom scripts or tools outside of Django's managemen
 Keep in mind that the details of Django's internal workings might change with different versions of the framework, so it's a good practice to refer to the official documentation for the most accurate and up-to-date information.
 
 
-***************************************************************************************************
+===================================================================================================
 Url configuration/mapping/routing
-***************************************************************************************************
+===================================================================================================
 https://docs.djangoproject.com/en/4.2/topics/http/urls/#
 
 Path converters
@@ -984,9 +980,9 @@ other related topics:
 see in polls app
 
 
-***************************************************************************************************
+===================================================================================================
 Django Forms
-***************************************************************************************************
+===================================================================================================
 https://docs.djangoproject.com/en/4.2/topics/forms/
 https://docs.djangoproject.com/en/4.2/ref/forms/api/#ref-forms-api-configuring-label
 
@@ -1381,7 +1377,7 @@ The changed_data attribute returns a list of the names of the fields whose value
 >>> f.changed_data
 ['subject', 'message']
 
-*********************************************************************************************************
+******************************************************************************************
 Accessing the fields from the form¶
 
 Form.fields:
@@ -1413,7 +1409,7 @@ Both f.base_fields and f.fields provide information about the fields in a form,
 the key difference is that f.base_fields contains the original field instances defined in the form class,
 while f.fields represents the fields that will be displayed on the current form instance, considering any dynamic modifications you've made.
 
-*********************************************************************************************************
+******************************************************************************************
 Accessing “clean” data:
 
 Form.cleaned_data:
@@ -1486,7 +1482,7 @@ For full details on each field’s behavior in this case, see the “Empty value
 
 You can write code to perform validation for particular form fields (based on their name) or for the form as a whole (considering combinations of various fields). More information about this is in Form and field validation.
 
-*********************************************************************************************************
+******************************************************************************************
 Configuring form elements’ HTML id attributes and <label> tags¶
 
 Form.auto_id:
@@ -1564,8 +1560,7 @@ When set to True(the default), the required attribute is added to the HTML input
 This will remove required attribute from the fields (i.e.remove frontend validations)
 >>> f = ContactForm(use_required_attribute=False)
 >>> print(f)
-******************************************************************************************************
-
+******************************************************************************************
 Outputting forms as HTML¶
 
 There are other output options though for the <label>/<input> pairs:
@@ -1575,7 +1570,7 @@ There are other output options though for the <label>/<input> pairs:
 {{ form.as_p }} will render them wrapped in <p> tags.
 {{ form.as_ul }} will render them wrapped in <li> tags.
 
-*********************************************************************************************************
+******************************************************************************************
 
 More granular output¶
 
@@ -1673,7 +1668,7 @@ Instead, you interact with form fields using their names as keys to access their
 This is because the context in Python code is different from the context provided by the Django template system.
 
 
-*********************************************************************************************************
+******************************************************************************************
 
 All methods on form instance:
 
@@ -1687,86 +1682,181 @@ f.as_table(               f.cleaned_data            f.errors                  f.
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+Authentication and Authorization
+===================================================================================================
+Authentication and authorization are two fundamental concepts in computer security and access control.
+Authentication and authorization work together to create a layered security approach.
+Authentication ensures that only legitimate users gain access to a system,
+while authorization ensures that authenticated users have appropriate access rights.
+Implementing strong authentication and authorization practices is essential for protecting sensitive data, preventing unauthorized access, and maintaining the overall security of a system or application.
+
+
+Authentication:
+Authentication is the process of verifying the identity of a user, system, or entity. It ensures that the entity claiming a particular identity is indeed who it claims to be.
+Authentication mechanisms are used to prevent unauthorized access and ensure that only legitimate users can access resources or perform actions within a system.
+
+There are several methods of authentication, including:
+
+1) Username and Password: This is the most common method where users provide a unique username and a secret password.
+2) Multi-Factor Authentication (MFA): In addition to a password, another piece of evidence is required, such as a one-time code sent to a mobile device.
+3) Biometric Authentication: This includes fingerprint scans, facial recognition, and other physiological characteristics to verify identity.
+4) Token-based Authentication: Users are provided with a token or key that is used as proof of identity.
+5) Certificate-based Authentication: Digital certificates are used to authenticate users or systems.
+
+*************************
+
+Authorization:
+
+Authorization, on the other hand, comes after authentication and involves determining what actions or resources a user is allowed to access after their identity has been verified. Authorization ensures that authenticated users have appropriate permissions to perform specific actions or access certain resources within a system. It defines the scope of a user's privileges and controls what they can and cannot do. Authorization can be implemented through role-based access control (RBAC) or attribute-based access control (ABAC), among other methods.
+
+2) Role-Based Access Control (RBAC): Users are assigned roles, and these roles have specific permissions associated with them. Users can perform actions based on their assigned roles.
+3) Attribute-Based Access Control (ABAC):
+Access decisions are made based on attributes associated with users, resources, and the environment.
+It provides more fine-grained control over access.
+
+Example for ABAC:
+
+Scenario: File-Sharing System
+
+Imagine a file-sharing system where users can upload and access various files.
+ The system uses ABAC to control access to files based on attributes such as user roles, file types, and sensitivity levels.
+
+Attributes:
+Role: Users can have roles such as "Employee" and "Manager."
+File Type: Files can be categorized as "Documents," "Spreadsheets," or "Presentations."
+Sensitivity Level: Files are assigned sensitivity levels: "Low," "Medium," and "High."
+
+Attribute-Based Access Control Rules:
+Access to Files:
+    Employees can access "Documents" and "Spreadsheets" files.
+    Managers can access all types of files.
+Sensitive Files:
+    Only users with a sensitivity level of "High" can access files marked as "High" sensitivity.
+
+Example Scenarios:
+
+Jane, an employee, wants to access a presentation file. The ABAC system checks her role ("Employee") and the file type ("Presentation"). Since she has the appropriate role for the file type, she's granted access.
+Alex, a manager, tries to access a spreadsheet. The ABAC system checks his role ("Manager") and the file type ("Spreadsheet"), so he's allowed to access the file.
+Lisa, an employee, attempts to access a "High" sensitivity document. The ABAC system checks her role ("Employee") and the sensitivity level of the file ("High"). Since her sensitivity level doesn't match the requirement, access is denied.
+Mark, a manager, needs to access a "High" sensitivity presentation. The ABAC system verifies his role ("Manager") and the sensitivity level of the file ("High"), granting him access.
+
+In this simple example, ABAC is used to control access to files based on attributes like roles, file types, and sensitivity levels. Access control decisions are made dynamically based on the attributes associated with the user and the resources they're trying to access. This example illustrates how ABAC can provide fine-grained control over access, allowing for more flexible and context-aware authorization decisions.
+
+**************************************************
+Authentication in web requests
+**************************************************
+
+Authentication in web requests is a process by which a client (usually a user or another system) provides credentials to a server to prove its identity. This is essential for ensuring that only authorized users or systems can access specific resources or perform actions on a web application. There are several common methods of implementing authentication in web requests:
+
+Basic Authentication:
+Basic authentication is a simple method where the client includes a username and password in the HTTP request headers. The credentials are usually base64-encoded for transmission, although it's important to note that this encoding doesn't provide strong security on its own. Basic authentication is often used with HTTPS to encrypt the credentials during transmission.
+
+Example of headers:
+Authorization: Basic base64(username:password)
+*****************
+
+Digest Authentication:
+Digest authentication is a more secure alternative to basic authentication. It involves the server challenging the client with a nonce value that the client combines with the username, password, and other data to produce a hash. This hash is sent back to the server for verification. Digest authentication helps prevent sending plain-text passwords over the network.
+*****************
+
+Token-Based Authentication:
+Token-based authentication involves the use of tokens instead of sending credentials with each request. After successful login, the server provides the client with a token that the client includes in the headers of subsequent requests. This token is often digitally signed to prevent tampering. Token-based authentication is commonly used in modern web applications and APIs.
+
+Example of headers:
+Authorization: Bearer <token>
+
+*****************
+
+OAuth and OAuth2:
+OAuth (Open Authorization) and OAuth2 are authentication and authorization protocols that allow a user to grant limited access to their resources on one site to another site without exposing their credentials. OAuth2, the newer version, is widely used for granting access to third-party applications or services. It involves obtaining an access token after user consent and using that token for making authorized API requests.
+
+*****************
+JWT (JSON Web Tokens):
+JWT is a compact, URL-safe means of representing claims between two parties. It's often used as a token format for token-based authentication. A JWT contains encoded information (claims) that can include user identity, expiration time, and other metadata. The server signs the JWT, and the client includes it in headers to authenticate and access protected resources.
+
+These authentication methods help secure web requests by verifying the identity of clients and ensuring that only authorized users or systems can interact with a web application's resources. The choice of authentication method depends on factors such as security requirements, ease of implementation, and the specific use case of the web application.
 
 
 
-***************************************************************************************************
-***************************************************************************************************
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
 
 
 
-***************************************************************************************************
-***************************************************************************************************
+===================================================================================================
+===================================================================================================
+
+
+
+===================================================================================================
+===================================================================================================
 

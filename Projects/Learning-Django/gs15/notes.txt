@@ -1,0 +1,14 @@
+Static Files inside Project:
+1) STATIC_DIR = BASE_DIR/ 'static'
+2) STATICFILES_DIRS = [STATIC_DIR]
+
+Now we can use static files of static folder in project(root).
+
+*********************
+
+get_static_prefix:
+will give the url whatever we set in STATIC_URL in settings.py,
+
+
+
+http://localhost:8000/course/learndj/

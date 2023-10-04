@@ -1,0 +1,3 @@
+create file system
+
+create model and register it in admin file and run migrations

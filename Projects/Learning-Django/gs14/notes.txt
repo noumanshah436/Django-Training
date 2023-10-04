@@ -1,0 +1,34 @@
+
+
+Templates inside project:
+
+1) make sure to have 
+TEMPLATE_DIR = BASE_DIR/ 'templates'
+
+and
+
+
+TEMPLATES = [
+    {
+ 	...
+        'DIRS': [TEMPLATE_DIR],
+        .....
+    },
+]
+
+
+******************************
+
+Templates inside app:
+
+make sure you have:
+
+'APP_DIRS': True,
+
+TEMPLATES = [
+    {
+ 	...
+        'APP_DIRS': True,,
+        .....
+    },
+]
