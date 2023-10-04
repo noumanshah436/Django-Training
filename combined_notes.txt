@@ -56,8 +56,10 @@ https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
 
 1. Make a directory for the django project
 2. Install 'pip install pipenv' in the system environment if not already
-3. Create a virtual environment by running 'pipenv shell' (the location of the venv defaults to '~/user/.virtualenv/',
-	 to make it live inside the current directory, make an empty folder named '.venv', pipenv automatically detects that folder and creates the virtual environment inside that folder)
+3. Create a virtual environment by running 'pipenv shell'
+    (the location of the venv defaults to '~/user/.virtualenv/', to make it live inside the current directory, make an empty folder named '.venv',
+    pipenv automatically detects that folder and creates the virtual environment inside that folder)
+    ( default location in my ubuntu: /home/dev/.local/share/virtualenvs/Projects-IqmR9ahX )
 4. Now install django by running 'pipenv install django' (installs the latest version)
 5. Start the project by running 'django-admin startproject $NAME_OF_THE_PROJECT'
 6. To start the live server cd into the project and run 'python manage.py runserver port(optional)'
