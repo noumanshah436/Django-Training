@@ -1,0 +1,34 @@
+How to Create Custom Signal in Django
+
+https://studygyaan.com/django/how-to-create-custom-signal-in-django
+
+******************************
+
+error
+
+https://stackoverflow.com/questions/70466886/typeerror-init-got-an-unexpected-keyword-argument-providing-args
+
+******************************
+
+Create custom signal:
+
+1) create signal
+notification = Signal()
+
+
+2) create receiver and connect it with the signal
+
+@receiver(notification)
+def show_notification(sender, **kwargs):
+    print(sender)
+    print(f'{kwargs}')
+    print("Notification")
+
+3) send signal from anywhere:
+
+from blog import signals
+
+signals.notification.send(sender=None, request=request, user = ['Geeky', 'Shows'])
+
+******************************
+

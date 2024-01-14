@@ -45,6 +45,12 @@ from many_to_one_relationship.models import *
 python manage.py makemigrations
 python manage.py migrate
 
+3)
+upgrade django version
+
+pip install --upgrade django
+
+
 
 ===================================================================================================
 initial Setup (using pipenv)

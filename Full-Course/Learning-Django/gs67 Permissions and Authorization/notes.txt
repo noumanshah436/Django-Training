@@ -1,0 +1,14 @@
+username: admin
+pass: admin
+
+username: nouman
+pass: noumanrehman042
+
+username: farhan
+pass: noumanrehman042
+
+http://127.0.0.1:8000/admin/
+
+*************************************
+
+from django.contrib.auth.models import User, Group

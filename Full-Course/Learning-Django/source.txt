@@ -101,13 +101,20 @@ GS85 Template Fragment Caching (Database based Caching)
 GS86 Template Fragment Caching (File System based Caching)
 GS87 Template Fragment Caching (Local Memory based Caching)
 GS88 Low level Cache API
+
+
 GS89 Signals and Built-in Signals
 GS90 Custom Signals
+
+
 GS91 Middleware in Django
 GS92 Class Based Middleware
 GS93 More than one Middleware
 GS94 Hooks in Middleware
 GS95 Built in Middleware
+
+########################
+
 GS96 QuerySet API/ QuerySET API Methods that returns new QuerySets
 GS97 QuerySet API(Methods that do not return new QuerySet)
 GS98 QuerySet API Field Lookups

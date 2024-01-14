@@ -16,3 +16,11 @@ Create SIgnal:
 
 http://localhost:8000/admin
 
+
+*************************************
+
+How to Use and Create Django Signal using Built-in Signals
+
+https://studygyaan.com/django/how-to-use-and-create-django-signals
+
+*************************************
