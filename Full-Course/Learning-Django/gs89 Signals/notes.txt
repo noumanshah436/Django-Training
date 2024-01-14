@@ -1,0 +1,18 @@
+A list of all the signals that Django sends. All built-in signals are sent using the send() method.
+https://docs.djangoproject.com/en/5.0/ref/signals/
+
+
+python manage.py migrate
+python manage.py createsuperuser
+
+username: nouman
+pass: noumanrehman042
+
+
+Create SIgnal:
+1) define signal in signals file
+2) define ready method in apps.py file
+3) define 'blog.apps.BlogConfig' in settings file in INSTALLED_APPS
+
+http://localhost:8000/admin
+

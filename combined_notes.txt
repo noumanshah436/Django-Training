@@ -493,6 +493,7 @@ class Post(models.Model):
 
 # DateTimeField(auto_now = True)   -> for last modified field
 # DateTimeField(auto_now-add = True)   -> save current date when object is created but we cannot modify that date
+# use on_delete=models.SET_NULL to just add null on delete related table
 
 2)
 

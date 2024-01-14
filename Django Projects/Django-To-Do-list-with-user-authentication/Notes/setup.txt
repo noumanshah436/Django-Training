@@ -1,0 +1,34 @@
+django-admin startproject todo_list
+
+cd todo_list
+
+python manage.py startapp base
+
+mkdir .venv
+
+pipenv install   ( this will install all the packages listed in pipfile in .venv )
+
+pipenv shell
+
+python manage.py runserver
+
+
+python manage.py makemigrations
+python manage.py migrate
+
+
+python manage.py createsuperuser
+  Username (leave blank to use 'dev'): nouman
+  Email address: noumanshah436@gmail.com
+  Password: nouman
+  Password (again):
+  The password is too similar to the username.
+  This password is too short. It must contain at least 8 characters.
+  Bypass password validation and create user anyway? [y/N]: y
+  Superuser created successfully.
+
+username: nouman
+password: nouman
+
+username: dennisivy
+password: dennisivy
