@@ -41,6 +41,7 @@ def index3(request):
     # Lists
     langs = ["Python", "JavaScript", "Bash", "Ruby", "C", "Rust"]
 
+    # nested list
     res = [['Adam', '334', 'Ford'], [
         'Steve', '130', 'Porsche'], ['Dave', '510', 'Ford']]
 
@@ -95,10 +96,12 @@ def index3(request):
 
 #
 def build_in_tags_and_filters(request):
+    # First read django_templates.txt file
     name = "Nouman"
     langs = ["Python", "JavaScript", "Bash", "Ruby", "C++", "Rust"]
     some_date = datetime(2023, 8, 18, 15, 30, 0)
-    utc_date = datetime.utcnow()
+    # utc_date = datetime.utcnow()
+    utc_date = datetime.now(timezone.utc)
     current_datetime = timezone.now()
 
     context = {
@@ -133,6 +136,7 @@ def new_post(request):
 
 # **************************
 # generic views
+# generic_views.txt
 # **************************
 
 class MyCarsIndexView(generic.ListView):

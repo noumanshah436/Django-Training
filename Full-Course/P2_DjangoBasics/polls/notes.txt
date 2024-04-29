@@ -35,13 +35,15 @@ class FilteredAuthorView(ListView):
 
 get_context_data():
 
-
-This method is used to populate a dictionary to use as the template context. For example, ListViews will populate the result from get_queryset() as author_list in the above example. You will probably be overriding this method most often to add things to display in your templates.
+This method is used to populate a dictionary to use as the template context. 
+For example, ListViews will populate the result from get_queryset() as author_list in the above example. 
+You will probably be overriding this method most often to add things to display in your templates.
 
 def get_context_data(self, **kwargs):
     data = super().get_context_data(**kwargs)
     data['page_title'] = 'Authors'
     return data
+
 And then in your template, you can reference these variables.
 
 <h1>{{ page_title }}</h1>

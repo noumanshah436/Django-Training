@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'bookshelf.apps.BookshelfConfig',
     'task_manager',
     'my_forms.apps.MyFormsConfig',
+    'async_views.apps.AsyncViewsConfig',
 
 ]
 

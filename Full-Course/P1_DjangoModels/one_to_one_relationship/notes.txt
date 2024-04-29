@@ -1,7 +1,6 @@
 https://docs.djangoproject.com/en/4.2/topics/db/examples/one_to_one/
 
 
-
 CREATE TABLE "one_to_one_relationship_place" (
     "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
     "name" varchar(50) NOT NULL, "address" varchar(80) NOT NULL

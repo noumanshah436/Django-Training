@@ -1,6 +1,33 @@
 https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_one/
 
+https://docs.djangoproject.com/en/4.2/ref/models/fields/#module-django.db.models.fields.related
+
 A Reporter can be associated with many Article objects, but an Article can only have one Reporter object:
+
+
+1) create simple reporter model:
+
+CREATE TABLE "many_to_one_relationship_reporter" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  "first_name" varchar(30) NOT NULL, 
+  "last_name" varchar(30) NOT NULL, 
+  "email" varchar(254) NOT NULL
+)
+
+2) Create article model with foreign key "reporter_id":	
+
+CREATE TABLE "many_to_one_relationship_article" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "headline" varchar(100) NOT NULL,
+  "pub_date" date NOT NULL, 
+  "reporter_id" bigint NOT NULL REFERENCES "many_to_one_relationship_reporter" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+
+**************************
+pipenv shell
+cd P1_DjangoModels/
+python manage.py shell
 
 
 from many_to_one_relationship.models import *

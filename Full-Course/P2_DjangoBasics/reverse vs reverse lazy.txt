@@ -1,7 +1,9 @@
 reverse and reverse_lazy are both functions provided by Django to generate URLs for named views,
 but they have different use cases and behaviors.
 
+**********************
 reverse:
+**********************
 
 Eager Evaluation:
 The reverse function generates the URL immediately when called.
@@ -23,7 +25,12 @@ def my_view(request):
 we can also test this in terminal:
 
 >>> from django.urls import reverse
->>> reverse("polls:results", args=(3,))
+>>> reverse("polls:results", args=(3,)) 
+'/polls/3/results/'
+
+or
+
+>>> reverse("polls:results", kwargs={"question_id": 3})
 '/polls/3/results/'
 
 Another Example:
@@ -36,8 +43,8 @@ def get_absolute_url(self):
     return reverse('product-detail', kwargs={'id': self.id})
 
 **********************
-
 reverse_lazy:
+**********************
 
 Lazy Evaluation:
 The reverse_lazy function returns a lazy object that doesn't immediately generate the URL.

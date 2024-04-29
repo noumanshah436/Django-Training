@@ -81,7 +81,7 @@ datetime.datetime(2012, 2, 26, 13, 0, 0, 775217, tzinfo=datetime.timezone.utc)
 
 ********************************
 
-Creating an admin use
+Creating an admin user:
 
 python manage.py createsuperuser
 
@@ -195,7 +195,8 @@ After finding the match at 'polls/', it strips off the matching text ("polls/") 
 Add templates:
 
 -> Your project’s TEMPLATES setting describes how Django will load and render templates.
-The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. By convention DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
+The default settings file configures a DjangoTemplates backend whose APP_DIRS option is set to True. 
+By convention DjangoTemplates looks for a “templates” subdirectory in each of the INSTALLED_APPS.
 
 
 -> Here’s a setup that tells the Django template engine to load templates from the templates subdirectory inside each installed application:

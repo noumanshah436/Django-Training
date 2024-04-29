@@ -8,7 +8,8 @@ from .forms import NameForm, ContactForm
 # https://docs.djangoproject.com/en/4.0/ref/forms/fields/      form fields
 
 def my_forms(request):
-    return render(request, 'my_forms/my_form.html')
+    form = NameForm()
+    return render(request, 'my_forms/my_form.html', {'form': form})
 
 
 # http://localhost:8000/my_forms/get_name/

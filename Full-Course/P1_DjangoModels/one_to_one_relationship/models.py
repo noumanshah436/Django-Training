@@ -20,3 +20,26 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return "%s the restaurant" % self.place.name
+
+# ************************************
+
+# Each user has one prifile and each profile belongs to one user
+
+# class User(models.Model):
+#     name = models.CharField(max_length=50)
+
+#     def __str__(self):
+#         return str(self.name)
+
+
+# class Profile(models.Model):
+#     user = models.OneToOneField(
+#         User,
+#         on_delete=models.PROTECT,
+#         primary_key=True,
+#     )
+#     language = models.CharField(max_length=50)
+#     email = models.EmailField(max_length=70, blank=True, unique=True)
+
+#     def __str__(self):
+#         return str(self.email)

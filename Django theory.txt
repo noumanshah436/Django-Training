@@ -1,0 +1,144 @@
+
+Python linters
+
+
+Difference Between Linter and Formatter?
+Linter analyzes code for errors, potential issues, and adherence to coding standards, providing suggestions and warnings.
+Formatter automatically adjusts code formatting to conform to a specific style guide, ensuring consistent and uniform code appearance.
+
+linting analyzes how the code runs and detects errors, whereas formatting only restructures how code appears.
+
+
+***************************************
+
+
+
+High-quality code identifiers:
+
+It does what it is supposed to do.
+It does not contain defects or problems.
+It is easy to read, maintain, and extend.
+
+
+
+************************************
+
+A web framework is a software tool that provides a way to build and run web applications. As a result, you don’t need to write code on your own and waste time looking for possible miscalculations and bugs.
+
+
+A web framework is a collection of pre-written code and libraries that provides a structured way to build web applications. 
+It offers developers a set of tools, components, and conventions to streamline the development process, making it faster and more efficient to create dynamic and interactive websites or web services.
+
+************************************
+
+Why Django? What is Django?
+
+Django is an open-source framework for backend web applications based on Python — one of the top web development languages. 
+Its main goals are simplicity, flexibility, reliability, and scalability.
+
+Django has its own naming system for all functions and components (e.g., HTTP responses are called “views”). 
+It also has an admin panel, which is deemed easier to work with than in Lavarel or Yii, and other technical Django features, including:
+
+Simple syntax;
+Its own web server;
+MVC (Model-View-Controller) core architecture;
+“Batteries included” (comes with all the essentials needed to solve solving common cases);
+An ORM (Object Relational Mapper);
+HTTP libraries;
+Middleware support; and
+A Python unit test framework.
+
+
+**************************************
+
+
+Comapnies using django:
+
+- Instagram: Leverages Django for seamless social networking functionality.
+- Spotify: Utilizes Django to manage its extensive media library and subscription services.
+- The Washington Post: Relies on Django to handle heavy traffic and power its online news platform.
+- Dropbox: Uses Django for cloud file storage, sharing, synchronization, and scalability.
+- Mozilla: Implements Django for web browsing functionality, transitioning from PHP for better performance.
+- NASA: Trusts Django for reliable functional elements on its website, handling high-resolution imagery and millions of monthly views.
+- Pinterest: Relies on Django for managing over 250 million monthly active users and vast media data.
+- Reddit: Employs Django for its social news and discussion platform, serving heavy user traffic effectively.
+
+
+****************************************************************************
+Django – Design Philosophies
+****************************************************************************
+
+Django's primary goal is to ease the creation of complex, database-driven websites. The framework emphasizes reusability and pluggability (The ability of just dropping something somewhere and having that thing working. It is achieved by your pluggable item having adhere to certain rules i.e. implement interface) of components, less code, low coupling, rapid development, and the principle of don't repeat yourself. Python is used throughout, even for settings, files, and data models.
+
+Don’t repeat yourself (DRY)
+Explicit is better than implicit
+Loose Coupling
+Less Code
+Quick Development
+Consistency
+
+************
+
+Loose coupling and tight cohesion
+
+Loose coupling and tight cohesion are principles in software design that aim to improve the quality, maintainability, and flexibility of code:
+
+**Loose Coupling:**
+- Refers to the degree of dependency between software components.
+- In a loosely coupled system, components are independent and interact with each other through well-defined interfaces or contracts.
+- Changes to one component have minimal impact on other components, making the system more flexible and easier to maintain.
+- Achieved by decoupling components, using abstractions, and employing design patterns like Dependency Injection.
+- Promotes modularity, reusability, and scalability.
+
+**Tight Cohesion:**
+- Refers to the degree to which the elements within a module or component are related to one another.
+- In a tightly cohesive module, elements (functions, classes, etc.) are closely related and work together to perform a single task or purpose.
+- Encourages a clear and focused design, where each module has a well-defined responsibility or functionality.
+- Helps improve code readability, understandability, and maintainability by grouping related elements together.
+- Different levels of cohesion include functional cohesion, sequential cohesion, communicational cohesion, procedural cohesion, and temporal cohesion.
+
+In summary, loose coupling focuses on reducing dependencies between components to enhance flexibility and maintainability, while tight cohesion emphasizes grouping related elements together within modules or components to improve clarity and efficiency. Striking a balance between these two principles is essential for designing robust and maintainable software systems.
+
+
+************
+
+Explicit is better than implicit(hidden behaviors):
+
+The principle "Explicit is better than implicit" from PEP 20 emphasizes the importance of clarity and transparency in code. 
+In the context of Django, this principle means that Django should avoid excessive automation or "magic" behavior unless it significantly enhances convenience without sacrificing clarity.
+
+Instead of relying on implicit behaviors or hidden mechanisms, Django should prioritize explicitness, making it clear to developers how features and functionalities work. This approach ensures that developers can easily understand and reason about the behavior of their code, reducing confusion and making it easier to learn and maintain Django projects.
+
+In essence, Django should only employ "magic" when it provides substantial benefits that outweigh the potential drawbacks of obscured behavior, and even then, it should be implemented in a way that doesn't hinder understanding or usability for developers.
+
+
+
+Certainly! Let's consider a few examples of how Django adheres to the principle of "Explicit is better than implicit":
+
+1. **URL Routing:**
+   - In Django, URL routing is explicitly defined using URL patterns in the URLconf (URL configuration) module.
+   - Developers specify the URL patterns in a central location, making it clear how incoming requests are mapped to view functions or classes.
+
+
+2. **Model Fields:**
+   - When defining models in Django, developers explicitly specify the fields and their data types.
+  
+3. **Template Context:**
+   - In Django templates, data passed from views to templates is explicitly defined and passed through the context.
+   
+4. **Middleware:**
+   - Django middleware components are explicitly configured in the `MIDDLEWARE` setting.
+   - Each middleware component is explicitly listed in the order in which it should be applied to incoming requests and outgoing responses.
+   - This explicit configuration allows developers to understand and control the behavior of middleware in the request-response cycle, avoiding hidden or implicit middleware execution.
+
+In each of these examples, Django prioritizes explicitness and transparency, making it clear to developers how features and functionalities are implemented. This approach enhances code clarity, reduces confusion, and facilitates easier learning and maintenance of Django projects.
+
+************
+
+
+
+
+
+
+
+

@@ -6,6 +6,13 @@ https://dennisivy.com/django-class-based-views
 
 app in this project:
 
+my_views:
+  initial practice of views in django
+
+polls app:
+  create polls app by following django tutorials.
+  Initial understanding of class based views
+
 bookshelf:
   practice of CRUD operations using both function and class based views
 
@@ -15,13 +22,6 @@ employee app:
 my_class_based_views:
   to practice class based views using View class (pending )
   learn here: https://docs.djangoproject.com/en/4.2/topics/class-based-views/intro/
-
-my_views:
-  initial practice of views in django
-
-polls app:
-  create polls app by following django tutorials.
-  Initial understanding of class based views
 
 task_manager:
   practice crud using class based views

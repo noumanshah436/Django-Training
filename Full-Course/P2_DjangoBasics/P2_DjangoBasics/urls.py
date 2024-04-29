@@ -33,4 +33,5 @@ urlpatterns = [
     path('task_manager/', include("task_manager.urls")),
     path('contact/', contact, name="contact"),
     path('my_forms/', include('my_forms.urls')),
+    path('async_views/', include('async_views.urls')),
 ]

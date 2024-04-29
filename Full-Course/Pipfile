@@ -8,6 +8,8 @@ django = "*"
 sqlparse = "*"
 coloredlogs = "*"
 django-crispy-forms = "*"
+requests = "*"
+aiohttp = "*"
 
 [dev-packages]
 

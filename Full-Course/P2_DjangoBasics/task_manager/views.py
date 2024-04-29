@@ -17,6 +17,7 @@ class TaskDetailView(DetailView):
     template_name = 'task_manager/task_detail.html'
 
 
+# http://localhost:8000/task_manager/create/
 class TaskCreateView(CreateView):
     model = Task
     form_class = TaskForm

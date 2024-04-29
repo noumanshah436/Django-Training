@@ -2,7 +2,7 @@
 
 <ul>
 {% for book in object_list %}
-    <li>{{ book }}</li>
+    <li><a href="{% url 'bookshelf:book_detail_by_id' book.id %}">{{ book.title }}</a></li>
 {% empty %}
     <li>No books yet.</li>
 {% endfor %}

@@ -87,7 +87,9 @@ WHERE "my_models_album"."title" LIKE 'The%' ESCAPE '\'  args=('The%',);
 
 **********************
 
-range: Finds values within a specified range.
+range: 
+
+Finds values within a specified range.
 
 Order.objects.filter(quantity__range=(10, 50))
 
@@ -196,7 +198,6 @@ Author.objects.annotate(article_count=Count('articles'))
 F object:
 
 Allows you to reference other fields in the query.
-
 
 from django.db.models import F
 

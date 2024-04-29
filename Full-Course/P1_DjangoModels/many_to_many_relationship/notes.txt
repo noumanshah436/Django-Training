@@ -1,7 +1,6 @@
 https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_many/
 
 
-
 # CREATE TABLE "many_to_many_relationship_article"(
 #   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
 #   "headline" varchar(100) NOT NULL

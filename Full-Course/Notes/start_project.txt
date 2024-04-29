@@ -1,5 +1,5 @@
 
-$ cd /home/dev/django_training/Learning
+$ cd /home/dev/Django-Training/Full-Course
 $ pipenv shell
 $ cd P1_DjangoModels
 $ python manage.py runserver
@@ -9,7 +9,7 @@ $ python manage.py runserver
 
 install virtual environment if project cloned:
 
-$ cd /home/dev/django_training/Learning
+$ cd /home/dev/Django-Training/Full-Course
 $ mkdir .venv
 $ pipenv install   ( this will install all the packages listed in pipfile in .venv )
 $ pipenv shell

@@ -23,7 +23,7 @@ ListView generic view:
 The ListView uses a default template called <app name>/<model name>_list.html.
 We can use template_name to tell ListView to use our existing "my_views/index.html" template.
 
-For ListView, the automatically generated context variable is car_list.
+For ListView, the automatically generated context variable is <model name>_list.
 To override this we provide the context_object_name attribute, specifying that we want to use "my_cars" instead.
   (now it will use my_cars variable to get all cars that will be available in template)
 

@@ -93,11 +93,8 @@ pipenv lock
 
 pipenv install --ignore-pipfile
 
-
-
 run command in virtual environment without activating it:
 pipenv run python
-
 
 **********************
 summary:
@@ -117,6 +114,14 @@ django-admin startproject P1_DjangoModels .              -- create project in th
 
 django-admin startproject P1_DjangoModels		   -- create project in its sub directory
 
+**********************
+
+Add interpreter path for project in VScode
+
+1) Run this commad to get path to virtual environment 
+pipenv --venv 
+
+2) Add the path to virtual environment by appending "/bin/python"
 
 ===================================================================================================
 Initial Setup (old)
@@ -221,8 +226,7 @@ event_calendar (for an event calendar app)
 
 
 ===================================================================================================
-Day 1:
-Models
+Logging and debugging
 ===================================================================================================
 
 debugging:
@@ -372,9 +376,6 @@ to print the SQL command.
 ie:
 
 MyModel.objects.all().query.as_sql()
-
-
-
 
 ===================================================================================================
 Django Basics
@@ -643,7 +644,6 @@ urlpatterns = [
 
 ****************************
 
-
 # names can be used to redirect to this specific route as
 
 return redirect('register')
@@ -652,10 +652,9 @@ return redirect('register')
 
 ********************************************
 
-href="{% url 'post-detail' post.id %}"   in html file ( blog app)
-
 path('post/<int:pk>/', PostDetailView.as_view(), name='post-detail')
 
+href="{% url 'post-detail' post.id %}"   in html file ( blog app)
 
 ===================================================================================================
 Django Ecommerce
@@ -711,8 +710,6 @@ https://www.youtube.com/watch?v=q6oxoOxvUMk&list=PL_99hMDlL4d2zsGU5nOgADmRc6A8ms
 
 
 
-
-
 ===================================================================================================
 Django Installations
 ===================================================================================================
@@ -722,17 +719,6 @@ pip install django
 pip install django-crispy-forms
 
 pip install Pillow    --   library to work with images with python
-
-
-===================================================================================================
-Python linters
-===================================================================================================
-
-Difference Between Linter and Formatter?
-Linter analyzes code for errors, potential issues, and adherence to coding standards, providing suggestions and warnings.
-Formatter automatically adjusts code formatting to conform to a specific style guide, ensuring consistent and uniform code appearance.
-
-
 
 ===================================================================================================
 Django Apps
@@ -806,7 +792,9 @@ Application configuration
 ****************************
 
 class AppConfig:
+
 Application configuration objects store metadata for an application.
+Each application's AppConfig class provides metadata and configuration for the application, such as its name, label, models, middleware, and other settings.
 Some attributes can be configured in AppConfig subclasses. Others are set by Django and read-only.
 
 >>> from django.apps import apps
@@ -843,7 +831,7 @@ Initialization process:
 https://docs.djangoproject.com/en/4.2/ref/applications/#initialization-process
 
 In Django, when the framework starts up, the django.setup() function is responsible for populating the application registry and performing various initialization tasks.
-The setup() function is typically called automatically when Django's management commands or server are run.
+The setup() function is typically called automatically when Django's management commands like runserver, migrate, or shell.
 
 The django.setup() function performs several important tasks:
 
@@ -1057,6 +1045,22 @@ Here’s the output of {{ form.as_p }} for our ContactForm instance:
 Note that each form field has an ID attribute set to id_<field-name>, which is referenced by the accompanying label tag. This is important in ensuring that forms are accessible to assistive technology such as screen reader software. You can also customize the way in which labels and ids are generated.
 
 ****************************
+
+Looping over the form’s fields
+
+If you’re using the same HTML for each of your form fields, you can reduce duplicate code by looping through each field in turn using a {% for %} loop:
+
+{% for field in form %}
+    <div class="fieldWrapper">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+        {% if field.help_text %}
+          <p class="help" id="{{ field.auto_id }}_helptext">
+            {{ field.help_text|safe }}
+          </p>
+        {% endif %}
+    </div>
+{% endfor %}
 
 Useful attributes on {{ field }} include:
 
@@ -1324,6 +1328,9 @@ Only include the fields for which you’re specifying an initial value; it’s n
 For example:
 
 >>> f = ContactForm(initial={"subject": "Hi there!"})
+]>>> f.is_bound
+False
+
 These values are only displayed for unbound forms, and they’re not used as fallback values if a particular value isn’t provided.
 
 If a Field defines initial and you include initial when instantiating the Form, then the latter initial will have precedence.
@@ -1365,6 +1372,8 @@ Use the has_changed() method on your Form when you need to check if the form dat
     'cc_myself': True
 }
 >>> f = ContactForm(data, initial=data)
+>>> f.is_bound
+True
 >>> f.has_changed()
 False
 
@@ -1387,7 +1396,7 @@ The changed_data attribute returns a list of the names of the fields whose value
 ['subject', 'message']
 
 ******************************************************************************************
-Accessing the fields from the form¶
+Accessing the fields from the form
 
 Form.fields:
 
@@ -1499,14 +1508,17 @@ Form.auto_id:
 By default, the form rendering methods include:
 
 1) HTML id attributes on the form elements. The id attribute values are generated by prepending id_ to the form field names
-2) The corresponding <label> tags around the labels. An HTML <label> tag designates which label text is associated with which form element. This small enhancement makes forms more usable and more accessible to assistive devices. It’s always a good idea to use <label> tags.
+2) The corresponding <label> tags around the labels. An HTML <label> tag designates which label text is associated with which form element. 
+This small enhancement makes forms more usable and more accessible to assistive devices. It’s always a good idea to use <label> tags.
 
 >>> f = ContactForm(auto_id=False)
 >>> print(f.as_div())
+
 <div>Subject:<input type="text" name="subject" maxlength="100" required></div>
 <div>Message:<textarea name="message" cols="40" rows="10" required></textarea></div>
 <div>Sender:<input type="email" name="sender" required></div>
 <div>Cc myself:<input type="checkbox" name="cc_myself"></div>
+
 ****************
 
 If auto_id is set to True, then the form output will include <label> tags and will use the field name as its id for each form field:
@@ -1561,7 +1573,7 @@ The suffix can also be overridden at runtime using the label_suffix parameter to
 
 ***************************************************
 
-Form.use_required_attribute¶
+Form.use_required_attribute:
 
 It controls whether the HTML attribute required is added to form fields marked as required in the form.
 When set to True(the default), the required attribute is added to the HTML input elements, which prompts browsers to enforce client-side validation on those fields.
@@ -1599,7 +1611,7 @@ To retrieve all BoundField objects, iterate the form:
     print(boundfield)
 **************************
 
-Attributes of BoundField¶
+Attributes of BoundField:
 
 >>> form = ContactForm(initial={"subject":"initial subject"})
 >>> form["subject"].initial
@@ -1787,24 +1799,918 @@ JWT is a compact, URL-safe means of representing claims between two parties. It'
 These authentication methods help secure web requests by verifying the identity of clients and ensuring that only authorized users or systems can interact with a web application's resources. The choice of authentication method depends on factors such as security requirements, ease of implementation, and the specific use case of the web application.
 
 
+===================================================================================================
+Models
+Model Field options
+===================================================================================================
+https://docs.djangoproject.com/en/4.2/ref/models/fields/#field-options
+
+NULL vs BLANK
+
+null:
+The null option is used at the database level and determines whether a field can store a NULL value in the database.
+It's relevant for database columns.
+
+If you set null=True on a field, it means that the field's database column can hold a NULL value, indicating the absence of data.
+If you set null=False (which is the default), it means that the field cannot hold NULL values.
+
+Example:
+
+class MyModel(models.Model):
+    some_field = models.CharField(max_length=50, null=True)
+
+In this example, some_field can store NULL values in the database.
+
+More detail:
+
+-> Using null=True on String-based Fields:
+When you use null=True on a string-based field like CharField or TextField,
+you're allowing that field to store NULL values in the database, in addition to empty strings.
+This means the field can have two possible values to represent "no data" (i.e. NULL and an empty string '').
+
+Django's convention is to use the empty string ('') to represent "no data" for string-based fields.
+
+Here's an example:
+
+class Product(models.Model):
+    name = models.CharField(max_length=100, null=True)
+
+In this example, if you set null=True on the name field, it will allow the field to store both NULL and empty strings.
+
+summary:
+It's often better to leave null=False (the default) for string-based fields, so an empty string can be used to represent "no data".
+For other types of fields like numbers or dates, using null=True can be appropriate when you want to differentiate between "no data" and an actual numeric or date value.
+
+-> exception for above scenerio:
+
+If you do not give null=True and have a field with unique=True and blank=True,
+then having multiple NULL values will indeed violate the uniqueness constraint.
+
+class Product(models.Model):
+    code = models.CharField(max_length=10, unique=True, blank=True)
+
+# Creating two products with NULL code values
+product1 = Product.objects.create(code=None)
+product2 = Product.objects.create(code=None)
+
+In this example, if you attempt to create both product1 and product2 with NULL values for the code field, you will encounter a uniqueness constraint violation.
+This is because, by default, without null=True, NULL values are treated as equal and will violate the uniqueness constraint set by unique=True.
+
+To avoid this issue and allow multiple NULL values for the field while maintaining uniqueness for non-NULL values, you would need to set null=True.
+
+class Product(models.Model):
+    code = models.CharField(max_length=10, unique=True, blank=True, null=True)
+
+# Creating two products with NULL code values
+product1 = Product.objects.create(code=None)
+product2 = Product.objects.create(code=None)
+
+In this case, with null=True, the uniqueness constraint will not be violated because each NULL value is considered distinct, and you can have multiple rows with NULL code values.
+
+In summary, using null=True along with unique=True and blank=True can help handle scenarios where you want to allow multiple blank or NULL values while still enforcing uniqueness on the non-empty values.
+
+************************************************************
+blank:
+************************************************************
+
+The blank option is used at the validation and form level.
+It specifies whether a field is required when creating a form to input data.
+
+If blank=True is set on a field, it means that the field is not required when creating a form.
+If blank=False (the default) is set, the field is required.
+
+Example:
+
+class MyModel(models.Model):
+    some_field = models.CharField(max_length=50, blank=True)
+
+In this example, some_field is not required when creating a form.
+
+***************
+
+In summary:
+
+'null' is related to the database and determines whether a field can hold NULL values.
+'blank' is related to form validation and determines whether a field is required when creating a form.
+
+It's also worth noting that some field types have default behaviors for null and blank.
+
+For example,
+
+CharField and TextField have blank set to False by default (field is required), while
+DateField and DateTimeField have null set to True by default.
+
+1) If you have a CharField with blank=True (null=False by default) and you create a record without giving a value for that field, Django will store an empty string ('') in the database for that field.
+
+2) If you have a CharField with both blank=True and null=True, and you create a record without giving a value for that field, Django will store a NULL value in the database for that field.
+
+**************************************************************************
+Verbose field names
+**************************************************************************
+https://docs.djangoproject.com/en/4.2/topics/db/models/#verbose-field-names
+
+In Django, the verbose_name attribute is used to specify a human-readable name for a model field or a model class. 
+It provides a more descriptive name for the field or the model that is used in the Django admin interface, forms, and other places where the model's details are displayed.
+
+Each field type, except for ForeignKey, ManyToManyField and OneToOneField, takes an optional first positional argument – a verbose name.
+If the verbose name isn’t given, Django will automatically create it using the field’s attribute name, converting underscores to spaces.
+
+For example, consider a User model with a field first_name. 
+Instead of displaying the field as "First Name" in the admin interface, you can use verbose_name="First Name" to make it more readable and intuitive.
+
+class User(models.Model):
+    first_name = models.CharField(max_length=50, verbose_name="First Name")
+    # Other fields...
+    
+
+In this example, the verbose name is "person's first name":
+first_name = models.CharField("person's first name", max_length=30)
+
+In this example, the verbose name is "first name":
+first_name = models.CharField(max_length=30)
 
 
+ForeignKey, ManyToManyField and OneToOneField require the first argument to be a model class, so use the verbose_name keyword argument:
+poll = models.ForeignKey(
+    Poll,
+    on_delete=models.CASCADE,
+    verbose_name="the related poll",
+)
+sites = models.ManyToManyField(Site, verbose_name="list of sites")
+place = models.OneToOneField(
+    Place,
+    on_delete=models.CASCADE,
+    verbose_name="related place",
+)
+
+The convention is not to capitalize the first letter of the verbose_name.
+Django will automatically capitalize the first letter where it needs to.
+
+****************
+
+In Django, the verbose_name and verbose_name_plural attributes are used to provide human-readable names for model fields and their related models.
+These attributes are not strictly necessary for the functionality of your application, but they greatly improve the readability and user-friendliness of your code and the admin interface.
+
+class Book(models.Model):
+    title = models.CharField(max_length=200, verbose_name="book Title")
+    author = models.CharField(max_length=100, verbose_name="author's Name")
+    publication_year = models.PositiveIntegerField(verbose_name="publication Year")
+    is_available = models.BooleanField(default=True, verbose_name="is Available")
+
+    class Meta:
+        verbose_name = "Book"
+        verbose_name_plural = "Books"
+
+Readability and Clarity: We use verbose_name to provide more descriptive names for our fields. Instead of using generic names like title, author, etc., we provide meaningful labels like "Book Title," "Author's Name," etc.
+
+Admin Interface: In the Django admin interface, the labels provided by verbose_name will be displayed for each field. Users of the admin interface will see these labels, which make it clear what each field represents.
+
+Documentation and Collaboration: Other developers working on the project will immediately understand the purpose of each field when reading the code. For instance, verbose_name="Publication Year" communicates that the field represents the publication year of the book.
+
+Internationalization and Localization: Imagine you want to make your application multilingual. With verbose_name, you can provide translations for different languages. For instance, you can have translations for "Book Title" in different languages, allowing your application to display the appropriate label based on the user's language preferences.
+
+
+**************************************************************************
+Field name restrictions
+**************************************************************************
+
+https://docs.djangoproject.com/en/4.2/topics/db/models/#field-name-restrictions
+
+Django places some restrictions on model field names:
+
+1) A field name cannot be a Python reserved word, because that would result in a Python syntax error. For example:
+
+class Example(models.Model):
+    pass = models.IntegerField() # 'pass' is a reserved word!
+
+2) A field name cannot contain more than one underscore in a row, due to the way Django’s query lookup syntax works. For example:
+
+class Example(models.Model):
+    foo__bar = models.IntegerField()  # 'foo__bar' has two underscores!
+
+3) A field name cannot end with an underscore, for similar reasons.
+
+These limitations can be worked around, though, because your field name doesn’t necessarily have to match your database column name. See the db_column option.
+
+SQL reserved words, such as join, where or select, are allowed as model field names, because Django escapes all database table names and column names in every underlying SQL query. It uses the quoting syntax of your particular database engine.
+
+
+*************************************************************************************************
+Listing 7-7. Django model default options for dates and times, as well as auto_now and auto_now_add use
+*************************************************************************************************
+
+https://www.webforefront.com/django/modeldatatypesandvalidation.html
+
+
+from datetime import date
+from django.utils import timezone
+
+class Store(models.Model):
+    name = models.CharField(max_length=30)    
+    address = models.CharField(max_length=30)
+
+    date = models.DateField(default=date.today)
+    datetime = models.DateTimeField(default=timezone.now)
+
+    date_lastupdated = models.DateField(auto_now=True)
+    date_added = models.DateField(auto_now_add=True)
+
+    timestamp_lastupdated = models.DateTimeField(auto_now=True)
+    timestamp_added = models.DateTimeField(auto_now_add=True)
+
+*****************************************
+
+Don't add () PARENTHESIS to methods in default values:
+If you look closely at the default values from previous listings, notice they lack () in their syntax, which creates an important behavior. 
+By omitting the () syntax, Python assigns a reference to a method and evaluates the expression until runtime, but if you use the () syntax (e.g. default=timezone.now()) Python evaluates the expression at compile time. 
+For functions that return fixed values this is a non-issue, but for functions that return dynamically calculated values (e.g. dates) this is critical, otherwise you get a single value calculated at compile time (e.g. the date or datetime field would contain the same value calculated at compile time for all records).
+
+*****************************************
+
+auto_now=True and auto_now_add=True options:
+
+Both of these options work like the default option -- in the sense they add a default date or date & time -- but have a slightly different behavior. 
+
+Values for fields that use either the auto_now and auto_now_add options are generated when a record is created. 
+
+Values for fields that use the "auto_now" option are updated every time a record is changed, 
+while values for fields that use the "auto_now_add" option remain frozen for the lifetime of the record. 
+
+By default, DateField fields that use either the auto_now or auto_now_add options generate their value from datetime.date.today(), 
+where as DateTimeField fields that use either auto_now or auto_now_add options generate their value from django.utils.timezone.now().
+
+*****************************************
+
+date.today():
+
+date.today() is a function from Python's datetime module that returns a date object representing the current local date.
+
+timezone.now():
+
+timezone.now() is a function from Django's django.utils.timezone module that returns a datetime object representing the current date and time.
+It takes into account the timezone settings specified in Django's settings.py file.
+This function includes both the date and time components, making it suitable for scenarios where you need both.
+
+*************************************************************************************************
+Unique values: unique, unique_for_date, unique_for_month and unique_for_year
+*************************************************************************************************
+
+unique:
+
+It's possible to enforce a field value be unique across all records. For example, in listing 7-7 if you change 
+name=models.CharField(max_length=30) to name=models.CharField(max_length=30, unique=True) it tells Django to ensure all 
+Store records have a unique name value.
+
+The unique option is enforced by Django at the database layer (i.e. by adding a DDL UNIQUE SQL constraint), as well as
+the Django/Python layer. In addition, the unique option is valid on all field types except ManyToManyField, 
+OneToOneField, and FileField.
+
+unique_for_date:
+
+To enforce uniqueness of a field along with a DateField or DateTimeField value, Django offers the unique_for_date, 
+unique_for_month and unique_for_year options. For example, in listing 7-7 to enforce the name field value be unique 
+with a date of the date_lastupdated field you can use the name = models.CharField(max_length=30, unique_for_date="date_lastupdated") 
+statement which tells Django to allow only one record with the same name and date_lastupdated 
+(e.g. you can't have two records with name="Downtown" and date_lastupdated="2018-01-01", but two 
+records with name="Downtown" and different date_lastupdated values are allowed).
+
+unique_for_month and unique_for_year options:
+
+The unique_for_month and unique_for_year options provide wider ranges to enforce validation. For example, the name = 
+models.CharField(max_length=30, unique_for_month="date_lastupdated") statement tells Django to only allow one record 
+with the same name and date_lastupdated value for the same month and the name = models.CharField(max_length=30, 
+unique_for_year="date_lastupdated") statement tells Django to only allow one record with the same name and 
+date_lastupdated value for the same year.
+
+Due to the more complex requirements of the unique_for_date, unique_for_month and unique_for_year options, the 
+enforcement of these options is done at the Django/Python layer. In addition, due to the nature of the validation 
+process these options are only valid for DateField and DateTimeField fields, noting that for DateTimeField cases only 
+the date portion of the value is used.
+
+**********************************************************************************
+Database Definition Language (DDL) values: 
+ db_column, db_index, db_tablespace, primary_key
+**********************************************************************************
+
+db_column:
+By default, Django generates a database table's column names based on a Django model's field names. 
+For example, if a Django model field is named 'menu' Django generates a DB column named 'menu'. 
+It's possible to override this behavior using the db_column option 
+(e.g. name = models.CharField(max_length=30,db_column="my_custom_name") Django generates the DDL with the my_custom_name column name).
+
+db_index:
+Another database related option for Django models is the db_index option that tells Django to generate a database index for the field 
+(e.g. size = models.CharField(choices=ITEM_SIZES,max_length=1,db_index=True) generates a database index for the size field). 
+
+Be aware that under the following circumstances Django automatically creates a database index, so db_index=True for the following scenarios is redundant:
+
+If a field uses the unique=True option, Django automatically creates an index for the field. You can disable this behavior setting db_index=False.
+If a field is a ForeignKey data type, Django automatically creates an index for the field. You can disable this behavior setting db_index=False.
+
+===================================================================================================
+Django ORM
+===================================================================================================
+
+One of the most powerful features of Django is its Object-Relational Mapper (ORM).
+ORM enables you to interact with your database, like you would with SQL. 
+In fact, Django's ORM is just a pythonic way to create SQL to query and manipulate your database and get results in a pythonic fashion.
+
+**********************************************************************************
+Prefetch_Related And Select_Related Django
+**********************************************************************************
+
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#select-related
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#prefetch-related
+
+
+Account.objects.all()
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 21;
+
+****************
+
+Account.objects.all()[0]
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 1;
+
+****************
+
+This will run 2 queries to get related object data:
+
+Account.objects.all()[0].person
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 1;
+
+
+SELECT "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_person"
+WHERE "my_models_person"."id" = 3
+LIMIT 21;
+
+
+<Person: Joan louji>
+
+
+****************************************************************************************
+select_related:
+****************************************************************************************
+
+* select_related is used to fetch related objects from the database in a single query by performing a SQL join.
+* It works for ForeignKey and OneToOneField relationships models.
+* When you use select_related, Django fetches the related objects and caches them in memory. This can be particularly useful when you need to access fields of related objects in your code.
+* Use select_related when you have a ForeignKey or OneToOneField relationship and you know you will be accessing related object fields. It's efficient for cases where you're fetching a single object and its related object(s).
+
+select_related will fetch all the foreign key related objects in single query:
+
+Account.objects.select_related('person')
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance",
+       "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_account"
+INNER JOIN "my_models_person" ON ("my_models_account"."person_id" = "my_models_person"."id")
+LIMIT 21;
+
+*****************
+this single query to fetch related models data:
+
+Account.objects.select_related('person')[0].person
+
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance",
+       "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_account"
+INNER JOIN "my_models_person" ON ("my_models_account"."person_id" = "my_models_person"."id")
+LIMIT 1;
+
+
+<Person: Joan louji>
+
+******************************
+
+looping through the loaded objetcs and access their related objects:
+specify which foreign key related objects to fetch:
+
+This is run only single query for looping:
+
+accounts = Account.objects.select_related('person')
+
+for account in accounts:
+  print(account.person.name)
+
+****************************************************************************************
+prefetch_related:
+****************************************************************************************
+
+prefetch_related fetches the related objects in a separate query and then associates them with the
+original objects in Python memory. This approach can be more efficient when dealing with many related objects 
+because it avoids the problem of duplicating rows when using SQL joins, which can happen with many-to-many 
+relationships.
+
+Account.objects.prefetch_related('person')
+
+(0.000)
+SELECT "my_models_account"."id",
+       "my_models_account"."person_id",
+       "my_models_account"."account_number",
+       "my_models_account"."balance"
+FROM "my_models_account"
+LIMIT 21;
+
+
+**********************
+
+Account.objects.prefetch_related()[0].person
+
+**********************
+
+from my_models.models import *
+
+customers = Customer.objects.prefetch_related('product_set')
+
+for customer in customers:
+  print(customer.product_set.all())
+
+It runs only two queries:
+
+1) to fetch all customers
+
+  SELECT "my_models_customer"."id",
+        "my_models_customer"."cus_name",
+        "my_models_customer"."cus_email",
+        "my_models_customer"."cus_mobile"
+  FROM "my_models_customer";
+
+2) To fetch all the products related to these customers:
+
+  SELECT ("my_models_product_customers"."customer_id") AS "_prefetch_related_val_customer_id",
+        "my_models_product"."id",
+        "my_models_product"."cus_name",
+        "my_models_product"."cus_qty"
+  FROM "my_models_product"
+  INNER JOIN "my_models_product_customers" ON ("my_models_product"."id" = "my_models_product_customers"."product_id")
+  WHERE "my_models_product_customers"."customer_id" IN (1,2,3);
+
+****************************************************************************************
+differences between select_related and prefetch_related:
+****************************************************************************************
+
+https://docs.djangoproject.com/en/4.2/ref/models/querysets/#prefetch-related
+
+-> select_related works by creating an SQL join and including the fields of the related object in the SELECT statement.
+For this reason, select_related gets the related objects in the same database query ( does ‘joining’ in sql)
+However, to avoid the much larger result set that would result from joining across a ‘many’ relationship, select_related is limited to single-valued relationships - foreign key and one-to-one.
+-> select_related only works with foreign key and one-to-one
+-> select_related will not work with many-to-many relationship:
+  Customer.objects.select_related('product_set')  -- give error
+
+
+-> prefetch_related, on the other hand, does a separate lookup for each relationship, and does the ‘joining’ in Python.
+This allows it to prefetch many-to-many and many-to-one objects ( which cannot be done using select_related ), and it also works for foreign key and one-to-one relationships that are supported by select_related.
+It also supports prefetching of GenericRelation and GenericForeignKey, however, it must be restricted to a homogeneous set of results.
+
+For example, prefetching objects referenced by a GenericForeignKey is only supported if the query is restricted to one ContentType.
+
+****************************************************************************************
+Complex lookups with Q objects
+****************************************************************************************
+
+In Django, the Q object is a powerful tool that allows you to create complex queries using logical operators like AND(&), OR(|), and NOT(~).
+It's often used in conjunction with the filter() method to create more advanced database queries.
+
+“A Q object (django.db.models.Q) is an object used to encapsulate a collection of keyword arguments.
+These keyword arguments are specified as in ‘Field lookups’”.
+
+
+from my_models.models import Person
+from django.db.models import Q
+
+With Field lookups
+>>> Person.objects.filter(name__startswith='a') | Person.objects.filter(name__startswith='s')
+
+With Q object:
+>>> Person.objects.filter(Q(name__startswith='a') | Q(name__startswith='s'))
+
+boht will generate same sql:
+  SELECT "my_models_person"."id",
+        "my_models_person"."name",
+        "my_models_person"."email",
+        "my_models_person"."mobile"
+  FROM "my_models_person"
+  WHERE ("my_models_person"."name" LIKE 'a%' ESCAPE '\' OR "my_models_person"."name" LIKE 's%' ESCAPE '\') LIMIT 21; args=('a%', 's%');
+
+
+******************
+
+Q objects can be combined using the &, |, and ^ operators.
+When an operator is used on two Q objects, it yields a new Q object.
+
+For example, this statement yields a single Q object that represents the “OR” of two "question__startswith" queries:
+
+>>> Q(question__startswith="Who") | Q(question__startswith="What")
+
+This is equivalent to the following SQL WHERE clause:
+  WHERE question LIKE 'Who%' OR question LIKE 'What%'
+
+*************************
+
+You can compose statements of arbitrary complexity by combining Q objects with the &, |, and ^ operators and use parenthetical grouping.
+Also, Q objects can be negated using the ~ operator, allowing for combined lookups that combine both a normal query and a negated (NOT) query:
+
+Q(question__startswith="Who") | ~Q(pub_date__year=2005)
+
+*****************************
+Multiple Q objects:
+
+Each lookup function that takes keyword-arguments (e.g. filter(), exclude(), get()) can also be passed one or more Q objects as positional (not-named) arguments.
+If you provide multiple Q object arguments to a lookup function, the arguments will be “AND”ed together.
+
+For example:
+
+Poll.objects.get(
+    Q(question__startswith="Who"),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+)
+
+Roughly translates into the SQL:
+
+  SELECT * from polls WHERE question LIKE 'Who%'
+      AND (pub_date = '2005-05-02' OR pub_date = '2005-05-06')
+
+*****
+
+Person.objects.get(
+  Q(name__startswith="joan"),
+  Q(email='sjlouji10@gmail.com') | Q(mobile=123412),
+)
+
+SELECT "my_models_person"."id",
+       "my_models_person"."name",
+       "my_models_person"."email",
+       "my_models_person"."mobile"
+FROM "my_models_person"
+WHERE ("my_models_person"."name" LIKE 'joan%' ESCAPE '\' AND ("my_models_person"."email" = 'sjlouji10@gmail.com' OR "my_models_person"."mobile" = '123412')) LIMIT 21; args=('joan%', 'sjlouji10@gmail.com', '123412');
+
+
+<Person: Joan louji>
+
+*****************************
+
+Lookup functions can mix the use of Q objects and keyword arguments.
+All arguments provided to a lookup function (be they keyword arguments or Q objects) are “AND”ed together.
+However, if a Q object is provided, it must precede the definition of any keyword arguments. For example:
+
+Poll.objects.get(
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+    question__startswith="Who",
+)
+
+would be a valid query, equivalent to the previous example.
+
+****
+
+# INVALID QUERY
+Poll.objects.get(
+    question__startswith="Who",
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+)
+
+
+Person.objects.get(
+  name__startswith="joan",
+  Q(email='sjlouji10@gmail.com') | Q(mobile=123412),
+)
+
+SyntaxError: positional argument follows keyword argument
+*****************************
+
+The Q object is particularly useful when you need to build queries dynamically based on user input or other runtime conditions.
+You can combine multiple Q objects using the logical operators to create even more complex queries:
+
+
+from django.db.models import Q
+from myapp.models import MyModel
+
+q1 = Q(field1__icontains='term1')
+q2 = Q(field2__icontains='term2')
+q3 = Q(field3__icontains='term3')
+
+# Retrieve objects where either q1 AND q2 OR q3 is true
+results = MyModel.objects.filter((q1 & q2) | q3)
 
 
 ===================================================================================================
+Querying Data
 ===================================================================================================
+https://docs.djangoproject.com/en/4.2/topics/db/queries/#making-queries
+
+Note: First see all the queries in the relationships section.
+
+Queries allow us to perform CRUD (create, read, update and delete) operations on our Django Models.
+
+Query expressions describe a value or a computation that can be used as part of an update,
+create, filter, order by, annotation, or aggregate. When an expression outputs a boolean value, it
+may be used directly in filters. There are a number of built-in expressions that can be used to
+help you write queries. Expressions can be combined, or in some cases nested, to form more
+complex computations.
 
 
 
-===================================================================================================
-===================================================================================================
+>>> from querying_data.models import Blog
+
+>>> b = Blog(name="Beatles Blog", tagline="All the latest Beatles news.")
+>>> b.save()
+
+**********************
+
+Retrieving a single object with get():
+
+one_entry = Entry.objects.get(pk=1)
+
+>>> from querying_data.models import Blog, Entry
+>>> entry = Entry.objects.get(pk=1)
+>>> cheese_blog = Blog.objects.get(name="Cheddar Talk")
+>>> entry.blog = cheese_blog
+>>> entry.save()
+
+*********************************************
+Limiting QuerySets (array-slicing):
+*********************************************
+
+Use a subset of Python’s array-slicing syntax to limit your QuerySet to a certain number of results. 
+This is the equivalent of SQL’s LIMIT and OFFSET clauses.
+
+For example, this returns the first 5 objects (LIMIT 5):
+>>> Entry.objects.all()[:5]
+
+This returns the sixth through tenth objects (OFFSET 5 LIMIT 5):
+>>> Entry.objects.all()[5:10]
+
+-> Negative indexing (i.e. Entry.objects.all()[-1]) is not supported.
+
+Generally, slicing a QuerySet returns a new QuerySet – it doesn’t evaluate the query. 
+
+-> An exception is if you use the “step” parameter of Python slice syntax. 
+For example, this would actually execute the query in order to return a list of every second object of the first 10:
+>>> Entry.objects.all()[:10:2]
+
+Further filtering or ordering of a sliced queryset is prohibited due to the ambiguous nature of how that might work.
+
+-> To retrieve a single object rather than a list (e.g. SELECT foo FROM bar LIMIT 1), use an index instead of a slice. 
+For example, this returns the first Entry in the database, after ordering entries alphabetically by headline:
+
+>>> Entry.objects.order_by("headline")[0]
+
+This is roughly equivalent to:
+
+>>> Entry.objects.order_by("headline")[0:1].get()
+
+Note, however, that the first of these will raise IndexError while the second will raise DoesNotExist if no objects match the given criteria.
+
+*********************************************
+Field lookups
+*********************************************
+https://docs.djangoproject.com/en/4.2/topics/db/queries/#field-lookups
+
+Lookup functions in Django are methods provided by the Django ORM (Object-Relational Mapping)
+that allow you to perform various types of queries on your database.
+These functions help you filter, order, and manipulate data in your database tables.
+They are often used in combination with the filter() or exclude() methods of querysets to narrow down the set of objects returned.
+
+They enable you to write expressive and precise queries while abstracting away the underlying SQL.
+
+You can use these functions to tailor your queries to your specific requirements and retrieve the data you need from the database.
 
 
+Here are some commonly used lookup functions in Django:
 
-===================================================================================================
-===================================================================================================
+**********************
+exact:
+Performs an exact match lookup. It's used to retrieve objects with a field value exactly equal to the provided value.
+
+User.objects.filter(name__exact='john')
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."name" = 'john'
 
 
+**********************
+iexact:
+Performs a case-insensitive exact match lookup.
+
+User(name="John", email='john@gmail.com').save()
+User(name="john", email='john@gmail.com').save()
+User(name="JOHN", email='john@gmail.com').save()
+
+User.objects.filter(name__iexact='JOHN')
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."name" LIKE 'JOHN' ESCAPE '\'  args=('JOHN',);
+
+-> this will get all the above create objects
+
+
+**********************
+
+contains:
+Checks if the field value contains the specified substring.
+
+from many_to_many_relationship.models import Article
+
+Article.objects.filter(headline__contains='Django')
+
+SELECT * FROM "many_to_many_relationship_article"
+WHERE "many_to_many_relationship_article"."headline" LIKE '%Django%' ESCAPE '\' ORDER BY "many_to_many_relationship_article"."headline" ASC  args=('%Django%',);
+
+
+**********************
+
+icontains:
+Case-insensitive version of contains.
+
+**********************
+
+gt and lt: Greater than and less than comparisons.
+
+Product.objects.filter(price__gt=50)
+
+**********************
+
+gte and lte: Greater than or equal to and less than or equal to comparisons.
+
+**********************
+
+in:
+Checks if the field value is in a given list.
+
+User.objects.filter(id__in=[1, 2, 3])
+
+SELECT * FROM "my_models_user"
+WHERE "my_models_user"."id" IN (1, 2, 3)
+
+**********************
+
+startswith and endswith:
+
+Checks if the field value starts or ends with a specified substring.
+
+Album.objects.filter(title__startswith='The')
+
+SELECT * FROM "my_models_album"
+WHERE "my_models_album"."title" LIKE 'The%' ESCAPE '\'  args=('The%',);
+
+**********************
+
+range: 
+
+Finds values within a specified range.
+
+Order.objects.filter(quantity__range=(10, 50))
+
+Track.objects.filter(length__range=(10, 50))
+
+SELECT  * FROM "my_models_track"
+WHERE "my_models_track"."length" BETWEEN 10 AND 50
+
+**********************
+
+isnull:
+Checks for null values.
+
+Post.objects.filter(comments__isnull=True)
+
+Person.objects.filter(mobile__isnull=True)
+
+SELECT * FROM "my_models_person"
+WHERE "my_models_person"."mobile" IS NULL
+
+
+**********************
+
+date:
+Extracts date parts from a DateTimeField.
+
+Event.objects.filter(date__date=datetime.date(2023, 8, 11))
+
+
+**********************
+
+exact and iexact with foreign keys:
+
+You can use these lookups to filter objects based on their related foreign key fields.
+
+
+# Example: Retrieve articles written by an author with exact id 1
+Article.objects.filter(author__exact=1)
+
+# Example: Retrieve articles written by an author with case-insensitive name 'John'
+Article.objects.filter(author__name__iexact='John')
+icontains with related fields: You can apply case-insensitive substring matching on related fields.
+
+
+**********************
+
+# Example: Retrieve users whose email contains 'example.com'
+User.objects.filter(profile__email__icontains='example.com')
+
+
+**********************
+
+year, month, and day: Extract year, month, or day components from a DateField or DateTimeField.
+
+
+# Example: Retrieve events that occurred in the year 2023
+Event.objects.filter(date__year=2023)
+
+# Example: Retrieve articles published in the month of August
+Article.objects.filter(pub_date__month=8)
+
+**********************
+
+week_day: Filters objects based on the day of the week (1 for Monday, 7 for Sunday).
+
+# Example: Retrieve tasks scheduled for Fridays
+Task.objects.filter(due_date__week_day=5)
+
+
+**********************
+
+regex: Performs a regular expression match.
+
+
+# Example: Retrieve products with SKUs that match a specific pattern
+Product.objects.filter(sku__regex=r'^[A-Z]{3}-\d{3}$')
+
+**********************
+
+iregex: Case-insensitive version of regex.
+
+
+# Example: Retrieve products with SKUs that match a specific pattern (case-insensitive)
+Product.objects.filter(sku__iregex=r'^[a-z]{3}-\d{3}$')
+
+**********************
+
+exists: Checks if there are any related records.
+
+
+# Example: Retrieve users who have posted at least one comment
+User.objects.filter(comments__exists=True)
+
+**********************
+
+annotate: Adds aggregated values to each object.
+
+
+from django.db.models import Count
+
+# Example: Retrieve authors with the count of articles they've written
+Author.objects.annotate(article_count=Count('articles'))
+
+**********************
+
+F object:
+
+Allows you to reference other fields in the query.
+
+from django.db.models import F
+
+# Example: Retrieve products with price higher than cost price
+Product.objects.filter(price__gt=F('cost_price'))
+
+***********************************
+
+Remaining 
 
 ===================================================================================================
 ===================================================================================================
