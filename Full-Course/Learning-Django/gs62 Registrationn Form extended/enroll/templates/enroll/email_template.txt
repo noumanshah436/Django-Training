@@ -1,0 +1,7 @@
+{{ subject }}
+
+{{ body }}
+
+Visit our site: https://www.example.com
+
+© 2024 Your Company. All rights reserved.

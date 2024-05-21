@@ -76,8 +76,3 @@ async def main_view_async(request):
     # total:  5.002896070480347
 
 # ********************************
-
-def main_view(request):
-    start_time = time.time()
-    data = []
-    url_list

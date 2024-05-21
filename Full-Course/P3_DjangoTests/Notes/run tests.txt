@@ -1,0 +1,21 @@
+https://www.youtube.com/watch?v=hA_VxnxCHbo&list=PLbpAWbHbi5rMF2j5n6imm0enrSD9eQUaM&index=3
+
+Run all tests of the app:
+$ python manage.py test budget
+
+*********************************
+
+Run all tests of the specific test class:
+
+Run all tests of the class
+$ python manage.py test budget.tests.test_urls.TestUrls
+$ python manage.py test budget.tests.test_views.TestViews
+$ python manage.py test budget.tests.test_models.TestModels
+$ python manage.py test budget.tests.test_forms.TestForms
+
+
+Run specific test of the class
+$ python manage.py test budget.tests.test_views.TestViews.test_project_list_GET
+$ python manage.py test budget.tests.test_models.TestModels.test_get_absolute_url
+
+*********************************

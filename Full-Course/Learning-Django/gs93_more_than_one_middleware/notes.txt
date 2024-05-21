@@ -1,0 +1,19 @@
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'blog.middlewares.BrotherMiddleware',
+    'blog.middlewares.FatherMiddleware',
+    'blog.middlewares.MotherMiddleware'
+]
+
+
+
+Middlewares will be initialized from bottom to top order. 
+Means that first MotherMiddleware will be initialized and then FatherMiddleware and then BrotherMiddleware will be initialized.
+
+*********************************

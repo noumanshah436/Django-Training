@@ -1,0 +1,29 @@
+https://skolo.online/documents/webscrapping/#step-2-install-chromedriver
+
+
+history:
+
+1653  wget https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linux64.zip
+1654  unzip chromedriver_linux64.zip
+1656  sudo mv chromedriver /usr/bin/chromedriver
+1657  sudo chown root:root /usr/bin/chromedriver
+1658  sudo chmod +x /usr/bin/chromedriver
+1659  chromedriver --url-base=/wd/hub
+
+
+************************************
+
+install selenium in virtual environment:
+
+pipenv install selenium
+
+pipenv uninstall selenium
+
+************************************
+
+run tests:
+
+python manage.py test budget.functional_tests.test_project_list_page.TestProjectListPage
+
+
+************************************

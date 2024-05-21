@@ -84,17 +84,21 @@ check any security issue in installed packages:
 update in pipfile and run "pipenv install"
 
 
-show dependencies
-pipenv graph
+List packages with dependency graph:
+> pipenv graph
+
+List packages in plain format:
+> pip list
 
 
 update lock file with the installed version in case you install latest version of some package and it shows "*" in pipfile and then insatll using lock file when you deploy:
-pipenv lock
+> pipenv lock
 
 pipenv install --ignore-pipfile
 
 run command in virtual environment without activating it:
 pipenv run python
+
 
 **********************
 summary:
@@ -122,6 +126,23 @@ Add interpreter path for project in VScode
 pipenv --venv 
 
 2) Add the path to virtual environment by appending "/bin/python"
+
+===================================================================================================
+create virtual environment using virtualenv: (old way)
+===================================================================================================
+
+$ python --version
+Python 3.8.10
+
+$ python -m venv venv
+
+$ source venv/bin/activate
+
+$ pip install -r requirements.txt 
+
+$ pip install --upgrade pip
+
+$ pip list
 
 ===================================================================================================
 Initial Setup (old)
@@ -339,10 +360,12 @@ pipenv lock
 pipenv install --ignore-pipfile
 
 
-
 run command in virtual environment without activating it:
 pipenv run python
 
+install or remove dependencies:
+pipenv install selenium
+pipenv uninstall selenium
 
 **********************
 
@@ -1122,6 +1145,9 @@ The keys in the dictionary are the field names, and the values are the cleaned a
 
 After the validation process is finished and you've called is_valid() on the form, you can access the cleaned_data attribute to retrieve the cleaned values.
 If any validation errors occurred during the process, they will be stored in the errors attribute of the form, and cleaned_data won't be populated for that field.
+ 
+If we access the `cleaned_data` attribute, directly after initializing the form, it will throw an exception.
+AttributeError: 'YourForm' object has no attribute 'cleaned_data'
 
 ******************************************************************************************
 The Forms API
@@ -1230,7 +1256,7 @@ The escape_html parameter behaves as described in Form.errors.as_json().
 {'subject': [{'message': 'This field is required.', 'code': 'required'}], 'sender': [{'message': 'Enter a valid email address.', 'code': 'invalid'}]}
 
 The main use case for get_json_data() is when you need more control over how the error data is processed and serialized before being converted to JSON.
- This can be helpful if you want to apply additional logic or transformation to the error data before rendering it as JSON.
+This can be helpful if you want to apply additional logic or transformation to the error data before rendering it as JSON.
 
 For example:
 def my_view(request):
@@ -1439,11 +1465,11 @@ For example, DateField normalizes input into a Python datetime.date object. Rega
 Once you’ve created a Form instance with a set of data and validated it, you can access the clean data via its cleaned_data attribute:
 
 >>> data = {
-...     "subject": "hello",
-...     "message": "Hi there",
-...     "sender": "foo@example.com",
-...     "cc_myself": True,
-... }
+    "subject": "hello",
+    "message": "Hi there",
+    "sender": "foo@example.com",
+    "cc_myself": True,
+}
 >>> f = ContactForm(data)
 >>> f.is_valid()
 True
@@ -1521,7 +1547,8 @@ This small enhancement makes forms more usable and more accessible to assistive 
 
 ****************
 
-If auto_id is set to True, then the form output will include <label> tags and will use the field name as its id for each form field:
+If auto_id is set to True, then the form output will include <label> tags and 
+will use the field name as its id for each form field ( instead of id_<field_name> ):
 
 >>> f = ContactForm(auto_id=True)
 >>> print(f.as_div())
@@ -2713,19 +2740,785 @@ Product.objects.filter(price__gt=F('cost_price'))
 Remaining 
 
 ===================================================================================================
+Sending Emails 
 ===================================================================================================
 
+use project `Learning-Django/gs62 Registrationn Form extended/enroll`
 
+https://docs.djangoproject.com/en/5.0/topics/email/
+
+
+Follow these steps to send your emails:
+
+1) Add in setting.py
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "nouman.rehman@devsinc.com"
+EMAIL_HOST_PASSWORD = "pass" // copy that from notes 
+
+
+2) In utils.py file:
+
+from django.core.mail import send_mail
+from gs62 import settings
+
+
+def send_email():
+    subject = "Hello from Django"
+    message = "This is a test email sent from Django."
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [
+        "noumanshah436@gmail.com",
+    ]
+
+    send_mail(subject, message, from_email, recipient_list)
+
+
+3) Call this method anaywhere to send email.
+
+from .utils import send_email
+
+send_email()
+
+***********************************
+Send Email with attachments:
+***********************************
+
+1) create function in utils.py file:
+
+def send_email_with_attachment():
+    subject = "Hello from Django"
+    message = "This is a test email sent from Django."
+    recipient_list = [
+        "noumanshah436@gmail.com",
+    ]
+    file_path = os.path.join(settings.BASE_DIR, "sample.png")
+
+    mail = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.EMAIL_HOST_USER,
+        to=recipient_list,
+    )
+
+    mail.attach_file(file_path)
+
+    # To use `attach` method, we can attach like below:
+    # with open(file_path, 'rb') as f:
+    #     email.attach('sample.png', f.read(), 'image/png')
+
+    mail.send()
+
+
+
+2) Call this method anaywhere to send email.
+
+from .utils import send_email_with_attachment
+
+send_email_with_attachment()
+
+
+
+***********************************
+send_mass_mail
+***********************************
+
+The send_mass_mail function in Django is used to send multiple emails to multiple recipients. It is particularly useful when 
+you need to send different emails to different recipients in a single function call. This function reduces the overhead of 
+multiple SMTP connections by sending all emails in a single connection.
+
+
+from django.core.mail import send_mass_mail
+from django.conf import settings
+from django.http import HttpResponse
+
+def send_mass_email_view(request):
+    message1 = (
+        'Subject 1',
+        'Message body 1',
+        settings.EMAIL_HOST_USER,
+        ['recipient1@example.com']
+    )
+    
+    message2 = (
+        'Subject 2',
+        'Message body 2',
+        settings.EMAIL_HOST_USER,
+        ['recipient2@example.com']
+    )
+    
+    messages = [message1, message2]
+    
+    send_mass_mail(messages, fail_silently=False)
+    
+    return HttpResponse('Mass email sent successfully!')
+
+
+***********************************
+send_mass_mail() vs. send_mail()
+***********************************
+
+The main difference between send_mass_mail() and send_mail() is that send_mail() opens a connection to the mail server each 
+time it’s executed, while send_mass_mail() uses a single connection for all of its messages. This makes send_mass_mail() 
+slightly more efficient.
+
+
+***************************************
+mail_admins vs mail_managers:
+***************************************
+
+In Django, `mail_admins` and `mail_managers` are utility functions used to send error notifications to site administrators and managers, respectively. These functions are particularly useful for sending error messages or important notifications to the people responsible for maintaining the Django application.
+
+### `mail_admins`
+
+`mail_admins` is used to send an email to all the email addresses listed in the `ADMINS` setting. This is typically used to notify site administrators of critical errors.
+
+#### Usage
+
+To use `mail_admins`, first define the `ADMINS` setting in your `settings.py` file:
+
+```python
+# settings.py
+
+ADMINS = [
+    ('Admin One', 'admin1@example.com'),
+    ('Admin Two', 'admin2@example.com'),
+]
+```
+
+Then, you can use the `mail_admins` function to send an email:
+
+```python
+# views.py (or any other appropriate file)
+
+from django.core.mail import mail_admins
+
+def notify_admins_view(request):
+    subject = 'Critical Error'
+    message = 'A critical error occurred on the site.'
+    mail_admins(subject, message)
+    return HttpResponse('Admins notified successfully.')
+```
+
+#### Configuration
+
+Ensure your email settings are configured correctly in `settings.py`:
+
+
+### `mail_managers`
+
+`mail_managers` is used to send an email to all the email addresses listed in the `MANAGERS` setting. This is similar to `mail_admins` but is intended for site managers.
+
+#### Usage
+
+To use `mail_managers`, first define the `MANAGERS` setting in your `settings.py` file:
+
+```python
+# settings.py
+
+MANAGERS = [
+    ('Manager One', 'manager1@example.com'),
+    ('Manager Two', 'manager2@example.com'),
+]
+```
+
+Then, you can use the `mail_managers` function to send an email:
+
+```python
+# views.py (or any other appropriate file)
+
+from django.core.mail import mail_managers
+
+def notify_managers_view(request):
+    subject = 'Important Notification'
+    message = 'An important event has occurred on the site.'
+    mail_managers(subject, message)
+    return HttpResponse('Managers notified successfully.')
+```
+
+#### Configuration
+
+Ensure your email settings are configured correctly in `settings.py`:
+
+
+### Summary
+
+- **`mail_admins`**: Sends an email to all addresses listed in the `ADMINS` setting. Used for critical error notifications.
+- **`mail_managers`**: Sends an email to all addresses listed in the `MANAGERS` setting. Used for important notifications.
+
+Both functions require that the `ADMINS` or `MANAGERS` settings, respectively, are defined, and the email backend is properly configured in `settings.py`.
+
+***********************************************************
+send templated email
+Sending alternative content types 
+***********************************************************
+
+https://docs.djangoproject.com/en/5.0/topics/email/#sending-alternative-content-types
+
+It can be useful to include multiple versions of the content in an email; the classic example is to send both text and HTML 
+versions of a message. With Django’s email library, you can do this using the EmailMultiAlternatives class. This subclass of
+EmailMessage has an attach_alternative() method for including extra versions of the message body in the email. 
+All the other methods (including the class initialization) are inherited directly from EmailMessage.
+
+
+# utils.py
+from django.core.mail import EmailMultiAlternatives
+
+
+def send_templated_email():
+    subject = "Test Email with Template"
+    from_email = settings.EMAIL_HOST_USER
+    to_email = "noumanshah436@gmail.com"
+
+    # Define the context for the template
+    context = {
+        "subject": subject,
+        "body": "This is a test email with a template.",
+    }
+
+    # Load and render the templates
+    text_content = render_to_string("enroll/email_template.txt", context)
+    html_content = render_to_string("enroll/email_template.html", context)
+
+    # Create the email message
+    email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    email.attach_alternative(html_content, "text/html")
+
+    # Attach the file
+    file_path = os.path.join(settings.BASE_DIR, "sample.png")
+    email.attach_file(file_path)
+
+    # Send the email
+    email.send()
+
+********************************
+# email_template.txt
+
+{{ subject }}
+
+{{ body }}
+
+Visit our site: https://www.example.com
+
+© 2024 Your Company. All rights reserved.
+
+********************************
+
+# email_template.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ subject }}</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f4f4f4; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #fff; padding: 20px; border-radius: 5px;">
+        <h1 style="color: #333; border-bottom: 1px solid #ddd; padding-bottom: 10px;">{{ subject }}</h1>
+        <p>{{ body }}</p>
+        <a href="https://www.example.com" style="display: inline-block; padding: 10px 15px; margin-top: 20px; border-radius: 5px; background: #007BFF; color: #fff; text-decoration: none;">Visit Our Site</a>
+    </div>
+    <footer style="text-align: center; margin-top: 20px; font-size: 0.8em; color: #777;">
+        &copy; 2024 Your Company. All rights reserved.
+    </footer>
+</body>
+</html>
 
 ===================================================================================================
+Settings for different environments
 ===================================================================================================
 
+Read article:
 
+Configuring Django Settings: Best Practices
+https://djangostars.com/blog/configuring-django-settings-best-practices/#header7
+
+
+
+****************************************************************
+12 Factors (set of best practices)
+****************************************************************
+
+The Twelve-Factor App methodology is a set of best practices for building scalable, maintainable, and deployable web applications. 
+Here’s how these principles can be applied to a Django project:
+
+### 1. **Codebase**: One codebase tracked in revision control, many deploys
+
+- **Principle**: Maintain a single codebase for your application, stored in a version control system (e.g., Git), from which multiple deployments can be made.
+- **Example**: Use Git or another VCS to track your Django project's codebase. Deploy the same codebase in multiple environments (dev, staging, prod).
+    ```bash
+    git init
+    git add .
+    git commit -m "Initial commit"
+    ```
+
+### 2. **Dependencies**: Explicitly declare and isolate dependencies
+
+- **Principle**: Declare dependencies explicitly in a `requirements.txt` or `Pipfile`. Use virtual environments to isolate these dependencies.
+- **Example**: Use a `requirements.txt` file and virtual environments.
+    ```bash
+    python -m venv venv
+    source venv/bin/activate
+    pip install django
+    pip freeze > requirements.txt
+    ```
+
+### 3. **Config**: Store configuration in the environment
+
+- **Principle**: Store configuration in environment variables rather than in the application code.
+- **Example**: Use the `django-environ` package.
+    ```python
+    import environ
+    env = environ.Env()
+    environ.Env.read_env()
+
+    SECRET_KEY = env('SECRET_KEY')
+    DEBUG = env.bool('DEBUG', default=False)
+    DATABASES = {
+        'default': env.db(),
+    }
+    ```
+
+### 4. **Backing Services**: Treat backing services as attached resources
+
+- **Principle**: Treat databases, message queues, and other backing services as resources that can be attached and detached at any time. 
+                   Connect to databases, caches, and other services using environment variables.
+- **Example**: Configure a PostgreSQL database.
+    ```python
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST'),
+            'PORT': env('DB_PORT'),
+        }
+    }
+    ```
+
+### 5. **Build, Release, Run**: Strictly separate build and run stages
+
+- **Principle**: Separate the build, release, and run stages of your application. Build creates binaries, release combines build with config, and run executes the app.
+                    Use tools like Docker or Heroku to handle the build and release phases. Ensure builds are immutable and releases are versioned.
+- **Example**: Use a CI/CD pipeline to handle these stages.
+    ```yaml
+    stages:
+      - build
+      - release
+      - deploy
+
+    build:
+      script:
+        - python -m venv venv
+        - source venv/bin/activate
+        - pip install -r requirements.txt
+
+    release:
+      script:
+        - python manage.py migrate
+
+    deploy:
+      script:
+        - python manage.py runserver
+    ```
+
+### 6. **Processes**: Execute the app as one or more stateless processes
+
+- **Principle**: Ensure that the app runs as stateless processes; any data that needs to persist should be stored in a stateful backing service.
+                 Ensure the Django app is stateless and share nothing, relying on a stateful backing service like a database.
+- **Example**: Running Django using Gunicorn.
+    ```bash
+    gunicorn myproject.wsgi:application --bind 0.0.0.0:8000
+    ```
+
+### 7. **Port Binding**: Export services via port binding
+
+- **Principle**: The app should be self-contained and expose services by binding to a port.
+- **Example**: Configure Django to bind to a specific port.
+    ```bash
+    python manage.py runserver 0.0.0.0:8000
+    ```
+
+### 8. **Concurrency**: Scale out via the process model
+
+- **Principle**: Use multiple processes to handle concurrency. Use tools like gunicorn for multiple worker processes.
+- **Example**: Use Gunicorn with multiple workers.
+    ```bash
+    gunicorn myproject.wsgi:application --workers 3 --bind 0.0.0.0:8000
+    ```
+
+### 9. **Disposability**: Maximize robustness with fast startup and graceful shutdown
+
+- **Principle**: Make the app's processes disposable, allowing for quick startup and graceful shutdown. 
+                 Ensure the app can start and stop quickly. Use Docker or similar tools for quick deployment and termination.
+- **Example**: Implement signal handling in Django.
+    ```python
+    import signal
+    import sys
+    from django.core.management import BaseCommand
+
+    class Command(BaseCommand):
+        def handle(self, *args, **options):
+            def graceful_shutdown(signum, frame):
+                self.stdout.write("Shutting down gracefully...")
+                sys.exit(0)
+            
+            signal.signal(signal.SIGTERM, graceful_shutdown)
+            signal.signal(signal.SIGINT, graceful_shutdown)
+            
+            self.stdout.write("Running...")
+            while True:
+                pass
+    ```
+
+### 10. **Dev/Prod Parity**: Keep development, staging, and production as similar as possible
+
+- **Principle**: Ensure that development, staging, and production environments are as similar as possible to avoid bugs that are only present in production.
+- **Example**: Use Docker to create consistent environments.
+    ```dockerfile
+    FROM python:3.9-slim
+    WORKDIR /app
+    COPY . /app
+    RUN pip install -r requirements.txt
+    CMD ["gunicorn", "myproject.wsgi:application", "--bind", "0.0.0.0:8000"]
+    ```
+
+### 11. **Logs**: Treat logs as event streams
+
+- **Principle**: Use Django's logging configuration to send logs to stdout/stderr. Aggregate and analyze logs using external tools.
+- **Example**: Configure logging in Django.
+    ```python
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'console': {
+                'class': 'logging.StreamHandler',
+            },
+        },
+        'root': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    }
+    ```
+
+### 12. **Admin Processes**: Run admin/management tasks as one-off processes
+
+- **Principle**: Run administrative or maintenance tasks as one-off processes.
+- **Example**: Use Django management commands for administrative tasks
+    ```bash
+    python manage.py migrate
+    python manage.py createsuperuser
+    python manage.py collectstatic
+    ```
+
+These principles help create scalable, maintainable, and robust web applications. 
+By adhering to these guidelines, a Django application can be more easily managed and deployed in modern cloud environments.
+
+****************************************************************
+Middlewares
+****************************************************************
+
+
+****************************************************************
+Internationalization and Localization
+****************************************************************
+
+The process of preparing an application to support more than one language and data format is called internationalization. Localization is the process of adapting an internationalized application to support a specific region or locale.
+
+https://www.youtube.com/watch?v=leyCGPGiy3E
+
+https://github.com/rootamin/django_internationalization
+
+/home/dev/Downloads/django_internationalization-main.zip
 
 ===================================================================================================
+Middleware in Django
 ===================================================================================================
 
+Function based middleware:
 
+1) create middleware in middleware.py file of the app:
+
+def my_middleware(get_response):
+    print("One Time Initialization")
+
+    def my_function(request):
+        print("This is before view")
+        response = get_response(request)
+        print("This is after view")
+        return response
+    return my_function
+
+
+# The get_response callable might be the actual view (if this is the last listed middleware) or 
+# it might be the next middleware in the chain.
+# The current middleware doesn’t need to know or care what exactly it is, just that it represents whatever comes next.
+
+2) Register the middleware in settings.py file:
+
+MIDDLEWARE = [
+    'blog.middlewares.my_middleware',
+]
+
+****************************************************************
+Class Based middleware
+****************************************************************
+
+1) create middleware in middleware.py file of the app:
+
+class MyMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+        print("One Time Initialization")
+
+    def __call__(self, request):
+        print("This is before view")
+        response = self.get_response(request)
+        print("This is after view")
+        return response
+
+
+2) Register the middleware in settings.py file: 
+
+ MIDDLEWARE = [
+    'blog.middlewares.MyMiddleware'
+]
+
+****************************************************************
+Middleware Hooks
+****************************************************************
+
+In Django, middleware provides a way to process requests globally before they reach the view, as well as responses before they reach the client. 
+Middleware classes can also handle exceptions. The custom hooks are methods that you we define in our middleware to process views, exceptions, and template responses.
+
+ Here's a detailed explanation of each:
+
+### 1. `process_view(request, view_func, view_args, view_kwargs)`
+
+This middleware hook is called just before Django calls the view. 
+It can be used to perform tasks related to the view that will be executed.
+
+- **Parameters:**
+  - `request`: The HttpRequest object.
+  - `view_func`: The actual view function that Django is about to call.
+  - `view_args`: A list of positional arguments that will be passed to the view.
+  - `view_kwargs`: A dictionary of keyword arguments that will be passed to the view.
+
+- **Return Value:**
+  - This method can return `None` or an `HttpResponse` object.
+  - If it returns `None`, Django continues processing and eventually calls the view.
+  - If it returns an `HttpResponse`, Django short-circuits and does not call the view; the response is returned immediately to the client.
+
+- **Usage Example:**
+  ```python
+  class MyCustomMiddleware:
+      def process_view(self, request, view_func, view_args, view_kwargs):
+          # Example: Logging the view name
+          print(f"About to call view: {view_func.__name__}")
+          # Allow the request to proceed
+          return None
+  ```
+
+### 2. `process_exception(request, exception)`
+
+This hook is called when a view raises an exception. It's useful for logging, sending notifications, or transforming exceptions into user-friendly error messages.
+
+- **Parameters:**
+  - `request`: The HttpRequest object.
+  - `exception`: The exception that was raised.
+
+- **Return Value:**
+  - This method can return `None` or an `HttpResponse` object.
+  - If it returns `None`, Django's default exception handling continues.
+  - If it returns an `HttpResponse`, Django uses that response, and default exception handling is bypassed.
+
+- **Usage Example:**
+  ```python
+  class MyCustomMiddleware:
+      def process_exception(self, request, exception):
+          # Example: Logging the exception
+          print(f"Exception occurred: {exception}")
+          # Returning a custom error response
+          return HttpResponse("An error occurred", status=500)
+  ```
+
+### 3. `process_template_response(request, response)`
+
+This hook is called when a view returns a `TemplateResponse` (or a subclass). 
+It allows you to modify the template response before it is rendered and sent to the client.
+
+- **Parameters:**
+  - `request`: The HttpRequest object.
+  - `response`: The TemplateResponse object that is about to be returned.
+
+- **Return Value:**
+  - This method should return a `TemplateResponse` object, which can be the original response or a modified version.
+
+- **Usage Example:**
+  ```python
+  class MyCustomMiddleware:
+      def process_template_response(self, request, response):
+          # Example: Adding a variable to the context
+          response.context_data['additional_data'] = 'This is extra data'
+          # Returning the (possibly modified) response
+          return response
+  ```
+
+These hooks allow middleware to intervene at specific points during the request/response cycle, providing powerful ways to influence the behavior of your Django application.
+
+*****************************************************
+Middleware Hooks Use case example:
+*****************************************************
+
+Sure! Let's create an example middleware that demonstrates the use of all three hooks: `process_view`, `process_exception`, and `process_template_response`. 
+This middleware will log information about the view being processed, handle exceptions by logging them and providing a custom error response, and modify template responses to include additional context data.
+
+### Example Middleware
+
+```python
+from django.http import HttpResponse
+from django.template.response import TemplateResponse
+
+class MyCustomMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        response = self.get_response(request)
+        return response
+
+    def process_view(self, request, view_func, view_args, view_kwargs):
+        # Logging the name of the view function that is about to be called
+        print(f"About to call view: {view_func.__name__}")
+        # Allow the request to proceed
+        return None
+
+    def process_exception(self, request, exception):
+        # Logging the exception
+        print(f"Exception occurred: {exception}")
+        # Returning a custom error response
+        return HttpResponse("An error occurred, and we are working on it.", status=500)
+
+    def process_template_response(self, request, response):
+        # Adding a variable to the context of the template response
+        if isinstance(response, TemplateResponse):
+            response.context_data['additional_data'] = 'This is extra data from middleware'
+        # Returning the (possibly modified) response
+        return response
+```
+
+### Explanation
+
+1. **Initialization and Call Method:**
+   - The `__init__` method initializes the middleware with the next callable in the chain (`get_response`).
+   - The `__call__` method processes the request and gets the response by calling the next middleware or view.
+
+2. **`process_view` Hook:**
+   - Before the view is called, this hook logs the name of the view function.
+   - It then returns `None` to allow Django to continue processing and eventually call the view.
+
+3. **`process_exception` Hook:**
+   - If an exception is raised during view processing, this hook logs the exception message.
+   - It returns an `HttpResponse` with a custom error message and a 500 status code, effectively handling the exception.
+
+4. **`process_template_response` Hook:**
+   - If the response is a `TemplateResponse`, this hook adds an extra context variable (`additional_data`) to the template context.
+   - It then returns the modified (or original) response.
+
+### Using the Middleware
+
+To use this middleware, you need to add it to your `MIDDLEWARE` setting in `settings.py`:
+
+```python
+MIDDLEWARE = [
+    # Other middleware classes
+    'path.to.MyCustomMiddleware',
+    # More middleware classes
+]
+```
+
+### Scenario Demonstration
+
+- **Normal Request Flow:** When a request is made, `process_view` logs the view function's name. If the view returns a `TemplateResponse`, `process_template_response` adds extra context data.
+- **Exception Handling:** If an exception occurs during the view processing, `process_exception` logs the exception and returns a custom error response.
+
+This example shows how you can utilize these middleware hooks to handle various aspects of request and response processing in Django.
+
+*****************************************************
+Built-In middlewares
+*****************************************************
+
+Django provides several built-in middlewares that handle various aspects of request and response processing. 
+Middleware in Django is a way to process requests globally before they reach the view or after the view has processed them. 
+
+Here is an explanation of all the built-in middlewares in Django along with their use cases:
+
+### 1. `django.middleware.security.SecurityMiddleware`
+**Use Case:** Enhances security settings.
+- **Description:** Implements several security enhancements, including setting HTTP headers that prevent certain security vulnerabilities (e.g., XSS, Clickjacking).
+- **Example:** Sets the `Strict-Transport-Security` header for HTTPS, redirects HTTP requests to HTTPS, and handles settings like `SECURE_BROWSER_XSS_FILTER` and `SECURE_CONTENT_TYPE_NOSNIFF`.
+
+### 2. `django.contrib.sessions.middleware.SessionMiddleware`
+**Use Case:** Manages user sessions.
+- **Description:** Adds session management to requests. It enables storing and retrieving arbitrary data on a per-site-visitor basis.
+- **Example:** Used for user login functionality where you need to persist user information across requests.
+
+### 3. `django.middleware.common.CommonMiddleware`
+**Use Case:** Implements various common functionalities.
+- **Description:** Performs URL rewriting and handling common tasks like appending slashes to URLs and managing redirects.
+- **Example:** Automatically appends a slash at the end of URLs if `APPEND_SLASH` is set to `True`.
+
+### 4. `django.middleware.csrf.CsrfViewMiddleware`
+**Use Case:** Protects against Cross-Site Request Forgery (CSRF) attacks.
+- **Description:** Ensures that forms submitted via POST requests are protected against CSRF attacks by checking for a valid token.
+- **Example:** When creating forms in a Django application, this middleware ensures that each form contains a CSRF token.
+
+### 5. `django.middleware.gzip.GZipMiddleware`
+**Use Case:** Compresses content for clients that support gzip.
+- **Description:** Compresses responses if the client supports gzip, reducing the amount of data transferred and improving load times.
+- **Example:** Suitable for large JSON responses from an API, reducing the payload size and speeding up the response.
+
+### 6. `django.middleware.http.ConditionalGetMiddleware`
+**Use Case:** Implements HTTP conditional GET handling.
+- **Description:** Supports the use of the `ETag` and `Last-Modified` headers to determine if a response has changed and whether a new response needs to be sent.
+- **Example:** Efficiently serves cached content by returning a 304 Not Modified response when appropriate.
+
+### 7. `django.middleware.locale.LocaleMiddleware`
+**Use Case:** Manages language preferences.
+- **Description:** Enables language selection based on data from the request (e.g., cookies, session, browser settings).
+- **Example:** Automatically switches languages based on user preferences or browser settings for multilingual sites.
+
+### 8. `django.middleware.common.BrokenLinkEmailsMiddleware`
+**Use Case:** Sends emails about broken links.
+- **Description:** Emails site administrators when a broken link is encountered.
+- **Example:** Useful for monitoring and fixing broken links, though it's not included in the default middleware stack and needs to be added manually.
+
+### 9. `django.contrib.messages.middleware.MessageMiddleware`
+**Use Case:** Manages temporary messages.
+- **Description:** Provides a way to queue and display temporary messages to users (e.g., success or error messages).
+- **Example:** After a form is submitted successfully, a success message can be displayed to the user.
+
+### 10. `django.middleware.clickjacking.XFrameOptionsMiddleware`
+**Use Case:** Provides protection against clickjacking.
+- **Description:** Sets the `X-Frame-Options` HTTP header to control whether the site can be embedded in an iframe.
+- **Example:** Prevents your site from being embedded in other sites' iframes, which can help mitigate clickjacking attacks.
+
+### 11. `django.middleware.cache.UpdateCacheMiddleware` and `django.middleware.cache.FetchFromCacheMiddleware`
+**Use Case:** Implements site-wide caching.
+- **Description:** `UpdateCacheMiddleware` caches the response to be served for subsequent requests, and `FetchFromCacheMiddleware` fetches the response from the cache.
+- **Example:** Suitable for caching entire pages or site sections to improve performance by reducing database queries and processing time.
+
+### 12. `django.middleware.transaction.TransactionMiddleware`
+**Use Case:** Manages database transactions.
+- **Description:** Ensures that each request is wrapped in a database transaction, committing it at the end if no exceptions occur.
+- **Example:** Useful in ensuring atomicity for complex view logic that involves multiple database operations.
+
+These built-in middlewares cover a wide range of functionalities, from security enhancements and session management to caching and localization. By leveraging these middlewares, developers can address many common requirements and improve the robustness and performance of their Django applications.
 
 ===================================================================================================
 ===================================================================================================

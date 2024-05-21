@@ -1,0 +1,71 @@
+1) Add in setting.py
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "nouman.rehman@devsinc.com"
+EMAIL_HOST_PASSWORD = "pass" // copy that from notes 
+
+
+2) In utils.py file:
+
+from django.core.mail import send_mail
+from gs62 import settings
+
+
+def send_email():
+    subject = "Hello from Django"
+    message = "This is a test email sent from Django."
+    from_email = settings.EMAIL_HOST_USER
+    recipient_list = [
+        "noumanshah436@gmail.com",
+    ]
+
+    send_mail(subject, message, from_email, recipient_list)
+
+
+3) Call this method anaywhere to send email.
+
+from .utils import send_email
+
+send_email()
+
+***********************************
+Send Email with attachments:
+***********************************
+
+1) create function in utils.py file:
+
+def send_email_with_attachment():
+    subject = "Hello from Django"
+    message = "This is a test email sent from Django."
+    recipient_list = [
+        "noumanshah436@gmail.com",
+    ]
+    file_path = os.path.join(settings.BASE_DIR, "sample.png")
+
+    mail = EmailMessage(
+        subject=subject,
+        body=message,
+        from_email=settings.EMAIL_HOST_USER,
+        to=recipient_list,
+    )
+
+    mail.attach_file(file_path)
+
+    # To use `attach` method, we can attach like below:
+    # with open(file_path, 'rb') as f:
+    #     email.attach('sample.png', f.read(), 'image/png')
+
+    mail.send()
+
+
+
+2) Call this method anaywhere to send email.
+
+from .utils import send_email_with_attachment
+
+send_email_with_attachment()
+
+***********************************
