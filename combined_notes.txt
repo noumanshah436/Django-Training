@@ -3035,6 +3035,14 @@ Read article:
 Configuring Django Settings: Best Practices
 https://djangostars.com/blog/configuring-django-settings-best-practices/#header7
 
+****************************************************************
+Create secret key:
+
+from django.core.management.utils import get_random_secret_key
+
+>>> from django.core.management.utils import get_random_secret_key
+
+get_random_secret_key()
 
 
 ****************************************************************
