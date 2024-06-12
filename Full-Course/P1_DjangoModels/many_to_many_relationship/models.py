@@ -28,6 +28,14 @@ class Article(models.Model):
 # ****************************************
 # Extra fields on many-to-many relationships
 # ****************************************
+
+# Person ←→ Membership ←→ Group
+
+# A person can be a member of multiple groups and a group can have multiple members.
+# Each instance of Person can be associated with multiple instances of Group, and each instance of Group can be associated with multiple instances of Person.
+# The Membership model is used as an intermediary table that not only connects Person and Group but also allows you to store additional information about the relationship between the two, such as when the person joined the group and the reason for the invitation.
+
+
 class Person(models.Model):
     name = models.CharField(max_length=128)
 

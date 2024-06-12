@@ -254,6 +254,8 @@ debugging:
 
 import pdb; pdb.set_trace()
 
+import pdb 
+pdb.set_trace()
 *************************
 
 diff ways of getting sql in shell:

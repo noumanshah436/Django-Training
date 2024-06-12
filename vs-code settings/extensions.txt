@@ -1,0 +1,51 @@
+Here are the installed Visual Studio Code extensions as seen in the provided screenshots:
+
+1. **Python** - Microsoft
+2. **Atom One Dark Theme** - Mahmoud Ali
+3. **Black Formatter** - Microsoft
+4. **Django** - Baptiste Darthenay
+5. **ES7+ React/Redux/React-Native snippets** - dsznajder
+6. **ESLint** - Microsoft
+7. **Flake8** - Microsoft
+8. **Git Graph** - mhutchie
+9. **GitHub Actions** - GitHub
+10. **GitLens — Git supercharged** - GitKraken
+11. **Material Icon Theme** - Philipp Kief
+12. **npm Intellisense** - Christian Kohler
+13. **Prettier - Code formatter** - Prettier
+14. **Pylance** - Microsoft
+15. **Python Debugger** - Microsoft
+16. **Tabnine: AI Autocomplete & Chat for Javascript, Python, Typescript, PH** - TabNine
+17. **Tailwind CSS IntelliSense** - Tailwind Labs
+
+
+*********************************
+
+settings.json file:
+
+{
+  "files.autoSave": "afterDelay",
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Atom One Dark",
+  "editor.multiCursorModifier": "ctrlCmd",
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter",
+    "editor.formatOnSave": true
+  },
+  "tabnine.experimentalAutoImports": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "flake8.args": ["--ignore=E501,F401"],
+  "emmet.includeLanguages": {
+    "django-html": "html"
+},
+}
+
