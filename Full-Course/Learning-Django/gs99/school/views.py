@@ -2,6 +2,9 @@ from django.shortcuts import render
 from .models import Student
 from django.db.models import Avg, Sum, Min, Max, Count
 
+# https://docs.djangoproject.com/en/5.0/topics/db/aggregation/
+
+
 def home(request):
     student_data = Student.objects.all()
     average = student_data.aggregate(Avg('marks'))

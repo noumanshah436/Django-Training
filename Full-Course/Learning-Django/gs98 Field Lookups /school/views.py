@@ -18,9 +18,12 @@ def home(request):
     # student_data = Student.objects.filter(name__istartswith='s')
     # student_data = Student.objects.filter(name__endswith='i')
     # student_data = Student.objects.filter(name__iendswith='I')
-    # student_data = Student.objects.filter(passdate__range=('2019-01-01', '2021-01-01'))
+    # student_data = Student.objects.filter(passdate__range=('2019-01-01', '2021-01-01'))   # 'yyyy-mm-dd'
+
+    # __date: use with datetime fileld to extract date 
     # student_data = Student.objects.filter(admdatetime__date=date(2020,7,10))
     # student_data = Student.objects.filter(admdatetime__date__gt=date(2020,7,10))
+
     # student_data = Student.objects.filter(passdate__year=2020)
     # student_data = Student.objects.filter(passdate__year__gte=2020)
     # student_data = Student.objects.filter(passdate__month=1)
@@ -35,6 +38,7 @@ def home(request):
     # student_data = Student.objects.filter(admdatetime__hour__gt=5)
     # student_data = Student.objects.filter(admdatetime__minute__gt=20)
     # student_data = Student.objects.filter(admdatetime__second__gt=20)
+    
     # student_data = Student.objects.filter(roll__isnull=False)
 
     print("Return: ", student_data)

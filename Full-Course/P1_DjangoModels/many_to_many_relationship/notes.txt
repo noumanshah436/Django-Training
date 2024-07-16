@@ -281,9 +281,9 @@ Publication.objects.all().delete()
 Article.objects.all().delete()
 
 
-***************************************
+*********************************************************************************************************************
 Extra fields on many-to-many relationships¶
-***************************************
+*********************************************************************************************************************
 
 CREATE TABLE "many_to_many_relationship_person" (
   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,

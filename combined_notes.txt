@@ -126,6 +126,7 @@ Add interpreter path for project in VScode
 pipenv --venv 
 
 2) Add the path to virtual environment by appending "/bin/python"
+/home/dev/Django-Training/Full-Course/.venv/bin/python
 
 ===================================================================================================
 create virtual environment using virtualenv: (old way)
