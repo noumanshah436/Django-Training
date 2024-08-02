@@ -51,6 +51,9 @@ upgrade django version
 pip install --upgrade django
 
 
+2) see all available commands
+
+python manage.py --help
 
 ===================================================================================================
 initial Setup (using pipenv)
@@ -62,14 +65,14 @@ https://medium.com/@piyushmaurya23/setting-up-django-using-pipenv-cf8ff9b2caa6
 
 1. Make a directory for the django project
 2. Install 'pip install pipenv' in the system environment if not already
-3. Create a virtual environment by running 'pipenv shell'
+3. Create a virtual environment by running `pipenv shell`
     (the location of the venv defaults to '~/user/.virtualenv/', to make it live inside the current directory, make an empty folder named '.venv',
     pipenv automatically detects that folder and creates the virtual environment inside that folder)
     ( default location in my ubuntu: /home/dev/.local/share/virtualenvs/Projects-IqmR9ahX )
-4. Now install django by running 'pipenv install django' (installs the latest version)
-5. Start the project by running 'django-admin startproject $NAME_OF_THE_PROJECT'
+4. Now install django by running `pipenv install django` (installs the latest version)
+5. Start the project by running `django-admin startproject $NAME_OF_THE_PROJECT`
 6. To start the live server cd into the project and run 'python manage.py runserver port(optional)'
-7. To make a new app inside that project run 'python manage.py startapp $NAME_OF_THE_APP'
+7. To make a new app inside that project run `python manage.py startapp $NAME_OF_THE_APP`
 
 
 show all packages installed globally
@@ -128,12 +131,51 @@ pipenv --venv
 2) Add the path to virtual environment by appending "/bin/python"
 /home/dev/Django-Training/Full-Course/.venv/bin/python
 
+********************************************
+Setup for existing project:
+
+$ mkdir .venv
+$ pipenv install      # install dependencies
+$ pipenv shell        # activate environment
+$ python manage.py makemigrations
+$ python manage.py migrate
+
+$ python manage.py runserver
+
 ===================================================================================================
 create virtual environment using virtualenv: (old way)
 ===================================================================================================
 
-$ python --version
-Python 3.8.10
+pyenv local 3.12.3
+python --version
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+pip install --upgrade pip
+
+python manage.py makemigrations
+python manage.py migrate
+
+pip freeze > requirements.txt
+python manage.py runserver
+
+********************************************
+
+pip install pillow
+pip install djangorestframework
+python manage.py makemigrations
+pip install crispy_forms
+pip install django-crispy-forms
+
+python manage.py runserver
+pip install whitenoise
+python manage.py runserver
+pip install crispy-bootstrap4
+python manage.py runserver
+
+********************************************
+Setup for existing project (virtualenv):
+
 
 $ python -m venv venv
 
@@ -143,7 +185,6 @@ $ pip install -r requirements.txt
 
 $ pip install --upgrade pip
 
-$ pip list
 
 ===================================================================================================
 Initial Setup (old)

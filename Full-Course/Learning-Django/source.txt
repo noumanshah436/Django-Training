@@ -134,10 +134,11 @@ GS111 Many to One Relationship
 GS112 Many to Many Relationship
 GS113 Model Relationship Example and related_name Parameter
 
+GS114 View Class Based Base View or View Base Class in Django (Hindi)
 GS115 View Class Based Base View or View Base Class in Django  
 GS116 TemplateView in Django
 
-RedirectView in Django
+GS117 RedirectView in Django
 
 
 

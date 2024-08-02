@@ -13,6 +13,7 @@ def sign_up(request):
         if fm.is_valid():
             messages.success(request, 'Account Created Successfully!!!')
             user = fm.save()
+            # add user to Editor group when user signup
             group = Group.objects.get(name='Editor')
             user.groups.add(group)
     else:

@@ -1,0 +1,239 @@
+Celery is used to make functions to run in the background. Imagine you have a web API that does a job, and returns a response. You know, that job would seriously affect the response time for the API. So you'll transfer that particular job to Celery, and your API will respond instantly. Examples for some job that affect performance of an API are,
+
+Routing to email servers
+Routing to SMS Gateways
+Database backup
+Chained database operations
+File conversion
+Now, let's cover each components of celery.
+
+The workers Celery workers execute the job(function). They are asynchronous. So you'll have double the number of your processor cores as celery workers. You can assign a name and task to a celery worker#.
+
+The apps The app is the name of project you're working on. You'll have to specify that name in the celery instance.
+
+The tasks The functions you need to be executed in the background. Every task Celery execute will have a task id, state(and more). You can get that by inspecting a particular task.
+
+The message Broker Those tasks which will be executed in the background has to be moved from your python project to to Celery workers. Message brokers act as a medium here. So functions with its arguments will be transferred to brokers and from brokers Celery will fetch them to execute.
+
+Some codes
+
+celery -A project_name worker_name
+celery -A project_name worker_name inspect
+
+****************************************************
+
+
+
+
+
+
+
+
+
+
+Celery is an asynchronous task queue/job queue based on distributed message passing. It is used to handle time-consuming tasks in the background, which helps to improve the performance of your Django applications. Here is a step-by-step guide on how to integrate Celery with Django:
+
+### 1. Install Celery and Redis
+
+First, you need to install Celery and a message broker, such as Redis. You can install them using pip:
+
+```bash
+pip install celery redis
+```
+
+### 2. Create a Celery Configuration File
+
+In your Django project directory, create a file named `celery.py` alongside your `settings.py` file. This file will contain the configuration for Celery.
+
+```python
+# myproject/celery.py
+from __future__ import absolute_import, unicode_literals
+import os
+from celery import Celery
+
+# set the default Django settings module for the 'celery' program.
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
+
+app = Celery('myproject')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+
+# Load task modules from all registered Django app configs.
+app.autodiscover_tasks()
+
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
+```
+
+### 3. Update Django Settings
+
+Add the Celery configuration to your Django settings file (`settings.py`).
+
+```python
+# settings.py
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'UTC'
+```
+
+### 4. Create a Celery App in Your Django Project
+
+To make sure your Celery app is loaded when Django starts, update your `__init__.py` in the project directory:
+
+```python
+# myproject/__init__.py
+from __future__ import absolute_import, unicode_literals
+
+# This will make sure the app is always imported when
+# Django starts so that shared_task will use this app.
+from .celery import app as celery_app
+
+__all__ = ('celery_app',)
+```
+
+### 5. Create and Register Tasks
+
+Create tasks in your Django apps. For example, in an app called `myapp`, create a file named `tasks.py`:
+
+```python
+# myapp/tasks.py
+from celery import shared_task
+
+@shared_task
+def add(x, y):
+    return x + y
+
+@shared_task
+def mul(x, y):
+    return x * y
+
+@shared_task
+def xsum(numbers):
+    return sum(numbers)
+```
+
+### 6. Using Celery in Views or Other Parts of Your Django Project
+
+You can call these tasks from your views or other parts of your Django project.
+
+```python
+# myapp/views.py
+from django.http import JsonResponse
+from .tasks import add
+
+def add_view(request):
+    result = add.delay(4, 4)
+    return JsonResponse({'task_id': result.id})
+```
+
+### 7. Running the Celery Worker
+
+Start the Celery worker using the following command:
+
+```bash
+celery -A myproject worker -l info
+```
+
+This command starts a Celery worker process that will run the tasks.
+
+### 8. Running Celery Beat (Optional)
+
+If you have periodic tasks, you can run Celery Beat alongside the worker:
+
+```bash
+celery -A myproject beat -l info
+```
+
+### Conclusion
+
+By following these steps, you should be able to integrate Celery into your Django project and run asynchronous tasks. You can further customize the configuration and tasks based on your project requirements.
+
+
+
+
+
+
+
+***************************************************************
+is the celery is same as sidekiq
+***************************************************************
+
+Celery and Sidekiq are both tools for handling background job processing, but they are used in different ecosystems and have different features. Here’s a comparison to help understand their similarities and differences:
+
+### Language and Ecosystem
+
+- **Celery**: 
+  - **Language**: Python
+  - **Ecosystem**: Primarily used with Django, Flask, and other Python-based web frameworks.
+
+- **Sidekiq**: 
+  - **Language**: Ruby
+  - **Ecosystem**: Primarily used with Ruby on Rails.
+
+### Architecture
+
+- **Celery**: 
+  - Uses a distributed message passing system.
+  - Supports various message brokers (e.g., Redis, RabbitMQ).
+  - Tasks can be defined in any Python module.
+  - Can handle both task queues and periodic tasks (scheduled tasks).
+
+- **Sidekiq**: 
+  - Built on top of Redis.
+  - Utilizes multithreading to handle multiple jobs simultaneously within a single process.
+  - Integrates tightly with Ruby on Rails.
+  - Supports periodic jobs via an extension called Sidekiq-Cron.
+
+### Performance
+
+- **Celery**: 
+  - Can be slower in terms of job throughput compared to Sidekiq due to its multiprocess architecture.
+  - More suitable for tasks requiring heavy computation or tasks that can benefit from Python’s rich ecosystem.
+
+- **Sidekiq**: 
+  - Known for high performance due to its multithreading model.
+  - Excellent for handling high volumes of lightweight jobs quickly.
+
+### Configuration and Setup
+
+- **Celery**: 
+  - Requires setting up a message broker like Redis or RabbitMQ.
+  - Configuration can be more complex due to the flexibility of using different brokers and various settings.
+
+- **Sidekiq**: 
+  - Configuration is straightforward, primarily requiring Redis.
+  - Configuration is often simpler, especially within the Ruby on Rails ecosystem.
+
+### Community and Ecosystem
+
+- **Celery**: 
+  - Large community within the Python ecosystem.
+  - Extensive documentation and a variety of plugins/extensions.
+
+- **Sidekiq**: 
+  - Large community within the Ruby on Rails ecosystem.
+  - Well-documented with a rich set of features and extensions.
+
+### Error Handling and Monitoring
+
+- **Celery**: 
+  - Offers built-in support for error handling and retries.
+  - Monitoring tools like Flower and third-party integrations are available.
+
+- **Sidekiq**: 
+  - Built-in web UI for monitoring jobs, retries, and failures.
+  - Integrates with tools like Sidekiq Pro and Sidekiq Enterprise for enhanced features.
+
+### Conclusion
+
+While both Celery and Sidekiq are powerful tools for background job processing, the choice between them largely depends on the language and framework you are using. If you are working with Python, Celery is the go-to option. If you are in the Ruby on Rails world, Sidekiq is the preferred choice. Both have strong communities and support, but their performance and integration features differ based on their underlying architectures and intended use cases.
+

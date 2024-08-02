@@ -1,0 +1,14 @@
+$ cd "/home/dev/Django-Training/Full-Course"
+$ source .venv/bin/activate
+$ cd "/home/dev/Django-Training/Full-Course/Learning-Django/gs105 Model Manager"
+ 
+$ python manage.py migrate
+ 
+$ python manage.py createsuperuser
+ 
+    username: admin
+    pass: admin
+    email: admin@gmail.com
+     
+$ python manage.py runserver
+

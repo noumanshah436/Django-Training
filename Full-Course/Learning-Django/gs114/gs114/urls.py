@@ -5,8 +5,8 @@ from school import views
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('func/', views.myview, name='func'), 
-    
+    path('func/', views.myview, name='func'),
+
     # path('cl/', views.MyView.as_view(), name='cl'),
 
     # we can only send attribute that are defined in class

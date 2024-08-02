@@ -14,8 +14,8 @@ urlpatterns = [
 
     # path('newsfun/', views.newsfun, name='newsfun'),
     #  render different html files using single view function
-    path('newsfun/', views.newsfun, {'template_name' :'school/news.html'}, name='newsfun'),
-    path('newsfun1/', views.newsfun, {'template_name' :'school/news1.html'}, name='newsfun'),
+    path('newsfun/', views.newsfun, {'template_name': 'school/news.html'}, name='newsfun'),
+    path('newsfun1/', views.newsfun, {'template_name': 'school/news1.html'}, name='newsfun'),
 
     # path('newscl/', views.NewsClassView.as_view(), name='newscl'),
     #  render different html files using single class based function

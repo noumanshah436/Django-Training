@@ -3,7 +3,9 @@ from .forms import StudentRegistration
 from .models import User
 
 # Create your views here.
-#This finction will Add all Item and Show All Item
+# This finction will Add all Item and Show All Item
+
+
 def add_show(request):
     if request.method == 'POST':
         fm = StudentRegistration(request.POST)
@@ -17,9 +19,11 @@ def add_show(request):
     else:
         fm = StudentRegistration()
     stud = User.objects.all()
-    return render(request, 'enroll/addandshow.html',{'form':fm, 'stu':stud})
+    return render(request, 'enroll/addandshow.html', {'form': fm, 'stu': stud})
 
-#This funcion will update/edit
+# This funcion will update/edit
+
+
 def update_data(request, id):
     if request.method == 'POST':
         pi = User.objects.get(pk=id)
@@ -29,13 +33,12 @@ def update_data(request, id):
     else:
         pi = User.objects.get(pk=id)
         fm = StudentRegistration(instance=pi)
-    return render(request,'enroll/updatestudent.html',{'form':fm})
+    return render(request, 'enroll/updatestudent.html', {'form': fm})
 
 
-#This function will delete data
+# This function will delete data
 def delete_data(request, id):
     if request.method == 'POST':
         pi = User.objects.get(pk=id)
         pi.delete()
         return HttpResponseRedirect('/')
-
