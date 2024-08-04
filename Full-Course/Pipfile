@@ -10,6 +10,7 @@ coloredlogs = "*"
 django-crispy-forms = "*"
 requests = "*"
 aiohttp = "*"
+faker = "*"
 
 [dev-packages]
 

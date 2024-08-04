@@ -26,7 +26,7 @@ def home(request):
     # ****************************************************************
 
     # values(): Returns a QuerySet that returns dictionaries, rather than model instances, when used as an iterable.
-    # student_data = Student.objects.values() # return all columns in dictionary
+    # student_data = Student.objects.values()               # return all columns in dictionary
     # student_data = Student.objects.values('name', 'city') # return only selected columns
     # ****************************************************************
 

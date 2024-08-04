@@ -1,4 +1,105 @@
 ===================================================================================================
+Topics:
+===================================================================================================
+
+Resources
+frequently used commands
+initial Setup (using pipenv)
+create virtual environment using virtualenv: (old way)
+Project Setup
+    Create project
+    Create app inside project
+    Naming convention for apps
+Logging and debugging
+pipenv initial
+Django Basics
+    Create Project heirarchy
+    Create views
+    Render html
+    Creating models
+    Manipulate database
+    Forms
+    Load static data
+Django Basic Lines
+Django Ecommerce
+Django Installations
+Django Apps
+Application configuration
+Url configuration/mapping/routing
+
+Django Forms
+    Bound and unbound form instances
+    Widgets
+    Looping over the form’s fields
+    Form initialization and validation process:
+    The Forms API
+    Using forms to validate data
+    Checking which form data has changed:
+    Accessing the fields from the form
+    Accessing “clean” data:
+    Configuring form elements’ HTML id attributes and <label> tags¶
+    Outputting forms as HTML¶
+    More granular output¶
+    All methods on form instance
+
+Authentication and Authorization
+
+Models
+    Add models in django
+    Model Field options
+    NULL vs BLANK
+    Verbose field names
+    Field name restrictions
+    Listing 7-7. Django model default options for dates and times, as well as auto_now and auto_now_add use
+    Unique values: unique, unique_for_date, unique_for_month and unique_for_year
+    db_column, db_index, db_tablespace, primary_key
+
+Relationships
+    Many-to-one relationships
+    Many-to-many relationships
+    Extra fields on many-to-many relationships
+    One-to-one relationships
+    related_name
+    related_query_name
+    Model Meta options
+
+
+Django ORM
+    select_related
+    prefetch_related
+    Complex lookups with Q objects
+
+Querying Data
+    Limiting QuerySets (array-slicing):
+    Field lookups
+
+QuerySet API/ QuerySET API Methods that returns new QuerySets
+QuerySet API(Methods that do not return new QuerySet
+GS98 QuerySet API Field Lookups
+gs99 QuerySet API Aggregation
+QuerySet API Exercise (queryset_api_exercise)
+
+Query Optimization in Django
+Transactions
+Use Profiling
+Database Advanced Query Techniques
+    Raw SQL Queries
+    Database indexing 
+    Database Connection Pooling
+
+Sending Emails 
+Settings for different environments
+12 Factors (set of best practices)
+Internationalization and Localization
+
+Middleware in Django
+    Function based middleware:
+    Class Based middleware
+    Middleware Hooks
+    Middleware Hooks Use case example:
+    Built-In middlewares
+
+===================================================================================================
 Resources:
 ===================================================================================================
 
@@ -187,7 +288,10 @@ $ pip install --upgrade pip
 
 
 ===================================================================================================
-Initial Setup (old)
+Project Setup
+    Create project
+    Create app inside project
+    Naming convention for apps
 ===================================================================================================
 
 https://www.youtube.com/watch?v=UmljXZIypDc&list=PL-osiE80TeTtoQCKZ03TU5fNfx2UY6U4p&index=1&t=405s
@@ -205,7 +309,7 @@ django-admin     --------  list all sub-commands
 
 *********************************************
 
-create project:
+Create project:
 
 django-admin startproject project_name
 
@@ -223,7 +327,6 @@ http://127.0.0.1:8000/
 ctrl+c to stop server
 
 *********************************************
-
 
 Django documentation
 
@@ -277,7 +380,7 @@ admin.site.register(Person)
 
 **********************************
 
-naming convention for apps:
+Naming convention for apps:
 
 Here are a few examples of app names following the convention:
 
@@ -345,27 +448,32 @@ class SqlFormatter(logging.Formatter):
 
 
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'sql',  # Use the 'sql' formatter for SQL queries
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "sql",
         },
     },
-    'formatters': {
-        'sql': {
-            '()': SqlFormatter,  # Use the full path to your custom formatter class
+    "formatters": {
+        "sql": {
+            "()": SqlFormatter,
         },
     },
-    'root': {
-        'handlers': ['console'],
-        'level': 'DEBUG',  # Set this to the desired logging level
+    "root": {
+        "handlers": ["console"],
+        "level": "DEBUG",
     },
-    'loggers': {
-        'django.db.backends': {
-            'handlers': ['console'],
-            'l
+    "loggers": {
+        "django.db.backends": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
+
 ===================================================================================================
 pipenv initial
 ===================================================================================================
@@ -446,6 +554,15 @@ MyModel.objects.all().query.as_sql()
 
 ===================================================================================================
 Django Basics
+    Create Project heirarchy
+    Create views
+    Render html
+    Creating models
+    Manipulate database
+    Forms
+    Load static data
+
+
 ===================================================================================================
 
 Create Project heirarchy
@@ -509,7 +626,7 @@ def index(requuest):
 
 **********************************************
 
-render html :
+Render html :
 
 1) first register app in settings.py file
 'myapp.apps.MyappConfig'
@@ -544,7 +661,7 @@ TEMPLATES = [
 
 ****************************************************
 
-creating models:
+Creating models:
 
 1)
 
@@ -674,9 +791,7 @@ inside your_html.html file add {% load crispy_forms_tags %} and you can use crip
 
 ************************************
 
-
-
-load static data:
+Load static data:
 
 
 add this in settings.py file  ---  STATIC_URL = '/static/'
@@ -1872,8 +1987,72 @@ These authentication methods help secure web requests by verifying the identity 
 
 ===================================================================================================
 Models
-Model Field options
 ===================================================================================================
+
+Add models in django:
+
+/home/dev/Django-Training/Full-Course/P1_DjangoModels/my_models
+
+Add model:
+
+1) Add model in model.p
+
+from django.db import models
+
+class User(models.Model):
+    name = models.CharField(max_length=128)
+    email = models.CharField(max_length=128)
+
+Run the Migrations commands in order to get changes to our database.
+
+2) python manage.py makemigrations
+
+3) python manage.py sqlmigrate my_models 0001   #  it prints out the code that is going to run
+
+4) python manage.py migrate
+
+**********************************
+
+Manipulate database
+
+Start the django shell:
+
+python manage.py shell
+
+(In the shell at the prompt)
+
+from my_models.models import User
+
+u = User(name='Kristen', email='kf@umich.edu')
+u.save()
+u = User(name='Chuck', email='csev@umich.edu')
+u.save()
+u = User(name='Colleen', email='cvl@umich.edu')
+u.save()
+u = User(name='Ted', email='ted@umich.edu')
+u.save()
+u = User(name='Sally', email='a2@umich.edu')
+u.save()
+
+User.objects.values()
+User.objects.filter(email='csev@umich.edu').values()
+
+User.objects.filter(email='ted@umich.edu').delete()
+User.objects.values()
+
+User.objects.filter(email='csev@umich.edu').update(name='Charles')
+User.objects.values()
+
+User.objects.values().order_by('email')
+User.objects.values().order_by('-name')
+
+quit()
+
+
+
+**************************************************************************
+Model Field options
+**************************************************************************
 https://docs.djangoproject.com/en/4.2/ref/models/fields/#field-options
 
 NULL vs BLANK
@@ -2177,6 +2356,911 @@ Be aware that under the following circumstances Django automatically creates a d
 
 If a field uses the unique=True option, Django automatically creates an index for the field. You can disable this behavior setting db_index=False.
 If a field is a ForeignKey data type, Django automatically creates an index for the field. You can disable this behavior setting db_index=False.
+
+
+
+===================================================================================================
+Relationships
+===================================================================================================
+
+https://docs.djangoproject.com/en/5.0/topics/db/examples/
+
+
+**********************************************************************************
+Many-to-one relationships
+**********************************************************************************
+/home/dev/Django-Training/Full-Course/P1_DjangoModels/many_to_one_relationship
+
+
+https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_one/
+
+https://docs.djangoproject.com/en/4.2/ref/models/fields/#module-django.db.models.fields.related
+
+A Reporter can be associated with many Article objects, but an Article can only have one Reporter object:
+
+
+1) create simple reporter model:
+
+CREATE TABLE "many_to_one_relationship_reporter" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, 
+  "first_name" varchar(30) NOT NULL, 
+  "last_name" varchar(30) NOT NULL, 
+  "email" varchar(254) NOT NULL
+)
+
+2) Create article model with foreign key "reporter_id":	
+
+CREATE TABLE "many_to_one_relationship_article" (
+	"id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "headline" varchar(100) NOT NULL,
+  "pub_date" date NOT NULL, 
+  "reporter_id" bigint NOT NULL REFERENCES "many_to_one_relationship_reporter" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+
+**************************
+pipenv shell
+cd P1_DjangoModels/
+python manage.py shell
+
+
+from many_to_one_relationship.models import *
+
+
+Create a few Reporters:
+
+r = Reporter(first_name="John", last_name="Smith", email="john@example.com")
+r.save()
+
+r2 = Reporter(first_name="Paul", last_name="Jones", email="paul@example.com")
+r2.save()
+
+
+Create an Article:
+
+from datetime import date
+a = Article(headline="This is a test", pub_date=date(2005, 7, 27), reporter=r)
+a.save()
+
+a.reporter.id
+  1
+
+a.reporter
+  <Reporter: John Smith>
+
+
+r = a.reporter
+
+****************
+
+Create an Article via the Reporter object:
+
+new_article = r.article_set.create(
+  headline="John's second story", pub_date=date(2005, 7, 29)
+)
+
+new_article
+  <Article: John's second story>
+new_article.reporter
+  <Reporter: John Smith>
+new_article.reporter.id
+  1
+
+
+********************
+
+Create a new article:
+
+new_article2 = Article.objects.create(
+    headline="Paul's story", pub_date=date(2006, 1, 17), reporter=r
+)
+
+new_article2.reporter
+  <Reporter: John Smith>
+new_article2.reporter.id
+  1
+r.article_set.all()
+  <QuerySet [<Article: John's second story>, <Article: Paul's story>, <Article: This is a test>]>
+
+********************
+Change reporter of Article
+Add the same article to a different article set - check that it moves:
+
+r2.article_set.add(new_article2)        -- it changes also in db( no need to save it)
+new_article2.reporter.id
+  2
+new_article2.reporter
+  <Reporter: Paul Jones>
+
+********************
+
+Related managers support field lookups as well.
+The API automatically follows relationships as far as you need.
+Use double underscores to separate relationships. This works as many levels deep as you want. There’s no limit. For example:
+
+>>> r.article_set.filter(headline__startswith="This")
+<QuerySet [<Article: This is a test>]>
+
+# Find all Articles for any Reporter whose first name is "John".
+>>> Article.objects.filter(reporter__first_name="John")
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+
+>>> Article.objects.filter(reporter__first_name="John", reporter__last_name="Smith")
+
+************************
+
+For the related lookup you can supply a primary key value or pass the related object explicitly:
+
+>>> Article.objects.filter(reporter__pk=1)
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+>>> Article.objects.filter(reporter=1)
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+>>> Article.objects.filter(reporter=r)
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+
+
+>>> Article.objects.filter(reporter__in=[1, 2]).distinct()
+<QuerySet [<Article: John's second story>, <Article: Paul's story>, <Article: This is a test>]>
+>>> Article.objects.filter(reporter__in=[r, r2]).distinct()
+<QuerySet [<Article: John's second story>, <Article: Paul's story>, <Article: This is a test>]>
+
+
+You can also use a queryset instead of a literal list of instances:
+>>> Article.objects.filter(
+...     reporter__in=Reporter.objects.filter(first_name="John")
+... ).distinct()
+
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+
+**************************
+
+Querying in the opposite direction:
+
+>>> Reporter.objects.filter(article__pk=1)
+<QuerySet [<Reporter: John Smith>]>
+>>> Reporter.objects.filter(article=1)
+<QuerySet [<Reporter: John Smith>]>
+>>> Reporter.objects.filter(article=a)
+<QuerySet [<Reporter: John Smith>]>
+
+>>> Reporter.objects.filter(article__headline__startswith="This")
+<QuerySet [<Reporter: John Smith>, <Reporter: John Smith>, <Reporter: John Smith>]>
+>>> Reporter.objects.filter(article__headline__startswith="This").distinct()
+<QuerySet [<Reporter: John Smith>]>
+
+*****************************
+
+Queries can go round in circles:
+
+>>> Reporter.objects.filter(article__reporter__first_name__startswith="John")
+<QuerySet [<Reporter: John Smith>, <Reporter: John Smith>, <Reporter: John Smith>, <Reporter: John Smith>]>
+
+>>> Reporter.objects.filter(article__reporter__first_name__startswith="John").distinct()
+<QuerySet [<Reporter: John Smith>]>
+
+>>> Reporter.objects.filter(article__reporter=r).distinct()
+<QuerySet [<Reporter: John Smith>]>
+
+********************************
+
+If you delete a reporter, their articles will be deleted (assuming that the ForeignKey was defined with django.db.models.ForeignKey.on_delete set to CASCADE, which is the default):
+
+>>> Article.objects.all()
+<QuerySet [<Article: John's second story>, <Article: Paul's story>, <Article: This is a test>]>
+
+>>> Reporter.objects.order_by("first_name")
+<QuerySet [<Reporter: John Smith>, <Reporter: Paul Jones>]>
+
+>>> r2.delete()
+
+>>> Article.objects.all()
+<QuerySet [<Article: John's second story>, <Article: This is a test>]>
+
+>>> Reporter.objects.order_by("first_name")
+<QuerySet [<Reporter: John Smith>]>
+
+********************************
+
+You can delete using a JOIN in the query:
+
+>>> Reporter.objects.filter(article__headline__startswith="This").delete()
+
+>>> Reporter.objects.all()
+
+>>> Article.objects.all()
+
+****************************************************************
+foreign key field
+****************************************************************
+https://docs.djangoproject.com/en/4.2/ref/models/fields/#foreignkey
+
+foreignkey provide a many-to-one relation by adding a column to the local model to hold the remote value.
+By default ForeignKey will target the pk of the remote model but this behavior can be changed by using the to_field argument.
+
+class ForeignKey(to, on_delete, **options)¶
+
+A many-to-one relationship. Requires two positional arguments: 
+1) the class to which the model is related and 
+2) the on_delete option.
+
+To create a recursive relationship – an object that has a many-to-one relationship with itself – use models.ForeignKey('self', on_delete=models.CASCADE).
+
+If you need to create a relationship on a model that has not yet been defined, you can use the name of the model, rather than the model object itself:
+
+
+
+**********************************************************************************
+Many-to-many relationships
+**********************************************************************************
+/home/dev/Django-Training/Full-Course/P1_DjangoModels/many_to_many_relationship
+
+
+
+https://docs.djangoproject.com/en/4.2/topics/db/examples/many_to_many/
+
+
+# CREATE TABLE "many_to_many_relationship_article"(
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "headline" varchar(100) NOT NULL
+# )
+
+
+# CREATE TABLE "many_to_many_relationship_publication" (
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "title" varchar(30) NOT NULL
+# )
+
+# CREATE TABLE "many_to_many_relationship_article_publications" (
+#   "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+#   "article_id" bigint NOT NULL REFERENCES "many_to_many_relationship_article" ("id") DEFERRABLE INITIALLY DEFERRED,
+#   "publication_id" bigint NOT NULL REFERENCES "many_to_many_relationship_publication" ("id") DEFERRABLE INITIALLY DEFERRED
+# )
+
+
+# The "DEFERRABLE INITIALLY DEFERRED" part is specifying that the foreign key constraints on the "article_id" and "publication_id" columns are deferrable and initially deferred. This means that when data is inserted or updated, the foreign key constraint checks for these columns will be deferred until the transaction is about to be committed.
+
+******************************
+
+Create a few Publications:
+
+>>> from many_to_many_relationship.models import *
+
+>>> p1 = Publication(title="The Python Journal")
+>>> p1.save()
+>>> p2 = Publication(title="Science News")
+>>> p2.save()
+>>> p3 = Publication(title="Science Weekly")
+>>> p3.save()
+
+
+Create Articles:
+>>> a1 = Article(headline="Django lets you build web apps easily")
+>>> a1.save()
+>>> a2 = Article(headline="NASA uses Python")
+>>> a2.save()
+
+
+Associate the Article with a Publication:
+>>> a1.publications.add(p1)
+
+>>> a2.publications.add(p1, p2)
+>>> a2.publications.add(p3)
+
+Adding a second time is OK, it will not duplicate the relation:
+>>> a2.publications.add(p3)
+
+>>> p1 = Publication.objects.get(pk=1)
+>>> p2 = Publication.objects.get(pk=1)
+>>> p3 = Publication.objects.get(pk=3)
+>>> a1 = Article.objects.get(pk=1)
+
+*****************************
+
+Create and add a Publication to an Article in one step using create():
+>>> new_publication = a2.publications.create(title="Highlights for Children")
+
+*****************************
+
+Get related Objects:
+
+>>> a1.publications.all()
+>>> a2.publications.all()
+
+>>> p1.article_set.all()
+>>> p2.article_set.all()
+>>> p3.article_set.all()
+
+*****************************
+
+Many-to-many relationships can be queried using lookups across relationships:
+
+>>> Article.objects.filter(publications__id=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications__pk=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications=1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications=p1)
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+
+>>> Article.objects.filter(publications__title__startswith="Science")
+<QuerySet [<Article: NASA uses Python>, <Article: NASA uses Python>]>
+
+>>> Article.objects.filter(publications__title__startswith="Science").distinct()
+<QuerySet [<Article: NASA uses Python>]>
+
+*****************************
+
+The count() function respects distinct() as well:
+
+>>> Article.objects.filter(publications__title__startswith="Science").count()
+2
+
+>>> Article.objects.filter(publications__title__startswith="Science").distinct().count()
+1
+
+>>> Article.objects.filter(publications__in=[1, 2]).distinct()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+>>> Article.objects.filter(publications__in=[p1, p2]).distinct()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA uses Python>]>
+
+*****************************
+
+Reverse m2m queries are supported (i.e., starting at the table that doesn’t have a ManyToManyField):
+
+>>> Publication.objects.filter(id=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(pk=1)
+<QuerySet [<Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__headline__startswith="NASA")
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__id=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article__pk=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article=1)
+<QuerySet [<Publication: The Python Journal>]>
+>>> Publication.objects.filter(article=a1)
+<QuerySet [<Publication: The Python Journal>]>
+
+>>> Publication.objects.filter(article__in=[1, 2]).distinct()
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+>>> Publication.objects.filter(article__in=[a1, a2]).distinct()
+<QuerySet [<Publication: Highlights for Children>, <Publication: Science News>, <Publication: Science Weekly>, <Publication: The Python Journal>]>
+
+*****************************
+
+Excluding a related item works as you would expect, too (although the SQL involved is a little complex):
+
+>>> Article.objects.exclude(publications=p2)
+<QuerySet [<Article: Django lets you build web apps easily>]>
+
+*****************************
+
+If we delete an Article, its Publications won’t be able to access it:
+
+>>> a2.delete()
+>>> Article.objects.all()
+<QuerySet [<Article: Django lets you build web apps easily>]>
+
+>>> p2.article_set.all()
+<QuerySet []>
+
+*****************************
+
+Adding via the ‘other’ end of an m2m: (-- add existing article)
+
+>>> a4 = Article(headline="NASA finds intelligent life on Earth")
+>>> a4.save()
+
+>>> p2.article_set.add(a4)
+
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>]>
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+*****************************
+
+Adding via the other end using keywords: (-- both create and add article)
+
+>>> new_article = p2.article_set.create(headline="Oxygen-free diet works wonders")
+
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>, <Article: Oxygen-free diet works wonders>]>
+
+>>> a5 = p2.article_set.all()[1]
+
+>>> a5.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+*********************************
+
+Removing Publication from an Article:
+
+>>> a4.publications.remove(p2)
+
+>>> p2.article_set.all()
+<QuerySet [<Article: Oxygen-free diet works wonders>]>
+>>> a4.publications.all()
+<QuerySet []>
+
+
+And from the other end:
+
+>>> p2.article_set.remove(a5)
+
+>>> p2.article_set.all()
+<QuerySet []>
+>>> a5.publications.all()
+<QuerySet []>
+
+*********************************
+
+Relation sets can be set: ( pass array of objects to Associate)
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>]>
+
+>>> a4.publications.set([p3])         -- this will remove previous related objects and add new related objects
+
+>>> a4.publications.all()
+<QuerySet [<Publication: Science Weekly>]>
+
+*********************************
+
+Relation sets can be cleared:
+
+>>> p2.article_set.clear()
+>>> p2.article_set.all()
+<QuerySet []>
+
+
+And you can clear from the other end:
+
+>>> p2.article_set.add(a4, a5)
+>>> p2.article_set.all()
+<QuerySet [<Article: NASA finds intelligent life on Earth>, <Article: Oxygen-free diet works wonders>]>
+>>> a4.publications.all()
+<QuerySet [<Publication: Science News>, <Publication: Science Weekly>]>
+>>> a4.publications.clear()
+>>> a4.publications.all()
+<QuerySet []>
+>>> p2.article_set.all()
+<QuerySet [<Article: Oxygen-free diet works wonders>]>
+
+*********************************
+
+Recreate the Article and Publication we have deleted:
+
+>>> p1 = Publication(title="The Python Journal")
+>>> p1.save()
+>>> a2 = Article(headline="NASA uses Python")
+>>> a2.save()
+
+>>> a2.publications.add(p1, p2, p3)
+
+*********************************
+
+Bulk delete some Publications - references to deleted publications should go:
+
+>>> Publication.objects.filter(title__startswith="Science").delete()
+>>> Publication.objects.all()
+<QuerySet [<Publication: Highlights for Children>, <Publication: The Python Journal>]>
+>>> Article.objects.all()
+<QuerySet [<Article: Django lets you build web apps easily>, <Article: NASA finds intelligent life on Earth>, <Article: NASA uses Python>, <Article: Oxygen-free diet works wonders>]>
+>>> a2.publications.all()
+<QuerySet [<Publication: The Python Journal>]>
+
+*********
+
+Bulk delete some articles - references to deleted objects should go:
+
+>>> q = Article.objects.filter(headline__startswith="Django")
+>>> print(q)
+<QuerySet [<Article: Django lets you build web apps easily>]>
+>>> q.delete()
+
+*********
+
+After the delete(), the QuerySet cache needs to be cleared, and the referenced objects should be gone:
+
+>>> print(q)
+<QuerySet []>
+>>> p1.article_set.all()
+<QuerySet [<Article: NASA uses Python>]>
+
+*********************************
+
+Publication.objects.all().delete()
+Article.objects.all().delete()
+
+
+**********************************************************************************
+Extra fields on many-to-many relationships¶
+**********************************************************************************
+
+CREATE TABLE "many_to_many_relationship_person" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "name" varchar(128) NOT NULL
+)
+
+CREATE TABLE "many_to_many_relationship_group" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "name" varchar(128) NOT NULL
+)
+
+CREATE TABLE "many_to_many_relationship_membership" (
+  "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  "date_joined" date NOT NULL,
+  "invite_reason" varchar(64) NOT NULL,
+  "group_id" bigint NOT NULL REFERENCES "many_to_many_relationship_group" ("id") DEFERRABLE INITIALLY DEFERRED,
+  "person_id" bigint NOT NULL REFERENCES "many_to_many_relationship_person" ("id") DEFERRABLE INITIALLY DEFERRED
+)
+
+Add Data:
+
+>>> from datetime import date
+>>> nouman = Person.objects.create(name="Nouman")
+>>> farhan = Person.objects.create(name="Farhan")
+>>> beatles = Group.objects.create(name="The Beatles")
+>>> cricketers = Group.objects.create(name="The Cricketers")
+
+>>> m1 = Membership(
+  person=nouman,
+  group=beatles,
+  date_joined=date(1998, 11, 19),
+  invite_reason="Needed a new drummer.",
+)
+>>> m1.save()
+
+>>> beatles.members.all()
+<QuerySet [<Person: Nouman Starr>]>
+
+>>> nouman.group_set.all()
+<QuerySet [<Group: The Beatles>]>
+
+>>> m2 = Membership.objects.create(
+     person=farhan,
+     group=beatles,
+     date_joined=date(1960, 8, 1),
+     invite_reason="Wanted to form a band.",
+ )
+>>> beatles.members.all()
+<QuerySet [<Person: nouman Starr>, <Person: farhan McCartney>]>
+
+***************************
+
+You can also use add(), create(), or set() to create relationships, as long as you specify through_defaults for any required fields:
+
+>>> john = Person.objects.create(name="john")
+>>> beatles.members.add( john, through_defaults={ "date_joined": date(1960, 8, 1) } )
+
+>>> beatles.members.create(
+...     name="George Harrison", through_defaults={"date_joined": date(1960, 8, 1)}
+... )
+
+>>> beatles.members.set(
+...     [john, paul, ringo, george], through_defaults={"date_joined": date(1960, 8, 1)}
+... )
+
+***************************
+Duplicate in through table case:
+
+You may prefer to create instances of the intermediate model directly.
+
+If the custom through table defined by the intermediate model does not enforce uniqueness on the (model1, model2) pair,
+allowing multiple values, the remove() call will remove all intermediate model instances:
+
+>>> Membership.objects.create(
+     person=nouman,
+     group=beatles,
+     date_joined=date(1968, 9, 4),
+     invite_reason="You've been gone for a month and we miss you.",
+ )
+
+>>> beatles.members.all()
+<QuerySet [<Person: Ringo Starr>, <Person: Paul McCartney>, <Person: Ringo Starr>]>
+
+>>> # This deletes both of the intermediate model instances for Ringo Starr
+>>> beatles.members.remove(nouman)
+
+>>> beatles.members.all()
+<QuerySet [<Person: Paul McCartney>]>
+
+***************************
+The clear() method can be used to remove all many-to-many relationships for an instance:
+
+# Beatles have broken up
+# Note that this deletes the intermediate model instances
+>>> beatles.members.clear()
+
+>>> Membership.objects.all()
+<QuerySet []>
+
+***************************
+
+Once you have established the many-to-many relationships, you can issue queries. Just as with normal many-to-many relationships, you can query using the attributes of the many-to-many-related model:
+
+# Find all the groups with a member whose name starts with 'Paul'
+
+>>> Group.objects.filter(members__name__startswith="Nouman")
+<QuerySet [<Group: The Beatles>]>
+
+***************************
+
+As you are using an intermediate model, you can also query on its attributes:
+
+# Find all the members of the Beatles that joined after 1 Jan 1961
+>>> Person.objects.filter(
+  group__name="The Beatles", membership__date_joined__gt=date(1961, 1, 1)
+)
+<QuerySet [<Person: Ringo Starr]>
+
+***************************
+
+If you need to access a membership’s information you may do so by directly querying the Membership model:
+
+>>> nouman_membership = Membership.objects.get(group_id=1, person_id=1)
+>>> nouman_membership = Membership.objects.get(group=1, person=1)
+>>> nouman_membership = Membership.objects.get(group=beatles, person=nouman)
+
+>>> nouman_membership.date_joined
+datetime.date(1962, 8, 16)
+>>> nouman_membership.invite_reason
+'Needed a new drummer.'
+
+***************************
+
+Another way to access the same information is by querying the many-to-many reverse relationship from a Person object:
+
+>>> nouman_membership = nouman.membership_set.get(group=beatles)
+
+>>> nouman_membership.date_joined
+datetime.date(1962, 8, 16)
+
+>>> nouman_membership.invite_reason
+'Needed a new drummer.'
+
+
+
+
+**********************************************************************************
+One-to-one relationships
+**********************************************************************************
+/home/dev/Django-Training/Full-Course/P1_DjangoModels/one_to_one_relationship
+
+https://docs.djangoproject.com/en/4.2/topics/db/examples/one_to_one/
+
+
+CREATE TABLE "one_to_one_relationship_place" (
+    "id" integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "name" varchar(50) NOT NULL, "address" varchar(80) NOT NULL
+)
+
+CREATE TABLE "one_to_one_relationship_restaurant" (
+    "place_id" bigint NOT NULL PRIMARY KEY REFERENCES "one_to_one_relationship_place" ("id") DEFERRABLE INITIALLY DEFERRED,
+    "serves_hot_dogs" bool NOT NULL,
+    "serves_pizza" bool NOT NULL
+)
+
+from one_to_one_relationship.models import Place, Restaurant
+
+
+Create a couple of Places:
+p1 = Place(name="Place 1", address="944 W. Fullerton")
+p1.save()
+p2 = Place(name="Place 2", address="1013 N. Ashland")
+p2.save()
+
+
+Create a Restaurant. Pass the “parent” object as this object’s primary key:
+r = Restaurant(place=p1, serves_hot_dogs=True, serves_pizza=False)
+r.save()
+
+A Restaurant can access its place:
+r.place
+
+A Place can access its restaurant, if available:
+p1.restaurant
+
+
+Set the place using assignment notation. Because place is the primary key on Restaurant, the save will create a new restaurant:
+
+>>> r.place = p2
+>>> r.save()
+
+>>> p2.restaurant
+<Restaurant: Ace Hardware the restaurant>
+
+>>> r.place
+<Place: Ace Hardware the place>
+
+
+Set the place back again, using assignment in the reverse direction:
+
+>>> p1.restaurant = r
+>>> p1.restaurant
+<Restaurant: Demon Dogs the restaurant>
+
+**************************
+
+The primary key field is read-only. If you change the value of the primary key on an existing object and then save it, a new object will be created alongside the old one. For example:
+
+from django.db import models
+
+
+class Fruit(models.Model):
+    name = models.CharField(max_length=100, primary_key=True)
+>>> fruit = Fruit.objects.create(name="Apple")
+>>> fruit.name = "Pear"
+>>> fruit.save()
+>>> Fruit.objects.values_list("name", flat=True)
+<QuerySet ['Apple', 'Pear']>
+
+
+**********************************************************************************
+related_name
+**********************************************************************************
+
+In Django, the `related_name` attribute is used in model field definitions to specify the name of the reverse relation from the related model back to the model that defines the relation. 
+This is particularly useful for creating clear and unambiguous reverse relationships, especially when dealing with multiple relationships between models.
+
+### Understanding `related_name`
+
+When you define a ForeignKey, OneToOneField, or ManyToManyField, Django automatically creates a reverse relation that allows you to access related objects from the related model. By default, this reverse relation is named using the lowercase name of the related model followed by `_set`. For example, if you have a `Song` model with a ForeignKey to a `Singer` model, you can access all songs of a singer using `singer.song_set.all()`.
+
+The `related_name` attribute allows you to customize this reverse relation name. This is particularly helpful in the following scenarios:
+
+- **Clarity**: Providing a more meaningful name for the reverse relation.
+- **Avoiding Name Conflicts**:  When a model has multiple relationships to the same model, related_name helps to avoid naming conflicts by providing unique names for each reverse relationship.
+
+### Example Usage of `related_name`
+
+Consider the following models where a `Song` has a foreign key to a `Singer`.
+
+```python
+from django.db import models
+
+class Singer(models.Model):
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Song(models.Model):
+    title = models.CharField(max_length=100)
+    singer = models.ForeignKey(Singer, on_delete=models.CASCADE, related_name="songs")
+    duration = models.IntegerField()
+
+    def __str__(self):
+        return self.title
+```
+
+In this example, the `related_name="songs"` specifies that the reverse relation from `Singer` to `Song` should be called `songs` instead of the default `song_set`. This allows you to access all songs of a singer using `singer.songs.all()`.
+
+### Using `related_name` in Multiple Relationships
+
+If you have multiple foreign keys to the same model, using `related_name` becomes essential to avoid name conflicts.
+
+```python
+class Singer(models.Model):
+    name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class Album(models.Model):
+    title = models.CharField(max_length=100)
+    main_singer = models.ForeignKey(Singer, on_delete=models.CASCADE, related_name="main_albums")
+    featured_singer = models.ForeignKey(Singer, on_delete=models.CASCADE, related_name="featured_albums")
+
+    def __str__(self):
+        return self.title
+```
+
+In this example, there are two foreign keys to the `Singer` model: `main_singer` and `featured_singer`. By setting `related_name="main_albums"` and `related_name="featured_albums"`, you avoid conflicts and clearly distinguish between the two sets of albums in which a singer is involved.
+
+### Accessing Reverse Relationships
+
+With the models defined above, you can access the related objects as follows:
+
+```python
+# Assuming you have some instances created
+singer = Singer.objects.get(id=1)
+
+# Access songs related to this singer
+singer_songs = singer.songs.all()
+
+# Access albums where the singer is the main singer
+main_albums = singer.main_albums.all()
+
+# Access albums where the singer is the featured singer
+featured_albums = singer.featured_albums.all()
+```
+
+### Conclusion
+
+Using `related_name` in Django models is a powerful way to customize and clarify reverse relationships. It helps keep your code clean and avoids conflicts, especially when dealing with multiple relationships to the same model. By using `related_name`, you ensure that the relationships in your models are easy to understand and use.
+
+
+**********************************************************************************
+Model Meta options
+**********************************************************************************
+
+https://docs.djangoproject.com/en/5.0/ref/models/options/
+
+
+The class Meta inside a Django model allows you to define various options and configurations for that model. 
+Here are some common use cases for the Meta class:
+
+Custom Table Name: You can specify a custom name for the database table associated with the model using the db_table option:
+
+class Meta:
+    db_table = "custom_table_name"
+
+**************************************
+Verbose Name: You can provide a human-readable name for the model class using the verbose_name option:
+class Meta:
+    verbose_name = "Human-readable Name"
+
+**************************************
+Verbose Name Plural: Similar to verbose_name, you can define a plural name for the model using verbose_name_plural:
+class Meta:
+    verbose_name_plural = "Human-readable Plural Name"
+
+**************************************
+Unique Constraints: You can define unique constraints on fields using the unique_together option:
+class Meta:
+    unique_together = ("field1", "field2")
+**************************************
+Indexing: You can specify custom indexes on fields using the indexes option:
+class Meta:
+    indexes = [
+        models.Index(fields=["field1"]),
+        models.Index(fields=["field2", "field3"]),
+    ]
+**************************************
+Permissions: You can set default permissions for the model using the permissions option:
+
+class Meta:
+    permissions = [
+        ("can_view_details", "Can view details"),
+        ("can_change_settings", "Can change settings"),
+    ]
+
+**************************************
+Abstract Models: If you're creating an abstract base model, you can indicate that by setting abstract = True:
+
+class Meta:
+    abstract = True
+
+**************************************
+
+App Label: You can provide a custom app label to group models in the admin interface using the app_label option:
+
+class Meta:
+    app_label = "CustomAppLabel"
+
+**************************************
+
+Proxy Models: For proxy models, you can set proxy = True:
+
+class Meta:
+    proxy = True
+
+Default Ordering: As you mentioned earlier, you can set the default ordering for model instances using the ordering option.
+
+
+
+These are just a few examples of what you can do with the class Meta inside a Django model. 
+The Meta class provides a way to configure various aspects of your model's behavior, presentation, and interactions with the database and admin interface.
+
 
 ===================================================================================================
 Django ORM
@@ -2779,12 +3863,1160 @@ from django.db.models import F
 # Example: Retrieve products with price higher than cost price
 Product.objects.filter(price__gt=F('cost_price'))
 
-***********************************
+===================================================================================================
+QuerySet API/ QuerySET API Methods that returns new QuerySets
+===================================================================================================
+/home/dev/Django-Training/Full-Course/Learning-Django/gs96 QuerySet API (return new QuerySet)
 
-Remaining 
+Methods that return new QuerySets: (https://docs.djangoproject.com/en/5.0/ref/models/querysets/#methods-that-return-new-querysets)
+
+Django provides a range of QuerySet refinement methods that modify either the types of results returned by the QuerySet or the way its SQL query is executed.
+
+Note
+These methods do not run database queries, therefore they are safe to run in asynchronous code, and do not have separate asynchronous versions.
+
+
+class Student(models.Model):
+    name = models.CharField(max_length=70)
+    roll = models.IntegerField(unique=True, null=False)
+    city = models.CharField(max_length=70)
+    marks = models.IntegerField()
+    pass_date = models.DateField()
+
+
+class Teacher(models.Model):
+    name = CharField(max_length=70)
+    empnum = models.IntegerField(unique=True, null=False)
+    city = models.CharField(max_length=70)
+    salary = models.IntegerField()
+    join_date = models.DateField()
+
+
+
+student_data = Student.objects.all()
+
+student_data = Student.objects.filter(marks=70)
+
+student_data = Student.objects.exclude(marks=70)
+****************************************************************
+
+student_data = Student.objects.order_by('?') # '?[for random]', 'name', 'roll', ''marks
+student_data = Student.objects.order_by('marks') #  ascending order
+student_data = Student.objects.order_by('-name') #  descending order
+
+student_data = Student.objects.order_by('id').reverse()
+to get last five records:
+student_data = Student.objects.order_by('id').reverse()[:5]  
+
+****************************************************************
+
+values():
+Returns a QuerySet that returns dictionaries, rather than model instances, when used as an iterable.
+
+student_data = Student.objects.values()            # return all columns in dictionary
+student_data = Student.objects.values('name', 'city') # return only selected columns
+****************************************************************
+
+values_list(): 
+This is similar to values() except that instead of returning dictionaries, it returns tuples when iterated over.
+
+student_data = Student.objects.values_list()
+student_data = Student.objects.values_list('name', 'city')
+student_data = Student.objects.values_list('id', 'name', named=True)
+
+****************************************************************
+
+using(alias):
+This method is for controlling which database the QuerySet will be evaluated against if you are using more than one database. 
+The only argument this method takes is the alias of a database, as defined in DATABASES.
+
+student_data = Student.objects.using('default')
+
+****************************************************************
+
+student_data = Student.objects.dates('pass_date', 'year')
+
+****************************************************************
+
+Uses SQL’s UNION operator to combine the results of two or more QuerySets.  
+use same number of columns for all querysets
+
+qs1 = Student.objects.values_list('id', 'name', named=True)
+qs2 = Teacher.objects.values_list('id', 'name', named=True)
+student_data = qs2.union(qs1)
+
+qs1 = Student.objects.values_list('id', 'name', named=True)
+qs2 = Teacher.objects.values_list('id', 'name', named=True)
+student_data = qs2.union(qs1, all=True)
+
+****************************************************************
+
+intersection
+Uses SQL’s INTERSECT operator to return the shared elements of two or more QuerySets.
+Return only those records where the values of all the selected coulumns of both quesrysets are same
+
+qs1 = Student.objects.values_list('id', 'name', named=True)
+qs2 = Teacher.objects.values_list('id', 'name', named=True)
+student_data = qs2.intersection(qs1)
+
+return records where id and name of both querysets are same
+
+****************************************************************
+
+difference()
+Uses SQL’s EXCEPT operator to keep only elements present in the QuerySet but not in some other QuerySets.
+
+qs1 = Student.objects.values_list('id', 'name', named=True)
+qs2 = Teacher.objects.values_list('id', 'name', named=True)
+student_data = qs2.difference(qs1)
+
+return all the records of qs2, that do not match with any record of qs1
+
+student_data contain the tuples (id, name) that are in qs2 but not in qs1.
+
+****************************************************************
+
+AND OR operator  
+student_data = Student.objects.filter(id=6) & Student.objects.filter(roll=106)
+student_data = Student.objects.filter(id=6, roll=106)
+student_data = Student.objects.filter(Q(id=6) & Q(roll=106))
+
+student_data = Student.objects.filter(id=6) | Student.objects.filter(roll=107)
+student_data = Student.objects.filter(Q(id=6) | Q(roll=107))
 
 ===================================================================================================
-Sending Emails 
+QuerySet API(Methods that do not return new QuerySet
+===================================================================================================
+
+Methods that do not return QuerySets (https://docs.djangoproject.com/en/5.0/ref/models/querysets/#methods-that-do-not-return-querysets)
+The following QuerySet methods evaluate the QuerySet and return something other than a QuerySet.
+These methods do not use a cache (see Caching and QuerySets). Rather, they query the database each time they’re called.
+Because these methods evaluate the QuerySet, they are blocking calls, and so their main (synchronous) versions cannot be called from asynchronous code. For this reason, each has a corresponding asynchronous version with an a prefix - for example, rather than get(…) you can await aget(…).
+
+
+get()
+Returns the object matching the given lookup parameters, which should be in the format described in Field lookups.
+You should use lookups that are guaranteed unique, such as the primary key or fields in a unique constraint. For example:
+
+If get() doesn’t find any object, it raises a Model.DoesNotExist exception:
+If get() finds more than one object, it raises a Model.MultipleObjectsReturned exception:
+
+student_data = Student.objects.get(name='Rohit')
+student_data = Student.objects.get(id=1)
+student_data = Student.objects.get(pk=1)
+
+*******************************************************************
+
+student_data = Student.objects.first()
+student_data = Student.objects.order_by('name').first()
+*******************************************************************
+student_data = Student.objects.last()
+*******************************************************************
+student_data = Student.objects.latest('pass_date')
+*******************************************************************
+student_data = Student.objects.earliest('pass_date')
+*******************************************************************
+student_data = Student.objects.all()
+print(student_data.exists())
+
+student_data = Student.objects.all()
+one_data = Student.objects.get(pk=1)
+print(student_data.filter(pk=one_data.pk).exists())
+
+*******************************************************************
+
+student_data = Student.objects.create(name="Sameer", roll=114, city="Bokaro", marks=60, pass_date='2020-5-4')
+
+student_data, created = Student.objects.get_or_create(name="Sabirr", roll=113, city="Bookaro", marks=90, pass_date='2020-6-4')
+
+student_data = Student.objects.filter(id=12).update(name='Kabir', marks=80)
+student_data = Student.objects.filter(marks=70).update(city="Pass")
+
+student_data = Student.objects.update_or_create(id=13, name="Sabirr	", defaults={'name': 'Kohli'})
+
+objs = [
+    Student(name='Sonal', roll=120, city='Dhanbad', marks=40, pass_date='2020-5-4'),
+    Student(name='Kunal', roll=121, city='Dumka', marks=50, pass_date='2020-5-7'),
+    Student(name='Anisa', roll=122, city='Giridih', marks=70, pass_date='2020-5-9')
+]
+student_data = Student.objects.bulk_create(objs)
+
+all_student_data = Student.objects.all()
+for stu in all_student_data:
+    stu.city = 'BHEL'
+student_data = Student.objects.bulk_update(all_student_data, ['city'])
+
+*******************************************************************
+Takes a list of field values and the field_name for those values, and returns a dictionary mapping each value to an instance of the object with the given field value.
+By default field name is id if not specified
+
+student_data = Student.objects.in_bulk([1, 2])
+student_data = Student.objects.in_bulk([1, 2], field_name='id') # same as above
+
+print(student_data[1].name)
+student_data = Student.objects.in_bulk([])
+student_data = Student.objects.in_bulk()
+
+*******************************************************************
+
+delete single record
+student_data = Student.objects.get(pk=13).delete()
+
+delete all filtered records
+student_data = Student.objects.filter(marks=50).delete()
+
+delete all records
+student_data = Student.objects.all().delete()
+
+*******************************************************************
+
+student_data = Student.objects.all()
+print(student_data.count())
+
+===================================================================================================
+GS98 QuerySet API Field Lookups
+===================================================================================================
+
+student_data = Student.objects.all()
+
+student_data = Student.objects.filter(name__exact='Sonam')
+
+student_data = Student.objects.filter(name__iexact='sonam')
+
+student_data = Student.objects.filter(name__contains='U')
+
+student_data = Student.objects.filter(id__in=[1, 5, 7])
+
+student_data = Student.objects.filter(marks__in=[60, 70])
+
+student_data = Student.objects.filter(marks__gt=60)
+
+student_data = Student.objects.filter(marks__gte=60)
+
+student_data = Student.objects.filter(marks__lt=60)
+
+student_data = Student.objects.filter(marks__lte=60)
+
+student_data = Student.objects.filter(name__startswith='S')
+
+student_data = Student.objects.filter(name__istartswith='s')
+
+student_data = Student.objects.filter(name__endswith='i')
+
+student_data = Student.objects.filter(name__iendswith='I')
+
+student_data = Student.objects.filter(passdate__range=('2019-01-01', '2021-01-01'))   # 'yyyy-mm-dd'
+
+# __date: use with datetime fileld to extract date 
+ student_data = Student.objects.filter(admdatetime__date=date(2020,7,10))
+ student_data = Student.objects.filter(admdatetime__date__gt=date(2020,7,10))
+
+
+student_data = Student.objects.filter(passdate__year=2020)
+
+student_data = Student.objects.filter(passdate__year__gte=2020)
+
+student_data = Student.objects.filter(passdate__month=1)
+
+student_data = Student.objects.filter(passdate__month__gt=10)
+
+student_data = Student.objects.filter(passdate__day=24)
+
+student_data = Student.objects.filter(passdate__week=14)
+
+student_data = Student.objects.filter(passdate__week_gt=14)
+
+student_data = Student.objects.filter(passdate__week__day=5)
+
+student_data = Student.objects.filter(passdate__week__day__gt=5)
+
+student_data = Student.objects.filter(passdate__quarter=2)
+
+student_data = Student.objects.filter(admdatetime__time__gt=time(6, 00))
+
+student_data = Student.objects.filter(admdatetime__hour__gt=5)
+
+student_data = Student.objects.filter(admdatetime__minute__gt=20)
+
+student_data = Student.objects.filter(admdatetime__second__gt=20)
+    
+student_data = Student.objects.filter(roll__isnull=False)
+
+
+===================================================================================================
+gs99 QuerySet API Aggregation
+===================================================================================================
+
+from  django.db.models import Sum, A
+vg, Count, Max
+student_data = Student.objects.all()
+average = student_data.aggregate(Avg('marks'))
+sum = student_data.aggregate(Sum('marks'))
+max = student_data.aggregate(Max('marks'))
+min = student_data.aggregate(Min('marks'))
+count = student_data.aggregate(Count('marks'))
+
+
+# Calculate the total price of all products
+total_price = Product.objects.aggregate(Sum('price')).get('price__sum')
+
+# Calculate the average price of all products
+average_price = Product.objects.aggregate(Avg('price')).get('price__avg')
+
+# Count the number of products
+product_count = Product.objects.aggregate(Count('id')).get('id__count')
+
+# Retrieve the most expensive product
+most_expensive_product = Product.objects.aggregate(Max('price')).get('price__max')
+
+===================================================================================================
+Q objects
+===================================================================================================
+
+student_data = Student.objects.filter( Q(id=6) & Q(roll=106) )
+student_data = Student.objects.filter( Q(id=6) | Q(roll=107) )
+student_data = Student.objects.filter(~Q(id=6))
+
+
+
+===================================================================================================
+Limiting QuerySET
+===================================================================================================
+
+student_data = Student.objects.all()
+student_data = Student.objects.all()[:5]
+student_data = Student.objects.all()[5:10]
+student_data = Student.objects.all()[0:10:2]
+
+===================================================================================================
+QuerySet API Exercise (queryset_api_exercise)
+=================================================================================================== 
+
+Project Used:
+Django-Training/Full-Course/P4_DjangoQueries/P4_DjangoQueries
+
+from exercise.models import *
+
+***********************************************
+
+Query1: Fetching all books from the database
+
+Explanation: The all() method returns all the records from the model it is called on. In this case, it will fetch all the records from the Books model. The Books model is assumed to be defined in the main app.
+
+result1 = Books.objects.all()
+***********************************************
+
+Query2: Fetching selected columns from the Books table
+result2 = Books.objects.all().values_list('title', 'published_date')
+
+
+Explanation: The values_list() method is used to retrieve specific columns from the model. In this case, only the title and published_date columns are selected.
+
+***********************************************
+
+Query3: Filtering records based on a condition
+result3 = Author.objects.all().filter(popularity_score=0).values_list('firstname', 'lastname')
+
+Explanation: The filter() method is used to retrieve records that match a specific condition. In this case, the condition is that popularity_score should be equal to 0. The values_list() method is used to retrieve only the firstname and lastname fields from the retrieved records.
+
+***********************************************
+
+Query4: Filtering records based on multiple conditions
+result4 = Author.objects.all().filter(firstname__startswith='a', popularity_score__gte=8).values_list('firstname', 'popularity_score')
+
+Explanation: The filter() method is used to retrieve records that match multiple conditions. In this case, the conditions are that firstname should start with ‘a’ and popularity_score should be greater than or equal to 8. The values_list() method is used to retrieve only the firstname and popularity_score fields from the retrieved records.
+
+***********************************************
+
+Query5: Searching records based on a substring
+result5 = Author.objects.all().filter(firstname__icontains='aa').values_list('firstname')
+
+Explanation: The filter() method is used to retrieve records that contain a specific substring. In this case, the substring is ‘aa’. The values_list() method is used to retrieve only the firstname field from the retrieved records. The icontains lookup is used to perform a case-insensitive search for the specified substring.
+
+***********************************************
+
+Query6: Retrieve authors with specific primary keys
+result6 = Author.objects.all().filter(pk__in=[1, 3, 23, 43, 134, 25])
+
+Explanation: The filter() method is used to retrieve authors with primary keys specified in the pk__in argument. The pk in pk__in stands for primary key. In this case, the primary keys are [1, 3, 23, 43, 134, 25].
+
+***********************************************
+
+Query7: Retrieve authors who joined after a specific date
+
+import datetime
+
+result7 = Author.objects.all().filter(joindate__gte=datetime.date(year=2012, month=9, day=1)).order_by('joindate').values_list('firstname', 'joindate')
+
+Explanation: The filter() method = Authoris used to retrieve authors who joined after September 1, 2012, using the joindate__gte lookup. The gte in joindate__gte stands for greater than or equal to. The results are ordered by joindate in ascending order using the order_by() method. Only the firstname and joindate fields are selected using the values_list() method.
+
+***********************************************
+
+Query8: Retrieve distinct publisher last name
+result8 = Publisher.objects.all().order_by('lastname').values_list('lastname').distinct()[:10]
+
+Explanation: The distinct() method is used to retrieve distinct last names of all publishers in ascending order using the order_by() method. 
+Only the lastname field is selected using the values_list() method. The first 10 results are selected using slicing [:10].
+
+***********************************************
+
+Query9: Retrieve the latest joined author and the earliest joined publisher
+
+result9 = [Authors.objects.all().order_by('joindate').last(),
+        Publisher.objects.all().order_by('-joindate').first()]
+
+Explanation: Two queries are executed here, one to retrieve the latest joined author and one to retrieve the earliest joined publisher. In the first query, the last() method is used to retrieve the latest joined author. In the second query, the order_by('-joindate') method is used to order the publishers by joindate in descending order, and the first() method is used to retrieve the earliest joined publisher.
+
+***********************************************
+
+Query10: Retrieve the first name, last name, and join date of the most recently joined author
+result10 = Author.objects.all().order_by('-joindate').values_list('firstname', 'lastname', 'joindate').first()
+
+Explanation: The order_by('-joindate') method is used to order the authors by joindate in descending order. Only the firstname, lastname, and joindate fields are selected using the values_list() method. The first() method is used to retrieve the first row of the resulting queryset, which contains the most recent joined author in the database.
+
+***********************************************
+
+Query11: Retrieve Authors Joined After 2013
+result11 = Author.objects.all().filter(joindate__year__gte=2013)
+
+Explanation: This query retrieves all authors who joined after 2013. The filter() method is used to specify the condition. Here, the joindate field is filtered by its year attribute to retrieve all authors who joined after 2013.
+
+***********************************************
+
+Query12: Calculate Total Price of Books Written by Popular Authors
+
+from django.db.models import Sum
+
+result12 = Books.objects.all().filter(author__popularity_score__gte=7).aggregate(total_book_price=Sum('price'))
+
+SELECT SUM("exercise_books"."price") AS "total_book_price"
+FROM "exercise_books"
+INNER JOIN "exercise_author" ON ("exercise_books"."author_id" = "exercise_author"."id")
+WHERE "exercise_author"."popularity_score" >= 7;
+
+
+Explanation: This query calculates the total price of all books written by authors with a popularity score of 7 or greater. The filter() method is used to filter the books based on the popularity_score of their respective authors. The aggregate() method is used to calculate the total price of all books using the Sum() function.
+
+***********************************************
+
+Query13: Retrieve Titles of Books Written by Authors with ‘a’ in their Firstname
+result13 = Books.objects.all().filter(author__firstname__icontains='a').values_list('title', flat=True)
+
+Explanation: This query retrieves the titles of all books written by authors whose firstname contains the lowercase letter ‘a’. The filter() method is used to filter the books based on the firstname of their respective authors. The values_list() method is used to retrieve only the title field of the resulting queryset. The flat=True parameter is used to return the resulting queryset as a flat list.
+
+***********************************************
+
+Query14: Calculate Average Book Price of Selected Authors
+result14 = Books.objects.all().filter(author__pk__in=[1, 3, 4]).aggregate('price')
+
+Explanation: This query calculates the average price of all books written by a selected group of authors. The filter() method is used to select the authors based on their primary key values. The aggregate() method is used to calculate the average price of all books using the Avg() function.
+
+***********************************************
+
+Query15: Retrieve first name of authors and their recommended author’s first name
+result15 = Author.objects.all().values_list('firstname', 'recommendedby__firstname')
+
+Explanation: This query uses the values_list() method to retrieve the first name of authors and their recommended author’s first name. The recommendedby__firstname attribute is used to access the first name of the recommended author.
+
+***********************************************
+
+Query16: Retrieve authors whose books are published by a specific publisher
+result16 = Author.objects.all().filter(books__publisher__pk=1)
+
+Explanation: This query uses the filter() method to retrieve all authors whose books are published by a specific publisher. The books__publisher__pk attribute is used to access the publisher’s primary key.
+
+***********************************************
+
+Query17: Add followers to an author
+user1 = Users.objects.create(username='user1', email='user1@test.com')
+user2 = Users.objects.create(username='user2', email='user2@test.com')
+user3 = Users.objects.create(username='user3', email='user3@test.com')
+result17 = Author.objects.get(pk=1).followers.add(user1, user2, user3)
+
+Explanation: This query uses the add() method to add multiple followers to an author. The get() method is used to retrieve the author with the specified primary key.
+
+***********************************************
+
+Query18: Set followers for an author
+user1 = Users.objects.create(username='user1', email='user1@test.com')
+result18 = Author.objects.get(pk=2).followers.set(user1)
+
+Explanation: This query uses the set() method to set the followers for an author. The get() method is used to retrieve the author with the specified primary key.
+
+***********************************************
+
+Query19: Add a follower to an author
+user1 = Users.objects.create(username='user1', email='user1@test.com')
+result19 = Author.objects.get(pk=1).followers.add(user1)
+
+Explanation: This query uses the add() method to add a follower to an author. The get() method is used to retrieve the author with the specified primary key.
+
+***********************************************
+
+Query20: Remove a follower from an author
+user1 = Users.objects.create(username='user1', email='user1@test.com')
+result20 = Author.objects.get(pk=1).followers.remove(user1)
+
+Explanation: This query uses the remove() method to remove a follower from an author. The get() method is used to retrieve the author with the specified primary key.
+
+***********************************************
+
+Query21: Retrieve the first names of all authors followed by the user with primary key (pk) equal to 1
+result21 = Users.objects.get(pk=1).followed_authors.all().values_list('firstname', flat=True)
+
+Explanation: This code uses a foreign key relationship between the Users and Authors models to retrieve all authors followed by a specific user with a primary key of 1. The values_list method with flat=True is used to return a flat list of only the first names of the authors.
+
+***********************************************
+
+Query22: Retrieve all authors who have books with titles containing the string “tle”
+result22 = Author.objects.all().filter(books__title__icontains='tle')
+
+Explanation: This code uses a reverse foreign key relationship between the Authors and Books models to retrieve all authors who have books with titles containing the string “tle”. The filter method is used to apply the filter condition.
+ The __icontains lookup is used to perform a case-insensitive match on the book title.
+
+***********************************************
+
+Query23: Retrieve all authors whose first name starts with the letter “a” and either have a popularity score greater than 5 or joined the platform after the year 2014
+
+from django.db.models import Q
+Author.objects.filter(Q(firstname__istartswith='a') & (Q(popularity_score__gt=5) | Q(joindate__year__gt=2014)))
+
+(0.001)
+SELECT "exercise_author"."*" FROM "exercise_author"
+WHERE (
+    "exercise_author"."firstname" LIKE 'a%' ESCAPE '\' AND 
+    ("exercise_author"."popularity_score" > 5 OR "exercise_author"."joindate" > '2014-12-31')
+) LIMIT 21; args=('a%', 5, '2014-12-31');
+
+Explanation: This code retrieves all authors whose first name starts with the letter “a” and satisfies at least one of the two conditions:
+
+popularity score greater than 5
+joined the platform after the year 2014. It uses the filter method with a combination of Q objects to create a complex query with multiple conditions. The __istartswith lookup is used to perform a case-insensitive match on the author’s first name, and the __gt lookup is used to retrieve records with a value greater than the specified number or date.
+***********************************************
+
+Query24: Retrieve the author with primary key (pk) equal to 1
+result24 = Author.objects.all().get(pk=1)
+
+Explanation: This code retrieves the author record with a primary key (pk) equal to 1 using the get method. It assumes that the Authors model has a primary key field named pk.
+
+***********************************************
+
+Query25: Retrieve the first 10 authors in the database
+
+result25 = Author.objects.all().order_by('joindate')[:10]
+
+SELECT * FROM "exercise_author"
+ORDER BY "exercise_author"."joindate" ASC
+LIMIT 10;
+
+Explanation: This code retrieves the first 10 authors in the database using the slice notation [:10]. It returns a queryset containing the first 10 records from the Authors model in the order they were created.
+
+***********************************************
+
+Query26: Retrieve the first and last author in the database with a popularity score of 7
+
+qs = Author.objects.all().filter(popularity_scre=7)
+author1 = qs.first()
+author2 = qs.last()
+result26 = [author1, author2]
+
+Explanation: This query retrieves all the authors with a popularity_score of 7, then gets the first and last author in that queryset, and stores them in a list.
+
+***********************************************
+
+Query27: Retrieve all authors whose joindate year is greater than or equal to 2012, popularity_score is greater than or equal to 4, joindate day is greater than or equal to 12, and firstname starts with ‘a’
+
+Author.objects.all().filter(joindate__year__gte=2012, popularity_score__gte=4, joindate__day__gte=12, firstame__istartswith='a')
+
+Explanation: This query retrieves all the authors whose joindate year is greater than or equal to 2012, popularity_score is greater than or equal to 4, joindate day is greater than or equal to 12, and firstname starts with ‘a’.
+
+***********************************************
+
+Query28: Retrieve all authors whose joindate year is not equal to 2012
+
+result28 = Author.objects.all().exclude(joindate__year=2012)
+
+Explanation: This query retrieves all the authors whose joindate year is not equal to 2012.
+
+***********************************************
+
+Query29: Retrieve the oldest joindate among all authors, the newest joindate among all authors, the average popularity_score of all authors, and the sum of price of all books
+
+from django.db.models import Avg, Min, Max
+
+oldest_author = Author.objects.all().aggregate(Min('joindate'))
+newest_author = Author.objects.all().aggregate(Max('joindate'))
+avg_pop_score = Author.objects.all().aggregate(Avg('popularity_score'))
+sum_price = Books.objects.all().aggregate(Sum('price'))
+result29 = [oldest_author, newest_author, avg_pop_score, sum_price]
+
+
+Explanation: This query retrieves the oldest joindate among all authors, the newest joindate among all authors, the average popularity_score of all authors, and the sum of price of all books, and stores them in a list.
+
+***********************************************
+
+Query30: Retrieve all authors who have not been recommended by anyone
+result30 = Author.objects.all().filter(recommendedby__isnull=True)
+
+Explanation: This query selects all authors who have not been recommended by anyone (i.e., they don’t have a recommendedby field value).
+
+***********************************************
+
+Query31: Retrieve all books that have an author, and all books that have an author who has not been recommended by anyone
+one = Books.objects.all().filter(author__isnull=False)
+two = Books.objects.all().filter(author__isnull=False, author__recommender__isnull=True)
+result31 = [one, two]
+
+Explanation: This query retrieves all books that have an author (i.e., author__isnull=False). The first query in the list (one) retrieves all books with an author, while the second query (two) filters the first query to only include books where the author has not been recommended by anyone (i.e., author__recommender__isnull=True).
+
+***********************************************
+
+Query32: Calculate the sum of the price of all books authored by the author with primary key (pk) equal to 1
+result32 = Books.objects.all().filter(author__pk=1).aggregate(Sum('price'))
+
+Explanation: This query calculates the sum of the price of all books authored by the author with primary key (PK) equal to 1. It uses the aggregate() method to compute the sum, and the Sum() function to specify the aggregation operation.
+
+***********************************************
+
+Query33: Retrieve the title of the most recently published book
+result33 = Books.objects.all().order_by('published_date').last().title
+
+Explanation: This query retrieves the title of the most recently published book. It does so by first ordering all the books by their published date in ascending order, and then selecting the last book from this list.
+
+***********************************************
+
+Query34: Calculate the average price of all books
+result34 = Books.objects.all().aggregate(Avg('price'))
+
+Explanation: This query computes the average price of all the books in the database. It does so by using the aggregate() method on the queryset, with the Avg() function as the argument. The Avg() function is a database function that computes the average of a given column.
+
+***********************************************
+
+Query35: Calculate the maximum popularity score of all the publishers that have published a book written by the author with primary key 1
+
+result35 = Publisher.objects.filter(books__author__pk=1).aggregate(Max('popularity_score'))
+
+SELECT "exercise_publisher"."*" FROM "exercise_publisher"
+INNER JOIN "exercise_books" ON ("exercise_publisher"."id" = "exercise_books"."publisher_id")
+WHERE "exercise_books"."author_id" = 1
+
+Explanation: This query computes the maximum popularity score of all the publishers that have published a book written by the author with primary key 1. It does so by first filtering the Publisher queryset by the books that have been authored by the author with primary key 1. Then, it uses the aggregate() method with the Max() function to compute the maximum popularity score of these publishers.
+
+***********************************************
+
+Query36: Count Authors with Books containing ‘ab’ in the title
+result36 = Author.objects.filter(books__title__icontains='ab').count()
+
+Explanation: This query counts the number of authors who have written at least one book that contains ‘ab’ (case-insensitive) in the title.
+
+***********************************************
+
+Query37: Filter Authors by Number of Followers
+
+from django.db.models import Count
+result37 = Author.objects.annotate(f_count=Count('followers')).filter(f_count__gt=3)
+
+Explanation: This query annotates each author with the number of followers they have and then filters the authors to only include those with more than 216 followers.
+
+***********************************************
+
+Query38: Average Popularity Score of Authors who joined after 20th Sep 2014
+result38 = Author.objects.filter(joindate__gt=datetime.date(year=2014, month=9, day=20)).aggregate(Avg('popularity_score'))
+
+Explanation: This query filters authors who joined after 20th Sep 2014 and then calculates the average popularity score of those authors.
+
+***********************************************
+
+Query39: Filter Books by Authors who have written more than 10 Books
+
+result39 = Books.objects.all().annotate(bk_count=Count('author__books')).filter(bk_count__gt=10).distinct()
+
+Explanation: This query annotates each book with the number of authors who have written the book, then filters the books to only include those written by authors who have written more than 10 books. The distinct() method is called to eliminate duplicate books that have multiple authors.
+
+***********************************************
+
+Query40: Filter Books by Title Count
+result40 = Books.objects.all().annotate(count_title=Count('title')).filter(count_title__gt=1)
+
+Explanation: This query annotates each book with the count of books that share the same title, then filters the books to only include those with a title count greater than 1. This could be useful, for example, to find books that have been republished under different titles.
+
+***********************************************
+
+Query41: Get all authors who wrote more than 2 books
+
+Author.objects.all().annotate(bk_count=Count('books')).filter(bk_count__gt=2)
+
+
+===================================================================================================
+Query Optimization in Django
+===================================================================================================
+Project used:
+/home/dev/Django-Training/Full-Course/P4_DjangoQueries/exercise
+
+
+1) Use select_related for ForeignKey and OneToOneField relationships
+
+# Without improvements
+books = Books.objects.all()
+for book in books:
+    print(book.title)
+    print(book.author.firstname)    # will run n+1 queries
+
+# With improvement
+books = Book.objects.select_related('author').all()
+for book in books:
+    print(book.title)
+    print(book.author.firstname)
+
+
+SELECT  "exercise_books"."*",  
+        "exercise_author"."*" 
+FROM "exercise_books"
+INNER JOIN "exercise_author" ON ("exercise_books"."author_id" = "exercise_author"."id");
+
+
+2) Use prefetch_related for ManyToManyField relationships
+
+# Without improvement
+books = Book.objects.all()
+for book in books:
+    print(book.title)
+    print(book.genres.all())
+
+# With improvement
+books = Book.objects.prefetch_related('genres').all()
+for book in books:
+    print(book.title)
+    print(book.genres.all())
+
+
+3) Use values() or values_list() to retrieve only the required fields from the database
+
+books = Book.objects.values('title').all()
+for book in books:
+    print(book['title'])
+
+SELECT "exercise_books"."title"
+FROM "exercise_books"
+LIMIT 21;
+
+<QuerySet [{'title': 'You authority.'}, {'title': 'For individual threat.'}, ...]>
+
+4) Use filter() instead of exclude() to narrow down the queryset
+
+# Without improvement
+books = Books.objects.all().exclude(status='published')
+
+# With improvement
+books = Books.objects.filter(status__ne='published')
+
+5) Use annotate() to perform aggregations at the database level
+
+# Without optimization
+books = Books.objects.all()
+total_price = sum(book.price for book in books)
+
+# With optimization
+from django.db.models import Sum
+total_price = Books.objects.aggregate(Sum('price'))
+
+# {'price__sum': 27815}
+
+6) Use only() to fetch only the required fields from the database
+
+books = Book.objects.only('title').all()
+for book in books:
+    print(book.title)
+
+SELECT "exercise_books"."id",
+       "exercise_books"."title"
+FROM "exercise_books"
+LIMIT 21;
+
+<QuerySet [<Books: You authority.>, <Books: For individual threat.>, ...]>
+
+
+7) Use defer() to defer loading of less frequently used fields
+
+In Django, the defer() method is used to defer the loading of certain fields from the database until they are accessed. 
+This can be useful for optimizing queries, particularly when dealing with large datasets where you don't need all the fields of a model immediately.
+
+Key Points:
+Use Case: It's best to use defer() when you have fields that are large or computationally expensive to load, and you don't always need them immediately.
+Deferred Fields: When you access a deferred field, Django will make a separate database query to fetch that field.
+Performance: By deferring fields, you can reduce the amount of data initially fetched from the database, potentially improving performance.
+
+Consider a model Book with a description field that contains large text data:
+
+# Fetch books without loading 'description'
+books = Books.objects.defer('description')
+
+# Iterate over the books
+for book in books:
+    print(book.title)  # This doesn't trigger an additional query
+    print(book.description)  # This triggers a separate query to fetch the description
+
+
+Using defer() can help optimize your application by reducing the amount of data transferred and 
+loaded into memory when it's not immediately needed.
+
+
+===================================================================================================
+Transactions
+===================================================================================================
+https://docs.djangoproject.com/en/5.0/topics/db/transactions/
+https://www.squash.io/exploring-advanced-querying-and-optimization-in-django-orm/
+
+
+Project used:
+/home/dev/Django-Training/Full-Course/P4_DjangoQueries/exercise
+
+Transactions are important to use in a Django app when you need to ensure data integrity, handle concurrent access, optimize performance, and 
+execute multiple related database operations as a single unit of work
+
+1) Atomic Transactions
+
+Atomic transactions are the most common way to handle transactions in Django. 
+The atomic decorator or context manager is used to wrap a block of code in a transaction.
+
+from django.db import transaction
+
+# Wrap the database operation in a transaction
+with transaction.atomic():
+    # Code for performing database operations
+    # ...
+    # If an exception occurs within this block, the transaction will be rolled back
+
+***********************
+with transaction.atomic():
+...     book = Books.objects.get(pk=1)
+...     book.price = 100000
+...     a = 10/0
+...     print(a)
+...     book.save()
+
+***********************
+
+from django.db import transaction
+
+# Using atomic as a decorator
+@transaction.atomic
+def create_author_and_book():
+    author = Author.objects.create(firstname='John', lastname='Doe', joindate='2023-01-01', popularity_score=10)
+    Book.objects.create(title='My Book', genre='Fiction', description='A great book.', price=20, published_date='2023-06-01', author=author)
+
+# Using atomic as a context manager
+def create_author_and_book():
+    with transaction.atomic():
+        author = Author.objects.create(firstname='John', lastname='Doe', joindate='2023-01-01', popularity_score=10)
+        Book.objects.create(title='My Book', genre='Fiction', description='A great book.', price=20, published_date='2023-06-01', author=author)
+
+
+************************************************************
+2) Manual Transaction Management
+
+Django also provides manual transaction management functions such as transaction.commit() and transaction.rollback().
+This is less common but useful in specific scenarios.
+
+
+from django.db import transaction
+
+# Start a transaction manually
+transaction.set_autocommit(False)
+
+try:
+    # Code for performing database operations
+    # ...
+    # Commit the transaction
+    transaction.commit()
+except:
+    # Rollback the transaction if an exception occurs
+    transaction.rollback()
+finally:
+    # Restore autocommit to default state
+    transaction.set_autocommit(True)
+
+**************************
+
+from django.db import transaction
+
+def create_author_and_book():
+    try:
+        transaction.set_autocommit(False)
+        author = Author.objects.create(firstname='John', lastname='Doe', joindate='2023-01-01', popularity_score=10)
+        Book.objects.create(title='My Book', genre='Fiction', description='A great book.', price=20, published_date='2023-06-01', author=author)
+        transaction.commit()
+    except Exception as e:
+        transaction.rollback()
+    finally:
+        transaction.set_autocommit(True)
+
+
+************************************************************
+3)  Nested Transactions:
+
+Nested transactions in Django are managed using savepoints within an atomic block. 
+Savepoints allow you to rollback part of a transaction without affecting the outer transaction.
+This can be useful when you want to commit some operations while being able to roll back others in case of an error.
+
+from django.db import transaction
+from myapp.models import Author, Book
+
+def create_author_and_book_with_savepoint():
+    try:
+        with transaction.atomic():
+            # Outer transaction block
+            author = Author.objects.create(firstname='John', lastname='Doe', joindate='2023-01-01', popularity_score=10)
+            
+            # Create a savepoint
+            savepoint = transaction.savepoint()
+            
+            try:
+                # Attempt to create a book
+                Book.objects.create(title='My Book', genre='Fiction', description='A great book.', price=20, published_date='2023-06-01', author=author)
+            except Exception as e:
+                # If an error occurs, rollback to the savepoint
+                transaction.savepoint_rollback(savepoint)
+                print(f"Error creating book: {e}")
+            
+            # If no error, commit the savepoint
+            transaction.savepoint_commit(savepoint)
+    except Exception as e:
+        # If an error occurs in the outer block, rollback everything
+        transaction.rollback()
+        print(f"Error in outer transaction: {e}")
+
+# Call the function
+create_author_and_book_with_savepoint()
+
+
+Explanation:
+
+Outer Transaction Block:
+The with transaction.atomic(): block creates an outer transaction. 
+If any error occurs in this block, the entire transaction will be rolled back.
+
+Savepoint:
+A savepoint is created using transaction.savepoint(). 
+This allows you to rollback to this point without affecting the outer transaction.
+
+Inner Block:
+Inside the try block, you attempt to create a Book.
+If an error occurs during the creation of the Book, it rolls back to the savepoint using transaction.savepoint_rollback(savepoint).
+i.e. undoing the Book creation while keeping the Author creation intact.
+
+Commit Savepoint:
+If no error occurs, the savepoint is committed using transaction.savepoint_commit(savepoint).
+
+Outer Exception Handling:
+If an error occurs in the outer block, the entire transaction is rolled back using transaction.rollback().
+
+This way, you can manage nested transactions in Django, allowing partial rollbacks within a larger transaction.
+
+************************************************************
+4) Transaction Middleware
+
+Django can also manage transactions at the middleware level, automatically wrapping each HTTP request in a transaction.
+
+Example:
+
+# settings.py
+MIDDLEWARE = [
+    # ...
+    'django.middleware.transaction.TransactionMiddleware',
+    # ...
+]
+
+************************************************************
+5)  Database-Level Constraints
+
+Database-level constraints, such as foreign key constraints, unique constraints, and others, also ensure transactional integrity. 
+These are defined at the model level using Django’s model fields and options.
+
+Example:
+
+class Author(models.Model):
+    firstname = models.CharField(max_length=100)
+    lastname = models.CharField(max_length=100)
+
+    # Foreign key constraint
+    recommendedby = models.ForeignKey('Author', on_delete=models.CASCADE, related_name='recommended_authors', related_query_name='recommended_authors', null=True)
+    
+    # Unique constraint
+    class Meta:
+        unique_together = ('firstname', 'lastname')
+
+===================================================================================================
+Use Profiling
+===================================================================================================
+
+
+Database profiling is an important technique for identifying performance bottlenecks and optimizing the number of queries.
+Here are some best practices for doing database profiling:
+
+1) Django Debug Toolbar: 
+Debug Toolbar is a third-party package that provides a set of panels displaying various debug information about database queries, cache usage, request/response headers, and more. 
+It’s a powerful tool for profiling database queries in  applications and identifying slow or inefficient queries.
+
+2) Django Silk: 
+Silk is another popular third-party package for database profiling. 
+It provides a set of middleware and a web interface for analyzing and profiling database queries, cache usage, and view functions. 
+Silk also allows you to log query execution times and analyze them for performance optimization.
+
+3) QuerySet API:
+Django’s QuerySet API provides built-in methods such as query.explain() and query.count() that can be used to profile and analyze database queries. 
+These methods allow you to examine the query execution plan, count the number of database queries executed, and analyze them for optimization.
+
+Example usage:
+
+# Use explain() to print the query execution plan
+queryset = MyModel.objects.filter(...)  # replace with your actual queryset
+queryset = queryset.explain()
+
+# Use count() to count the number of database queries executed
+queryset = MyModel.objects.filter(...)  # replace with your actual queryset
+queryset.count()
+
+===================================================================================================
+Database Advanced Query Techniques
+===================================================================================================
+
+************************************************************
+Raw SQL Queries
+************************************************************
+
+In Django, you can execute raw SQL queries using several methods provided by the Django ORM.
+These methods allow you to perform complex queries that might not be easily achievable using the Django QuerySet API.
+
+### 1. Using `raw()` Method
+
+The `raw()` method allows you to execute raw SQL queries and return model instances.
+
+#### Example:
+
+```python
+from exercise.models import *
+authors = Author.objects.raw('SELECT * FROM exercise_author WHERE popularity_score > %s', [50])
+
+for author in authors:
+    print(author.firstname, author.lastname)
+```
+************************************************************
+
+### 2. Using `connection.cursor()`
+
+The `connection.cursor()` method provides a way to execute raw SQL queries directly using a database cursor.
+
+#### Example:
+
+```python
+from django.db import connection
+
+def my_custom_sql(query, params):
+    with connection.cursor() as cursor:
+        cursor.execute(query, params)
+        # Fetch all rows from the result
+        results = cursor.fetchall()
+    return results
+
+# Example usage
+query = 'SELECT * FROM exercise_author WHERE popularity_score > %s'
+params = [50]
+authors = my_custom_sql(query, params)
+
+for author in authors:
+    print(author)
+
+For queries that modify data (INSERT, UPDATE, DELETE), you can still use `connection.cursor()`.
+
+#### Example:
+
+```python
+from django.db import connection
+
+def update_author_popularity():
+    with connection.cursor() as cursor:
+        cursor.execute('UPDATE exercise_author SET popularity_score = popularity_score + 1')
+
+# Call the function to update author popularity scores
+update_author_popularity()
+```
+************************************************************
+
+### 3. Using `extra()` Method (Deprecated)
+
+The `extra()` method was used to add extra SQL fragments to the query. However, this method is deprecated and not recommended for use in new projects.
+
+#### Example:
+
+```python
+from myapp.models import Author
+
+# Using extra() method (deprecated)
+authors = Author.objects.extra(where=['popularity_score > %s'], params=[50])
+
+for author in authors:
+    print(author.firstname, author.lastname)
+```
+************************************************************
+
+### 4. Using `RawSQL` Expressions
+
+You can use `RawSQL` expressions within Django QuerySets to include raw SQL fragments.
+
+#### Example:
+
+```python
+from django.db.models.expressions import RawSQL
+from myapp.models import Author
+
+# Using RawSQL expression in a filter
+authors = Author.objects.annotate(
+    popularity=RawSQL('SELECT popularity_score FROM exercise_author WHERE id = %s', (F('id'),))
+).filter(popularity__gt=50)
+
+for author in authors:
+    print(author.firstname, author.lastname)
+```
+
+### Summary
+
+- **`raw()` Method**: For executing raw SQL queries and returning model instances.
+- **`connection.cursor()`**: For executing raw SQL queries directly, useful for both data retrieval and modification.
+- **`extra()` Method**: Deprecated, not recommended for new projects.
+- **`RawSQL` Expressions**: For including raw SQL fragments in Django QuerySets.
+
+By using these methods, you can execute raw SQL queries in Django when necessary, allowing you to leverage the power and flexibility of SQL within the Django framework.
+
+
+
+************************************************************
+Database indexing 
+************************************************************
+
+Indexes are used to speed up  database queries by providing a fast lookup mechanism. 
+You can use various types of indexes such as B-tree, Hash, GIN, GIST, and SP-GiST, depending on the type of data and query patterns in your  app. 
+By properly indexing the  database tables used in your models, you can significantly improve query performance.
+
+Django allows you to define database indexes (similar to a primary key) using the db_index attribute on model fields or by using the db_index=True argument when creating fields.
+
+Example:
+
+class MyModel(models.Model):
+    my_field = models.CharField(max_length=100, db_index=True)
+    # ...
+
+************************************************************
+Database Connection Pooling
+************************************************************
+
+Database connection pooling is a technique that allows you to reuse  database connections instead of creating a new connection for every query. 
+Django provides third-party libraries like django-db-connection-pool that implement database connection pooling, which can help reduce the overhead of creating and tearing down database connections, resulting in improved performance.
+
+
+
+===================================================================================================
+Sending Emails
 ===================================================================================================
 
 use project `Learning-Django/gs62 Registrationn Form extended/enroll`
@@ -3270,10 +5502,6 @@ Here’s how these principles can be applied to a Django project:
 
 These principles help create scalable, maintainable, and robust web applications. 
 By adhering to these guidelines, a Django application can be more easily managed and deployed in modern cloud environments.
-
-****************************************************************
-Middlewares
-****************************************************************
 
 
 ****************************************************************

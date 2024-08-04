@@ -1,4 +1,5 @@
-The class Meta inside a Django model allows you to define various options and configurations for that model. Here are some common use cases for the Meta class:
+The class Meta inside a Django model allows you to define various options and configurations for that model. 
+Here are some common use cases for the Meta class:
 
 Custom Table Name: You can specify a custom name for the database table associated with the model using the db_table option:
 

@@ -1,3 +1,4 @@
+
 # related_name
 
 In Django, the `related_name` attribute is used in model field definitions to specify the name of the reverse relation from the related model back to the model that defines the relation. This is particularly useful for creating clear and unambiguous reverse relationships, especially when dealing with multiple relationships between models.

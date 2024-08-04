@@ -1,5 +1,3 @@
-**********************************
-
 Add model:
 
 1) Add model in model.p
