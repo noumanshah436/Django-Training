@@ -1,0 +1,20 @@
+mkdir .venv
+pipenv install -r requirements.txt
+pipenv shell
+
+********************************
+
+
+pipenv install django
+pipenv install redis
+pipenv install celery
+pipenv install django-celery-beat
+
+********************************
+
+Check redis status(in ubuntu)
+$ sudo service redis status
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver

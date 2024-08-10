@@ -1,0 +1,14 @@
+Check redis status(in ubuntu)
+$ sudo service redis status
+
+Activate virtual environment (use in each new terminal):
+$ pipenv shell
+
+Start django app:
+$ python manage.py runserver
+
+Start celery worker in a new terminal:
+$ celery -A myceleryproject worker -l info
+
+Start the celery beat service for periodic tasks in a new terminal:
+$ celery -A myceleryproject beat -l info

@@ -1,0 +1,58 @@
+Using Celery with Django¶
+https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html#using-celery-with-django
+
+1) create  myceleryproject/celery.py  file
+2) Import celery in myceleryproject/__init__.py file
+
+3) add celery configuraions in myceleryproject/settings.py file
+
+4) create task
+5) run task in view function
+
+6) To start processing tasks, run the Celery worker from the command line:
+
+syntax:
+$ celery -A project_name worker --loglevel=info
+
+-A  is used a shortcut for --app
+
+$ celery -A myceleryproject worker -l info
+
+this start the worker that listen for enqueued tasks to process them.
+
+****************************************
+use redis as a result backend
+****************************************
+
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/0'
+
+If we are using redis as a result backend, we can checks 
+
+$ redis-cli
+127.0.0.1:6379> keys *
+
+****************************************
+Using django database as a result backend:
+****************************************
+
+
+By using the below extension, we can monitor task in admin panel.
+
+1) in settings.py file:
+CELERY_RESULT_BACKEND = 'django-db'
+
+2) We need to install an extnesion for this
+$ pipenv install django-celery-results
+
+3) register it in INSTALLED_APPS
+
+INSTALLED_APPS = (
+    ...,
+    'django_celery_results',
+)
+
+4) Now create the Celery database tables by performing a database migrations:
+
+$ python manage.py migrate
+
+****************************************

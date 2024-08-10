@@ -1,0 +1,24 @@
+Complete Django Celery and Celery Beat Basic to Advance
+https://www.youtube.com/watch?v=BGiQJgWukRA
+
+https://docs.celeryq.dev/en/stable/index.html
+
+https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html
+
+Using Celery with Django¶
+https://docs.celeryq.dev/en/stable/django/first-steps-with-django.html#using-celery-with-django
+
+
+celery settings configuration:
+https://docs.celeryq.dev/en/stable/userguide/configuration.html
+
+**********************************
+
+$ python manage.py createsuperuser
+
+Username (leave blank to use 'dev'): nouman
+Email address: nouman@gmail.com
+Password: admin@123
+
+username: admin
+pass: admin

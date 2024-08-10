@@ -1,0 +1,115 @@
+### Create task in myapp/tasks.py file
+
+@shared_task
+def clear_session_cache(id):
+    print(f"Session Cache Cleared: {id}")
+    return id
+
+
+### Different ways to Schedule above task
+
+1) Method 1
+# we can schedule above task to run for every 10 seconds in settings.py
+
+CELERY_BEAT_SCHEDULE = {
+    'every-10-seconds':{
+        'task':'myapp.tasks.clear_session_cache',
+        'schedule':10,
+        'args':('11111', )
+    },
+
+    # Add more periodic tasks as needed
+}
+
+Start the celery beat service using the
+
+$ celery -A myceleryproject beat -l info
+
+The default scheduler is the celery.beat.PersistentScheduler, that simply keeps track of the last run times in a local shelve database file.
+
+****************************************************************
+
+2) Method 2
+# we can also schedule task in myceleryproject/celery.py file:
+
+app.conf.beat_schedule = {
+    'every-10-seconds': {
+        'task':'myapp.tasks.clear_session_cache',
+        'schedule':10,
+        'args':('11111', )
+    },
+
+    # Add more periodic tasks as needed
+}
+
+# Using timedelta 
+# (we can specify more options like hour, minutes, seconds)
+
+from datetime import timedelta
+app.conf.beat_schedule = {
+        'every-10-seconds':{
+        'task':'myapp.tasks.clear_session_cache',
+        'schedule':timedelta(seconds=10),
+        'args':('11111', )
+    }
+    # Add more periodic tasks as needed
+}
+
+# Using crontab  
+# ( Unix-like OS utility used for scheduling repetitive tasks at specific intervals. )
+# https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#crontab-schedules
+
+from celery.schedules import crontab
+app.conf.beat_schedule = {
+        'every-10-seconds':{
+        'task':'myapp.tasks.clear_session_cache',
+        'schedule':crontab(minute='*/1'),
+        'args':('11111', )
+    }
+    # Add more periodic tasks as needed
+}
+
+****************************************************************
+Using custom scheduler classes (django-celery-beat)
+****************************************************************
+
+https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html#using-custom-scheduler-classes
+
+django-celery-beat:
+https://pypi.org/project/django-celery-beat/
+
+This extension store the periodic task schedule in the database, and presents a convenient admin interface to manage periodic tasks at runtime.
+The periodic tasks can be managed from the Django Admin interface, where you can create, edit and delete periodic tasks and how often they should run.
+
+
+i) pipenv install django-celery-beat
+
+ii) settings.py:
+
+INSTALLED_APPS = (
+    ...,
+    'django_celery_beat',
+)
+
+iii) python manage.py migrate
+
+iv) Start the celery beat service using the django_celery_beat.schedulers:DatabaseScheduler scheduler:
+
+$ celery -A proj beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+
+Note: 
+
+You may also add this as the beat_scheduler in settings.py directly as
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+****************************************************************
+
+The default scheduler is the celery.beat.PersistentScheduler, that simply keeps track of the last run times in a local shelve database file.
+
+But now we have chnaged it to:
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+
+****************************************************************

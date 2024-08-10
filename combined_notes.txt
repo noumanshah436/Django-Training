@@ -233,7 +233,7 @@ pipenv --venv
 /home/dev/Django-Training/Full-Course/.venv/bin/python
 
 ********************************************
-Setup for existing project:
+Setup for existing Pipenv project:
 
 $ mkdir .venv
 $ pipenv install      # install dependencies
@@ -242,6 +242,31 @@ $ python manage.py makemigrations
 $ python manage.py migrate
 
 $ python manage.py runserver
+
+********************************************
+
+Create virtual environment from requirements.txt file:
+
+1) mkdir .venv 
+2) pipenv pipenv install -r requirements.txt
+
+Creating a virtualenv for this project...
+Pipfile: /home/dev/Fast-API/Educational-Purpose/Pipfile
+Using default python from /home/dev/.pyenv/versions/3.12.3/bin/python3.12 (3.12.3) to create virtualenv...
+⠹ Creating virtual environment...created virtual environment CPython3.12.3.final.0-64 in 141ms
+  creator CPython3Posix(dest=/home/dev/Fast-API/Educational-Purpose/.venv, clear=False, no_vcs_ignore=False, global=False)
+  seeder FromAppData(download=False, pip=bundle, via=copy, app_data_dir=/home/dev/.local/share/virtualenv)
+    added seed packages: pip==24.1.2
+  activators BashActivator,CShellActivator,FishActivator,NushellActivator,PowerShellActivator,PythonActivator
+
+✔ Successfully created virtual environment!
+Virtualenv location: /home/dev/Fast-API/Educational-Purpose/.venv
+requirements.txt found in /home/dev/Fast-API/Educational-Purpose instead of Pipfile! Converting...
+✔ Success!
+Warning: Your Pipfile now contains pinned versions, if your requirements.txt did. 
+We recommend updating your Pipfile to specify the "*" version, instead.
+
+3) pipenv shell
 
 ===================================================================================================
 create virtual environment using virtualenv: (old way)
