@@ -1,0 +1,15 @@
+
+
+django channels docs:
+
+https://channels.readthedocs.io/en/latest/index.html
+
+****************************
+
+How to build a Chat App with Django Channels and WebSockets in 2 Hours
+
+https://www.youtube.com/watch?v=mhADNEyMBis&t=16s
+
+https://youtu.be/mhADNEyMBis
+
+****************************
