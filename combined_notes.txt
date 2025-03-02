@@ -56,6 +56,7 @@ Models
 
 Relationships
     Many-to-one relationships
+    foreign key field
     Many-to-many relationships
     Extra fields on many-to-many relationships
     One-to-one relationships
@@ -71,7 +72,7 @@ Django ORM
 
 Querying Data
     Limiting QuerySets (array-slicing):
-    Field lookups
+    Field Lookups
 
 QuerySet API/ QuerySET API Methods that returns new QuerySets
 QuerySet API(Methods that do not return new QuerySet
@@ -2080,6 +2081,8 @@ Model Field options
 **************************************************************************
 https://docs.djangoproject.com/en/4.2/ref/models/fields/#field-options
 
+https://docs.djangoproject.com/en/5.1/ref/models/fields/
+
 NULL vs BLANK
 
 null:
@@ -3678,7 +3681,7 @@ This is roughly equivalent to:
 Note, however, that the first of these will raise IndexError while the second will raise DoesNotExist if no objects match the given criteria.
 
 *********************************************
-Field lookups
+Field Lookups
 *********************************************
 https://docs.djangoproject.com/en/4.2/topics/db/queries/#field-lookups
 

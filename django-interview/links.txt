@@ -1,0 +1,5 @@
+https://www.simplilearn.com/django-interview-questions-article
+
+
+Django interview questions and answers in 2023:
+https://www.turing.com/interview-questions/django

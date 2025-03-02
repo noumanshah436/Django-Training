@@ -1,0 +1,16 @@
+
+
+
+1) See python basics first
+
+Iterators
+Generators
+
+2) /home/dev/python-training/theory
+
+3) /home/dev/Django-Training/django-interview
+
+3) Django relationships
+
+4) Django learning tutorials
+

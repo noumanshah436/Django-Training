@@ -36,7 +36,7 @@ def login_success(sender, request, user, **kwargs):
 
 
 # we can also using this instead of decorator (use outside of function)
-user_logged_in.connect(login_success, sender=User)
+# user_logged_in.connect(login_success, sender=User)
 
 
 @receiver(user_logged_out, sender=User)
