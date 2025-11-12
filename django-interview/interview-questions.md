@@ -131,6 +131,24 @@ What is Django's built-in user authentication system?
 
 Django provides a comprehensive authentication system that includes features like user registration, login, logout, password reset, and user permissions. It can be easily integrated into your application to manage user authentication and access control.
 
+
+Django’s **authentication system** is part of the app called:
+
+```python
+django.contrib.auth
+```
+
+It provides ready-to-use tools for:
+
+* User login and logout
+* Password hashing and validation
+* User registration and profile management
+* Permissions and groups
+* Authentication backends (like email, username, OAuth, etc.)
+* Admin integration for user management
+
+---
+
 14.
 How can you handle forms in Django?
 
@@ -366,6 +384,8 @@ Reversing generates URLs from view names and parameters, enhancing maintainabili
 Changes to URLs can be made centrally through URL patterns.
 Reversing reduces errors caused by hardcoding URLs in templates or views.
 It simplifies URL updates when the project structure changes.
+
+
 17.
 How can you deploy a Django application in a production server?
 

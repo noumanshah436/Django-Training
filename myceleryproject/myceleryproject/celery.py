@@ -44,7 +44,7 @@ def add(x, y):
 
 # # Using timedelta
 app.conf.beat_schedule = {
-        'every-10-seconds':{
+    'every-10-seconds':{
         'task':'myapp.tasks.clear_session_cache',
         'schedule':crontab(minute='*/1'),
         'args':('11111', )

@@ -1,66 +1,87 @@
 The class Meta inside a Django model allows you to define various options and configurations for that model. 
 Here are some common use cases for the Meta class:
 
+---
+
 Custom Table Name: You can specify a custom name for the database table associated with the model using the db_table option:
 
-python
-Copy code
+
 class Meta:
     db_table = "custom_table_name"
+
+---
+
+
 Verbose Name: You can provide a human-readable name for the model class using the verbose_name option:
 
-python
-Copy code
+
 class Meta:
     verbose_name = "Human-readable Name"
+
+---
+
+
 Verbose Name Plural: Similar to verbose_name, you can define a plural name for the model using verbose_name_plural:
 
-python
-Copy code
+
 class Meta:
     verbose_name_plural = "Human-readable Plural Name"
+
+---
+
 Unique Constraints: You can define unique constraints on fields using the unique_together option:
 
-python
-Copy code
+
 class Meta:
     unique_together = ("field1", "field2")
+
+---
+
 Indexing: You can specify custom indexes on fields using the indexes option:
 
-python
-Copy code
+
 class Meta:
     indexes = [
         models.Index(fields=["field1"]),
         models.Index(fields=["field2", "field3"]),
     ]
+
+---
+
 Permissions: You can set default permissions for the model using the permissions option:
 
-python
-Copy code
+
 class Meta:
     permissions = [
         ("can_view_details", "Can view details"),
         ("can_change_settings", "Can change settings"),
     ]
+
+---
+
 Abstract Models: If you're creating an abstract base model, you can indicate that by setting abstract = True:
 
-python
-Copy code
+
 class Meta:
     abstract = True
+
+---
+
+
 App Label: You can provide a custom app label to group models in the admin interface using the app_label option:
 
-python
-Copy code
+
 class Meta:
     app_label = "CustomAppLabel"
+
+---
+   
 Proxy Models: For proxy models, you can set proxy = True:
 
-python
-Copy code
+
 class Meta:
     proxy = True
+
 Default Ordering: As you mentioned earlier, you can set the default ordering for model instances using the ordering option.
 
 These are just a few examples of what you can do with the class Meta inside a Django model. The Meta class provides a way to configure various aspects of your model's behavior, presentation, and interactions with the database and admin interface.

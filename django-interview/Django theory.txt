@@ -23,7 +23,8 @@ It is easy to read, maintain, and extend.
 
 ************************************
 
-A web framework is a software tool that provides a way to build and run web applications. As a result, you don’t need to write code on your own and waste time looking for possible miscalculations and bugs.
+A web framework is a software tool that provides a way to build and run web applications.
+ As a result, you don’t need to write code on your own and waste time looking for possible miscalculations and bugs.
 
 
 A web framework is a collection of pre-written code and libraries that provides a structured way to build web applications. 
@@ -68,7 +69,9 @@ Comapnies using django:
 Django – Design Philosophies
 ****************************************************************************
 
-Django's primary goal is to ease the creation of complex, database-driven websites. The framework emphasizes reusability and pluggability (The ability of just dropping something somewhere and having that thing working. It is achieved by your pluggable item having adhere to certain rules i.e. implement interface) of components, less code, low coupling, rapid development, and the principle of don't repeat yourself. Python is used throughout, even for settings, files, and data models.
+Django's primary goal is to ease the creation of complex, database-driven websites. 
+The framework emphasizes reusability and pluggability (The ability of just dropping something somewhere and having that thing working. 
+It is achieved by your pluggable item having adhere to certain rules i.e. implement interface) of components, less code, low coupling, rapid development, and the principle of don't repeat yourself. Python is used throughout, even for settings, files, and data models.
 
 Don’t repeat yourself (DRY)
 Explicit is better than implicit
@@ -79,7 +82,9 @@ Consistency
 
 ************
 
-Loose coupling and tight cohesion
+Loose coupling and tight cohesion   
+
+(/home/dev/Cpp-programming/interview/fundamental concepts on software engineering/coupling-vs-cohesion.md)
 
 Loose coupling and tight cohesion are principles in software design that aim to improve the quality, maintainability, and flexibility of code:
 

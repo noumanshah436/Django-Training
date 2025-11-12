@@ -73,6 +73,7 @@ Django ORM
 Querying Data
     Limiting QuerySets (array-slicing):
     Field Lookups
+    F object
 
 QuerySet API/ QuerySET API Methods that returns new QuerySets
 QuerySet API(Methods that do not return new QuerySet

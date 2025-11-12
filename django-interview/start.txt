@@ -6,6 +6,10 @@
 Iterators
 Generators
 
+Iterators are objects that follow the iterator protocol (__iter__() and __next__()), allowing sequential access to elements.
+Generators are a simpler way to create iterators using yield, producing values lazily without storing them all in memory.
+
+
 2) /home/dev/python-training/theory
 
 3) /home/dev/Django-Training/django-interview
